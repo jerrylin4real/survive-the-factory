@@ -23,7 +23,7 @@ let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
 let borderLimitUp = borderUISize * 6;
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyA, keyD, keyQ, keyP, keyM, keyV;
+let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyA, keyD, keyQ, keyP, keyM, keyV, keyESC;
 
 
 // global variables/

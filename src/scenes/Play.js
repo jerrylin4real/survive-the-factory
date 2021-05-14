@@ -78,7 +78,7 @@ class Play extends Phaser.Scene {
         // add camera
 
         // Set the camera bounds
-        this.cameras.main.setBounds(0, 0, game.config.width * 10, game.config.height* 10);
+        this.cameras.main.setBounds(0, 0, game.config.width * 10, game.config.height * 10);
         this.cameras.main.setZoom(1);
         //Set the camera to follow player1
         this.cameras.main.startFollow(this.player1);
@@ -101,6 +101,7 @@ class Play extends Phaser.Scene {
         // define mouse control
         this.mouse = this.add.sprite(game.config.width / 2, game.config.height / 2, 'mouse').setScale(0.2);
         this.input.mouse.capture = true;
+        //!FIXME mouse cannot move beyound game window size
         this.mouseEvent(); // redirect to mouseEvent()
         //Mouse Wheel example: https://phaser.io/examples/v3/view/input/mouse/mouse-wheel
 
@@ -117,7 +118,7 @@ class Play extends Phaser.Scene {
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         keyV = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
-
+        keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         // animation config
         this.anims.create({
             key: 'explode',
@@ -180,7 +181,7 @@ class Play extends Phaser.Scene {
         /*
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', this.scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
         */
@@ -192,7 +193,7 @@ class Play extends Phaser.Scene {
             }
             this.bgm = this.sound.add('bgm', {
                 mute: false,
-                volume: 0.7,
+                volume: 0.3,
                 rate: 1,
                 loop: true,
                 delay: 0
@@ -226,11 +227,15 @@ class Play extends Phaser.Scene {
             this.gameOver = true;
             //this.initialTime = 0;
         }
+        if (Phaser.Input.Keyboard.JustDown(keyESC)) {
+            this.gameOver = true;
+            this.scene.start("menuScene");
+        }
 
         // Game Over text
         if (this.gameOver) {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', this.scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }
         // Pause feature
@@ -254,18 +259,18 @@ class Play extends Phaser.Scene {
         }
 
 
-        if (this.gameOver && this.bgmCreated) {
-            this.bgm.pause()
-            this.bgmPlayed = false;
-        }
+        if (this.gameOver)
+            if (this.bgmCreated) {
+                this.bgm.pause()
+                this.bgmPlayed = false;
+            }
 
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+        if (Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
 
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-            this.scene.start("menuScene");
-        }
+
+      
 
         this.starfield.tilePositionX -= 0;  // update tile sprite
 
@@ -348,7 +353,7 @@ class Play extends Phaser.Scene {
         if (!this.gameOver) {
             this.initialTime += 1; // countdown 1 for one second
             this.timeText.setText('Time: ' + this.formatTime(this.initialTime));
-            if (this.hasted == false) { 
+            if (this.hasted == false) {
                 this.hasteCounter += 1; // if >= 30, ships will go faster
             }
             if (this.p1Score >= 30 && this.p1Score <= 100 && !this.superWeaponRewarded) {

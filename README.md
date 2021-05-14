@@ -26,6 +26,8 @@ Spring 2021
 ### Reference:
 - https://www.codecaptain.io/blog/game-development/shooting-bullets-phaser-3-using-arcade-physics-groups/696
 - https://phaser.io/examples/v2/camera/follow-styles
+- https://github.com/jerrylin4real/Endless-runner
+- https://github.com/leland-jin/Rocket_Patrol_Mod
  
 ### Credit  
 - [FPSOSU! Crosshair + Minimal skin](https://steamcommunity.com/sharedfiles/filedetails/?id=1789952373)
