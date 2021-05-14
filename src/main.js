@@ -1,9 +1,9 @@
 let config = {
-  type: Phaser.CANVAS,
-  parent: "game-container",
+  type: Phaser.AUTO,
+  parent: "main", // name of main
   pixelArt: true,
   physics: {
-    default: "arcade",
+    default: "matter",
     arcade: {
       gravity: { y: 0 }
     }
