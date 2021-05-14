@@ -5,7 +5,7 @@ class Player extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);   // add to existing, displayList, updateList
         this.health = 100;
         this.hunger = 0;
-        this.moveSpeed = 2;         // pixels per frame
+        this.moveSpeed = 15;         // pixels per frame
     }
 
     update() {
@@ -15,16 +15,18 @@ class Player extends Phaser.GameObjects.Sprite {
         if (Phaser.Input.Keyboard.JustDown(keyF) && !this.isFiring) {
             this.isFiring = true;
         }
+
+        //  player control:W S A D
+        //  !FIXME OFFSET Correction
         // is Down = keep pressed down
         if (keyA.isDown && this.x >= borderLimitDown) {
             this.x -= this.moveSpeed;
-        } else if (keyD.isDown && this.x <= game.config.width - borderUISize) {
+        } else if (keyD.isDown && this.x <= game.config.width * 10) {
             this.x += this.moveSpeed;
         }
-        //  player control:W S A D
         if (keyW.isDown && this.y >= borderLimitUp - borderUISize) {
             this.y -= this.moveSpeed;
-        } else if (keyS.isDown && this.y <= game.config.height - borderLimitDown) {
+        } else if (keyS.isDown && this.y <= game.config.height * 10 - borderLimitDown) {
             this.y += this.moveSpeed;
         }
 
