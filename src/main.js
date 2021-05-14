@@ -10,7 +10,7 @@ let config = {
   },
   scene: [
     Menu, 
-    Play
+    MatterPhysics
   ]
 };
 

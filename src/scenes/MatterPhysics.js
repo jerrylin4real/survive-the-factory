@@ -1,53 +1,79 @@
-var config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    backgroundColor: '#efefef',
-    parent: 'phaser-example',
-    physics: {
-        default: 'matter',
-        matter: {
-            debug: true
-        }
-    },
-    scene: {
-        create: create
+export default class MatterPhysics extends Phaser.Scene{
+    constructor(){
+        super("MatterPhysics");
     }
-};
 
-var game = new Phaser.Game(config);
+    preload(){
+        console.log("preload()...")
+    }
+    create() {
+        console.log("create()...")
 
-function create() {
-    this.matter.world.setBounds().disableGravity();
+        this.matter.world.setBounds().disableGravity();
 
-    var arrow = '40 0 40 20 100 20 100 80 40 80 40 100 0 50';
-    var chevron = '100 0 75 50 100 100 25 100 0 50 25 0';
-    var star = '50 0 63 38 100 38 69 59 82 100 50 75 18 100 31 59 0 38 37 38';
+        var arrow = '40 0 40 20 100 20 100 80 40 80 40 100 0 50';
+        var chevron = '100 0 75 50 100 100 25 100 0 50 25 0';
+        var star = '50 0 63 38 100 38 69 59 82 100 50 75 18 100 31 59 0 38 37 38';
 
-    var poly = this.add.polygon(400, 300, arrow, 0x0000ff, 0.2);
+        var poly = this.add.polygon(400, 300, arrow, 0x0000ff, 0.2);
 
-    this.matter.add.gameObject(poly, { shape: { type: 'fromVerts', verts: arrow, flagInternal: true } });
+        this.matter.add.gameObject(poly, { shape: { type: 'fromVerts', verts: arrow, flagInternal: true } });
 
-    poly.setVelocity(6, 3);
-    poly.setAngularVelocity(0.01);
-    poly.setBounce(1);
-    poly.setFriction(0, 0, 0);
+        poly.setVelocity(6, 3);
+        poly.setAngularVelocity(0.01);
+        poly.setBounce(1);
+        poly.setFriction(0, 0, 0);
 
-    var poly = this.add.polygon(400, 100, chevron, 0xff0000, 0.2);
+        var poly = this.add.polygon(400, 100, chevron, 0xff0000, 0.2);
 
-    this.matter.add.gameObject(poly, { shape: { type: 'fromVerts', verts: chevron, flagInternal: true } });
+        this.matter.add.gameObject(poly, { shape: { type: 'fromVerts', verts: chevron, flagInternal: true } });
 
-    poly.setVelocity(6, 3);
-    poly.setAngularVelocity(0.01);
-    poly.setBounce(1);
-    poly.setFriction(0, 0, 0);
+        poly.setVelocity(6, 3);
+        poly.setAngularVelocity(0.01);
+        poly.setBounce(1);
+        poly.setFriction(0, 0, 0);
 
-    var poly = this.add.polygon(600, 400, star, 0x00ff00, 0.2);
+        var poly = this.add.polygon(600, 400, star, 0x00ff00, 0.2);
 
-    this.matter.add.gameObject(poly, { shape: { type: 'fromVerts', verts: star, flagInternal: true } });
+        this.matter.add.gameObject(poly, { shape: { type: 'fromVerts', verts: star, flagInternal: true } });
 
-    poly.setVelocity(4, -2);
-    poly.setBounce(1);
-    poly.setFriction(0, 0, 0);
-    poly.setFrictionAir(0.005);
+        poly.setVelocity(4, -2);
+        poly.setBounce(1);
+        poly.setFriction(0, 0, 0);
+        poly.setFrictionAir(0.005);
+
+        // create the player
+        this.player = new Phaser.Physics.Matter.Sprite(this.matter.world);
+
+        // bind keys
+        this.inputKeys = this.input.keyboard.addKeys({
+            up: Phaser.input.Keyboard.KeyCodes.W,
+            down: Phaser.input.Keyboard.KeyCodes.S,
+            left: Phaser.input.Keyboard.KeyCodes.A,
+            right: Phaser.input.Keyboard.KeyCodes.D,
+        })
+
+    }
+
+    update() {
+        console.log("update...");
+        const speed = 2.5;
+        let playerVelocity = new Phaser.Math.Vectore2();
+        if (this.inputKeys.left.isDown) {
+            playerVelocity.x = -1;
+        }
+        if (this.inputKeys.left.isDown) {
+            playerVelocity.x = -1;
+        } else if (this.inputKeys.right.isDown) {
+            playerVelocity.x = 1;
+        }
+
+        if (this.inputKeys.up.isDown) {
+            playerVelocity.y = -1;
+        } else if (this.inputKeys.down.isDown) {
+            playerVelocity.y = 1;
+        }
+        playerVelocity.scale(speed); // multiply vectore by speed
+        this.player.setVelocity(playerVelocity.x, playerVelocity.y);
+    }
 }

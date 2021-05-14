@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SCUM-2D</title>
-    <script srt="http://cdn.jsdelivr.net/npm/phaser-matter-collision-plugin"></script>
     <style>
         body {
             background-color: beige;
@@ -16,9 +15,12 @@
 
 <body>
     <script src="./lib/phaser.js"></script>
+    <script src="./src/prefabs/Rocket.js"></script>
+    <script src="./src/prefabs/Spaceship.js"></script>
+    <script src="./src/scenes/Menu.js"></script>
+    <script src="./src/scenes/Play.js"></script>
     <script src="./src/scenes/MatterPhysics.js"></script>
-    <script src="./src/survival-game.js"></script>
-
+    <script src="./src/main.js"></script>
 </body>
 
 </html>
