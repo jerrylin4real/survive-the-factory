@@ -1,3 +1,4 @@
+// Main scene carrying out the game
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
@@ -30,7 +31,7 @@ class Play extends Phaser.Scene {
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
-        this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12});
+        this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12 });
         this.load.audio('bgm', './assets/mixkit-space-game-668.wav');
     }
     // Note: The keyword 'this' refers to the class 'Play'
@@ -376,5 +377,43 @@ class Play extends Phaser.Scene {
         this.sound.play(soundFXLib[random4SoundFX]);
         // add time bonus
         this.initialTime += ship.timeBonus;
+    }
+
+    setMap(scene, mapName) {
+        currentMap = mapName;
+        // currentMap = "dungeonMap";
+        map = scene.make.tilemap({ key: currentMap });
+        const tileset = map.addTilesetImage("room-tileset", "tiles");
+
+        const belowLayer = map.createStaticLayer("Below Player", tileset, 0, 0);
+        worldLayer = map.createStaticLayer("World", tileset, 0, 0);
+        const aboveLayer = map.createStaticLayer("Above Player", tileset, 0, 0);
+
+        worldLayer.setCollisionByProperty({ collides: true });
+        aboveLayer.setDepth(10);
+        spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
+
+        const enterArea = map.findObject("Objects", obj => obj.name === "Enter Area");
+        enterRec = new Phaser.GameObjects.Rectangle(scene, enterArea.x, enterArea.y, enterArea.width, enterArea.height);
+
+        // Create a sprite with physics enabled via the physics system. The image used for the sprite has
+        // a bit of whitespace, so I'm using setSize & setOffset to control the size of the player's body.
+        // if(player)
+        if (player == undefined) {
+            player = scene.physics.add
+                .sprite(spawnPoint.x, spawnPoint.y, "atlas", "misa-front")
+                .setSize(30, 40)
+                .setOffset(0, 24).setDepth(5);
+        } else {
+            scene.physics.world.removeCollider(colPW);
+            player.x = spawnPoint.x;
+            player.y = spawnPoint.y;
+        }
+
+        colPW = scene.physics.add.collider(player, worldLayer);
+
+        camera = scene.cameras.main;
+        camera.startFollow(player);
+        camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     }
 }

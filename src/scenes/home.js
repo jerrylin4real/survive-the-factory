@@ -1,5 +1,6 @@
 /*
-    Work by syoung125 for reference
+    Work by syoung125; for code reference only
+    https://syoung125.github.io/SurvivalGame-phaser/WEB_GA/home/home.html
 */
 
 let cursors;
