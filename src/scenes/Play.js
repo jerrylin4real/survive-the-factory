@@ -185,10 +185,16 @@ class Play extends Phaser.Scene {
         }
     }
 
-    mouseEvent(){ // crossair follows the user mouse input
+    mouseEvent(){ 
+        // crossair follows the user mouse input
         this.input.on('pointermove', pointer =>{
             this.mouse.x = pointer.x;
             this.mouse.y = pointer.y;
+        });
+
+        this.input.on('pointerdown', pointer =>{
+            //create a seperate function for on click event
+
         });
     }
 
