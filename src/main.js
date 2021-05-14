@@ -1,9 +1,18 @@
 let config = {
   type: Phaser.CANVAS,
-  width: 640,
-  height: 480,
-  scene: [Menu, Play]
-}
+  parent: "game-container",
+  pixelArt: true,
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: { y: 0 }
+    }
+  },
+  scene: [
+    Menu, 
+    Play
+  ]
+};
 
 var game = new Phaser.Game(config);
 

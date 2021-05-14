@@ -18,6 +18,8 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
+        console.log("preload");
+
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('rocket2', './assets/rocket2.png');
@@ -35,6 +37,7 @@ class Play extends Phaser.Scene {
 
 
     create() {
+        console.log("create");
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
