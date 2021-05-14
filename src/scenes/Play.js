@@ -169,13 +169,13 @@ class Play extends Phaser.Scene {
 
         // play clock
         this.scoreConfig.fixedWidth = 0;
-        this.countdownText = this.add.text(440, borderUISize + borderPadding + 10, 'Countdown: ' + this.formatTime(this.initialTime));
+        this.timeText = this.add.text(440, borderUISize + borderPadding + 10, 'Time: ' + this.formatTime(this.initialTime));
 
         // super weapon indicator
         this.superWeaponText = this.add.text(440, borderUISize + borderPadding + 40, 'Superweapon(V): ' + this.superWeaponCount);
 
-        // For each 1000 ms or 1 second, call onEvent
-        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
+        // For each 1000 ms or 1 second, call onTimedEvent
+        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
 
         /*
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
@@ -224,11 +224,11 @@ class Play extends Phaser.Scene {
         // check key input for restart / menu
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
             this.gameOver = true;
-            this.initialTime = 0;
+            //this.initialTime = 0;
         }
 
         // Game Over text
-        if (this.initialTime <= 0) {
+        if (this.gameOver) {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', this.scoreConfig).setOrigin(0.5);
             this.gameOver = true;
@@ -271,7 +271,7 @@ class Play extends Phaser.Scene {
 
         // if game is not over...
         if (!this.gameOver) {
-            this.p1Rocket.update();             // update p1rockt
+
             this.player1.update();             // update player1
             this.ship01.update();               // update spaceship (x4)
             this.ship02.update();
@@ -342,14 +342,14 @@ class Play extends Phaser.Scene {
         return `${minutes}:${partInSeconds}`;
     }
 
-    onEvent() {
+    onTimeEvent() {
         // run update()
         this.update();
         if (!this.gameOver) {
-            this.initialTime -= 1; // countdown 1 for one second
-            this.countdownText.setText('Countdown: ' + this.formatTime(this.initialTime));
-            if (this.hasted == false) {
-                this.hasteCounter += 1;
+            this.initialTime += 1; // countdown 1 for one second
+            this.timeText.setText('Time: ' + this.formatTime(this.initialTime));
+            if (this.hasted == false) { 
+                this.hasteCounter += 1; // if >= 30, ships will go faster
             }
             if (this.p1Score >= 30 && this.p1Score <= 100 && !this.superWeaponRewarded) {
                 this.superWeaponRewarded = true;
