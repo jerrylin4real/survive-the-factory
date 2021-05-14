@@ -2,9 +2,9 @@
 class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
+        scene.add.existing(this);   // add to existing, displayList, updateList
         this.health = 100;
         this.hunger = 0;
-        scene.add.existing(this);   // add to existing, displayList, updateList
         this.moveSpeed = 2;         // pixels per frame
     }
 
@@ -14,20 +14,23 @@ class Player extends Phaser.GameObjects.Sprite {
         // fire button
         if (Phaser.Input.Keyboard.JustDown(keyF) && !this.isFiring) {
             this.isFiring = true;
-            this.sfxRocket.play();
         }
-        // if fired, move up
-        if (this.isFiring && this.y >= borderUISize * 3 + borderPadding) {
+        // is Down = keep pressed down
+        if (keyA.isDown && this.x >= borderLimitDown) {
+            this.x -= this.moveSpeed;
+        } else if (keyD.isDown && this.x <= game.config.width - borderUISize) {
+            this.x += this.moveSpeed;
+        }
+        //  player control:W S A D
+        if (keyW.isDown && this.y >= borderLimitUp - borderUISize) {
             this.y -= this.moveSpeed;
-            if (keyLEFT.isDown && this.x >= borderUISize + this.width) {
-                this.x -= this.moveSpeed;
-            } else if (keyRIGHT.isDown && this.x <= game.config.width - borderUISize - this.width) {
-                this.x += this.moveSpeed;
-            }
+        } else if (keyS.isDown && this.y <= game.config.height - borderLimitDown) {
+            this.y += this.moveSpeed;
         }
+
         // reset on miss
         if (this.y <= borderUISize * 3 + borderPadding) {
-            this.reset();
+            // this.reset();
         }
     }
 

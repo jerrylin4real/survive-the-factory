@@ -49,6 +49,9 @@ class Play extends Phaser.Scene {
         this.superWeaponRewarded = false;
 
 
+        //  Make the world larger than the actual canvas; buggy
+        //this.game.world.setBounds(0, 0, 1400, 1400);
+
         // Add time counters
         this.initialTime = game.settings.gameTimer;
         this.hasteCounter = 0; // Increase ships' movespeed if >= 30.
@@ -58,7 +61,7 @@ class Play extends Phaser.Scene {
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
         // Azure/0x3e5861 UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00BBFF).setOrigin(0, 0);
+        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderLimitDown, 0x00BBFF).setOrigin(0, 0);
 
         // Grey/0x00BBFF borders 
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0x3e5861).setOrigin(0, 0);
@@ -68,14 +71,29 @@ class Play extends Phaser.Scene {
 
         // add player 
         this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-        this.player1 = new Player(this, borderUISize * 3, game.config.height - borderUISize * 2.5, 'player').setScale(0.2); // scale the size of player1
+        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'player').setScale(0.2); // scale the size of player1
 
+        // add camera
+
+        // Set the camera bounds
+        this.cameras.main.setBounds(0, 0, game.config.width, game.config.height);
+        this.cameras.main.setZoom(1);
+        //Set the camera to follow player1
+        this.cameras.main.startFollow(this.player1);
+
+
+        // follow style switch buttons
+        /*btn0 = game.add.button(6, 40, 'button', lockonFollow, this, 0, 0, 0);
+        btn1 = game.add.button(6, 120, 'button', platformerFollow, this, 1, 1, 1);
+        btn2 = game.add.button(6, 200, 'button', topdownFollow, this, 2, 2, 2);
+        btn3 = game.add.button(6, 280, 'button', topdownTightFollow, this, 3, 3, 3);
+        */
         // add Spaceships (x3)
 
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
+        this.ship01 = new Spaceship(this, game.config.width + borderLimitUp, borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20, 2).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
-        this.ship04 = new Spaceship(this, game.config.width, borderUISize * 2 + 45, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, game.config.width, borderLimitUp + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
+        this.ship04 = new Spaceship(this, game.config.width, borderLimitDown + 45, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
         this.ship04.moveSpeed = 10;
 
         // define mouse control
@@ -141,7 +159,7 @@ class Play extends Phaser.Scene {
             color: 'red', // color hex code: black
             fixedWidth: 150
         }
-        this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: F <- ->', redConfig);
+        this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: WSAD', redConfig);
         this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
         // GAME OVER flag
@@ -185,16 +203,16 @@ class Play extends Phaser.Scene {
         }
     }
 
-    mouseEvent(){ 
+    mouseEvent() {
         // crossair follows the user mouse input
-        this.input.on('pointermove', pointer =>{
+        this.input.on('pointermove', pointer => {
             this.mouse.x = pointer.x;
             this.mouse.y = pointer.y;
         });
 
-        this.input.on('pointerdown', pointer =>{
+        this.input.on('pointerdown', pointer => {
             //create a seperate function for on click event
-
+            this.superWeaponCount += 1;
         });
     }
 
@@ -207,6 +225,7 @@ class Play extends Phaser.Scene {
             this.initialTime = 0;
         }
 
+        // Game Over text
         if (this.initialTime <= 0) {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', this.scoreConfig).setOrigin(0.5);
@@ -248,9 +267,10 @@ class Play extends Phaser.Scene {
 
         this.starfield.tilePositionX -= 4;  // update tile sprite
 
+        // if game is not over...
         if (!this.gameOver) {
-
-            this.p1Rocket.update();             // update p1
+            this.p1Rocket.update();             // update p1rockt
+            this.player1.update();             // update player1
             this.ship01.update();               // update spaceship (x4)
             this.ship02.update();
             this.ship03.update();
@@ -259,8 +279,6 @@ class Play extends Phaser.Scene {
             // Debugging Only
             // console.log('gametime: ' + this.game.getTimer());
         }
-        // update mouse control
-
 
         // new weapon
         if (this.superWeaponCount > 0 && Phaser.Input.Keyboard.JustDown(keyV)) { // if pressed v for superweapon
@@ -323,8 +341,7 @@ class Play extends Phaser.Scene {
     }
 
     onEvent() {
-
-        // console.log("initialTime: " + this.initialTime); // debug only
+        // run update()
         this.update();
         if (!this.gameOver) {
             this.initialTime -= 1; // countdown 1 for one second
