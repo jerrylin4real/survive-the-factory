@@ -24,7 +24,7 @@ Spring 2021
 
 ---
 ### Reference:
-- https://codepen.io/samme/pen/JBwWLN?editors=0010
+- https://www.codecaptain.io/blog/game-development/shooting-bullets-phaser-3-using-arcade-physics-groups/696
  
 ### Credit  
 - [FPSOSU! Crosshair + Minimal skin](https://steamcommunity.com/sharedfiles/filedetails/?id=1789952373)
