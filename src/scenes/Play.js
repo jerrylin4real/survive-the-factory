@@ -28,6 +28,9 @@ class Play extends Phaser.Scene {
         this.load.image('starfield', './assets/nebulaRed2.png'); // Not showing the full img? Default: starfield.png 
         this.load.image('smallfreighterspr', './assets/smallfreighterspr.png');
         this.load.image('speedship', './assets/speedship.png');
+        this.load.image('player', './assets/Runner-obstacle.png'); // Placeholder file for now; FIXME!!!
+        this.load.image('mouse', 'assets/sprites/mouse.png'); // for mouse control
+
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
@@ -39,10 +42,12 @@ class Play extends Phaser.Scene {
 
     create() {
         console.log("create");
+        // Scene-level variables
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
         this.superWeaponRewarded = false;
+
 
         // Add time counters
         this.initialTime = game.settings.gameTimer;
@@ -61,19 +66,26 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
 
-        // add Rockets for player(s) 
+        // add player 
         this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-
-        this.p2Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(490, 0);
+        this.player1 = new Player(this, borderUISize * 3, game.config.height - borderUISize * 2.5, 'player').setScale(0.2); // scale the size of player1
 
         // add Spaceships (x3)
+
         this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20, 2).setOrigin(0, 0);
         this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
         this.ship04 = new Spaceship(this, game.config.width, borderUISize * 2 + 45, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
         this.ship04.moveSpeed = 10;
 
-        // define keys
+        // define mouse control
+        this.mouse = this.add.sprite(game.config.width / 2, game.config.height / 2, 'mouse').setScale(0.2);
+        this.input.mouse.capture = true;
+        this.mouseEvent(); // redirect to mouseEvent()
+        //Mouse Wheel example: https://phaser.io/examples/v3/view/input/mouse/mouse-wheel
+
+
+        // define key control
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -173,6 +185,12 @@ class Play extends Phaser.Scene {
         }
     }
 
+    mouseEvent(){ // crossair follows the user mouse input
+        this.input.on('pointermove', pointer =>{
+            this.mouse.x = pointer.x;
+            this.mouse.y = pointer.y;
+        });
+    }
 
 
     update() {
@@ -199,7 +217,6 @@ class Play extends Phaser.Scene {
             }
         }
         */
-
 
         if (this.hasteCounter > 30 && this.hasted == false) {
             this.ship01.moveSpeed += 2;
@@ -236,6 +253,8 @@ class Play extends Phaser.Scene {
             // Debugging Only
             // console.log('gametime: ' + this.game.getTimer());
         }
+        // update mouse control
+
 
         // new weapon
         if (this.superWeaponCount > 0 && Phaser.Input.Keyboard.JustDown(keyV)) { // if pressed v for superweapon
@@ -273,6 +292,18 @@ class Play extends Phaser.Scene {
 
     }
 
+    render() {
+        // mouse debug
+        this.debug.text("Left Button: " + game.input.activePointer.leftButton.isDown, 300, 132);
+        this.debug.text("Middle Button: " + game.input.activePointer.middleButton.isDown, 300, 196);
+        this.debug.text("Right Button: " + game.input.activePointer.rightButton.isDown, 300, 260);
+
+    }
+
+
+    /******************************************************
+    * Module-level funcions defined below
+    *******************************************************/
 
     formatTime(seconds) {
         // Minutes
@@ -417,3 +448,4 @@ class Play extends Phaser.Scene {
         camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     }
 }
+
