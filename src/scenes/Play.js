@@ -156,6 +156,7 @@ class Play extends Phaser.Scene {
 
         this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
         this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
+            //!FIXME implement ("Scum2DTopScore") mechenism;
             localStorage.getItem("RocketPatrolTopScore"), textConfig);
 
         let redConfig = {
@@ -173,7 +174,7 @@ class Play extends Phaser.Scene {
         this.timeText = this.add.text(440, borderUISize + borderPadding + 10, 'Time: ' + this.formatTime(this.initialTime));
 
         // super weapon indicator
-        this.superWeaponText = this.add.text(440, borderUISize + borderPadding + 40, 'Superweapon(V): ' + this.superWeaponCount);
+        //this.superWeaponText = this.add.text(440, borderUISize + borderPadding + 40, 'Superweapon(V): ' + this.superWeaponCount);
 
         // For each 1000 ms or 1 second, call onTimedEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
@@ -221,6 +222,7 @@ class Play extends Phaser.Scene {
 
 
     update() {
+        console.log("update()");
         // let paused = false;
         // check key input for restart / menu
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
@@ -360,7 +362,7 @@ class Play extends Phaser.Scene {
                 this.superWeaponRewarded = true;
                 this.superWeaponCount += 1;
             }
-            this.superWeaponText.setText('Superweapon(V): ' + this.superWeaponCount);
+            //this.superWeaponText.setText('Superweapon(V): ' + this.superWeaponCount);
         }
     }
 
