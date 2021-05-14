@@ -7,7 +7,7 @@ Spring 2021
 ### Note:
 - [Public GitHub repository](https://github.com/jerrylin4real/scum-2D)
 
-- [GitHub page]()
+- [GitHub page](https://jerrylin4real.github.io/scum-2D/)
 
 - [Group Google drive](https://drive.google.com/drive/folders/1LB6Vdx5lpXOuZgMV4hXCGnVQgUnjNuvu?usp=sharing)
 
