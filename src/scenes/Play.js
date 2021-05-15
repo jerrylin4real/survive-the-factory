@@ -366,12 +366,12 @@ class Play extends Phaser.Scene {
         }
     }
 
-    checkCollision(player1, ship) {
+    checkCollision(player, ship) {
         // simple AABB checking
-        if (player1.x < ship.x + ship.width &&
-            player1.x + player1.width > ship.x &&
-            player1.y < ship.y + ship.height &&
-            player1.height + player1.y > ship.y) {
+        if (player.x < ship.x + ship.width &&
+            player.x + player.width > ship.x &&
+            player.y < ship.y + ship.height &&
+            player.height + player.y > ship.y) {
             return true;
         } else {
             return false;
