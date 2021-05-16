@@ -73,7 +73,7 @@ class Play extends Phaser.Scene {
 
         // add player 
         //this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'player').setScale(0.1); // scale the size of player1
+        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'player').setScale(1); // scale the size of player1
 
         // add camera
 
