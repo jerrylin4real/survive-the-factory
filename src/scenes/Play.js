@@ -50,7 +50,7 @@ class Play extends Phaser.Scene {
 
 
         //  Make the world larger than the actual canvas; buggy
-        //this.game.world.setBounds(0, 0, 1400, 1400);
+        //this.game.world.setBounds(1400, 1400);
 
         // Add time counters
         this.initialTime = game.settings.gameTimer;
@@ -72,8 +72,8 @@ class Play extends Phaser.Scene {
         */
 
         // add player 
-        this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'player').setScale(0.1); // scale the size of player1
+        //this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
+        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'player').setScale(1); // scale the size of player1
 
         // add camera
 
@@ -299,27 +299,27 @@ class Play extends Phaser.Scene {
             ];
 
             let randomShip = ships[Math.floor(Math.random() * ships.length)];
-            this.p1Rocket.reset();
+            //this.player1.reset();
             this.shipExplode2(randomShip);
             this.superWeaponCount -= 1;
         }
 
         // check collisions
-        if (this.checkCollision(this.p1Rocket, this.ship04)) {
-            this.p1Rocket.reset();
+        if (this.checkCollision(this.player1, this.ship04)) {
+            //this.player1.reset();
             this.shipExplode(this.ship04);
         }
 
-        if (this.checkCollision(this.p1Rocket, this.ship03)) {
-            this.p1Rocket.reset();
+        if (this.checkCollision(this.player1, this.ship03)) {
+            //this.player1.reset();
             this.shipExplode(this.ship03);
         }
-        if (this.checkCollision(this.p1Rocket, this.ship02)) {
-            this.p1Rocket.reset();
+        if (this.checkCollision(this.player1, this.ship02)) {
+            //this.player1.reset();
             this.shipExplode(this.ship02);
         }
-        if (this.checkCollision(this.p1Rocket, this.ship01)) {
-            this.p1Rocket.reset();
+        if (this.checkCollision(this.player1, this.ship01)) {
+            //this.player1.reset();
             this.shipExplode(this.ship01);
         }
 
@@ -366,12 +366,12 @@ class Play extends Phaser.Scene {
         }
     }
 
-    checkCollision(rocket, ship) {
+    checkCollision(player, ship) {
         // simple AABB checking
-        if (rocket.x < ship.x + ship.width &&
-            rocket.x + rocket.width > ship.x &&
-            rocket.y < ship.y + ship.height &&
-            rocket.height + rocket.y > ship.y) {
+        if (player.x < ship.x + ship.width &&
+            player.x + player.width > ship.x &&
+            player.y < ship.y + ship.height &&
+            player.height + player.y > ship.y) {
             return true;
         } else {
             return false;

@@ -8,7 +8,7 @@ let player;
 let showDebug = false;
 var game;
 var worldLayer;
-var speed = 175;
+var speed = 100;
 var preSpeed;
 var score = 0;
 
