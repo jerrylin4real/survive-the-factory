@@ -1,6 +1,6 @@
 # Final CMPM120 Project: SCUM-2D
-Author: Leland Jin, Jerry Lin, Lakery Cao
-Date: May 14, 2021
+Author: Leland Jin, Jerry Lin, Lakery Cao \
+Date: May 14, 2021 \
 Spring 2021  
 
 ---
@@ -16,7 +16,7 @@ Spring 2021
 
 - You can use Python as a web server to host the game locally: `python3 -m http.server`
 
-`Patch v0.1`
+`Patch v0.1:`
 - Hours taken: 
   - 16 hours
 - Features implemented:

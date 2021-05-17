@@ -156,7 +156,7 @@ class Play extends Phaser.Scene {
 
         this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
         this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
-            //!FIXME implement ("Scum2DTopScore") mechenism;
+            //!FIXME implement ("Scum2DTopScore") mechanism;
             localStorage.getItem("RocketPatrolTopScore"), textConfig);
 
         let redConfig = {
@@ -222,7 +222,7 @@ class Play extends Phaser.Scene {
 
 
     update() {
-        console.log("update()");
+        //console.log("update()");
         // let paused = false;
         // check key input for restart / menu
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
