@@ -4,7 +4,22 @@ class Player extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
         scene.add.existing(this);   // add to existing, displayList, updateList
         this.health = 100;
-        this.hunger = 0;
+        this.kcal_intake = 2500;
+        this.kcal_usage = 2500;
+        this.target_percentage = this.kcal_intake * 100 / this.kcal_usage;
+        this.hunger = 0; // character dies after their hunger reaches 100 for 7 days 
+        this.thrist = 0; // character dies after their thrist reaches 100 for 3 days 
+        
+        // Digestion Variables
+        // volumes below are in percentage
+        this.stomach_volume = 0;
+        this.intestine_volume = 0;
+        this.colon_volume = 0;
+        this.bladder_volume = 0;
+        
+        this.walkspeed = 6;
+        this.runspeed = 10;
+
         this.moveSpeed = 15;         // pixels per frame
     }
 
@@ -29,6 +44,11 @@ class Player extends Phaser.GameObjects.Sprite {
         } else if (keyS.isDown && this.y <= game.config.height * 10 - borderLimitDown) {
             this.y += this.moveSpeed;
         }
+        
+        //state machines
+
+        // metabolism 
+        
 
         // reset on miss
         if (this.y <= borderUISize * 3 + borderPadding) {

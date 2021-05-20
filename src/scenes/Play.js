@@ -119,6 +119,11 @@ class Play extends Phaser.Scene {
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         keyV = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+
+
         // animation config
         this.anims.create({
             key: 'explode',
@@ -358,6 +363,7 @@ class Play extends Phaser.Scene {
             if (this.hasted == false) {
                 this.hasteCounter += 1; // if >= 30, ships will go faster
             }
+            // add superweapon
             if (this.p1Score >= 30 && this.p1Score <= 100 && !this.superWeaponRewarded) {
                 this.superWeaponRewarded = true;
                 this.superWeaponCount += 1;
