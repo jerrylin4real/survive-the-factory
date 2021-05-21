@@ -119,9 +119,8 @@ class Play extends Phaser.Scene {
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         keyV = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
-        keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-        keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
 
         // animation config
@@ -212,20 +211,6 @@ class Play extends Phaser.Scene {
         }
     }
 
-    mouseEvent() {
-        // crossair follows the user mouse input
-        this.input.on('pointermove', pointer => {
-            this.mouse.x = pointer.x;
-            this.mouse.y = pointer.y;
-        });
-
-        this.input.on('pointerdown', pointer => {
-            //create a seperate function for on click event
-            this.superWeaponCount += 1;
-        });
-    }
-
-
     update() {
         //console.log("update()");
         // let paused = false;
@@ -276,8 +261,21 @@ class Play extends Phaser.Scene {
             this.scene.restart();
         }
 
+        if (Phaser.Input.Keyboard.JustDown(keyTAB)) {
+            console.log("Pressed TAB");
+           
+            
+            // set the inventoryText to be visible
+            //inventoryText.alpha = 1;
+            
+            //  Dispatch a Scene event
+            this.events.emit('openInventory');
+            console.log("EVENT openInventory dispatched");
 
-      
+        }
+
+
+
 
         this.starfield.tilePositionX -= 0;  // update tile sprite
 
@@ -331,18 +329,29 @@ class Play extends Phaser.Scene {
     }
 
     render() {
-        // mouse debug
+        /* mouse debug
         this.debug.text("Left Button: " + game.input.activePointer.leftButton.isDown, 300, 132);
         this.debug.text("Middle Button: " + game.input.activePointer.middleButton.isDown, 300, 196);
         this.debug.text("Right Button: " + game.input.activePointer.rightButton.isDown, 300, 260);
-
+        */
     }
 
 
     /******************************************************
     * Module-level funcions defined below
     *******************************************************/
+    mouseEvent() {
+        // crossair follows the user mouse input
+        this.input.on('pointermove', pointer => {
+            this.mouse.x = pointer.x;
+            this.mouse.y = pointer.y;
+        });
 
+        this.input.on('pointerdown', pointer => {
+            //create a seperate function for on click event
+            this.superWeaponCount += 1;
+        });
+    }
     formatTime(seconds) {
         // Minutes
         var minutes = Math.floor(seconds / 60);
