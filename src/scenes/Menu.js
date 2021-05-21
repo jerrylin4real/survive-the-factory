@@ -34,7 +34,8 @@ class Menu extends Phaser.Scene {
 
     // show menu text
     this.add.text(game.config.width / 2, game.config.height / 2 - borderUISize - borderPadding, 'SCUM-2D', menuConfig).setOrigin(0.5);
-    this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact', menuConfig).setOrigin(0.5);
+    this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB for inventory\nPress T for Tutorial',
+     menuConfig).setOrigin(0.5);
     menuConfig.backgroundColor = '#00FF00';
     menuConfig.color = '#000';
     this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding, 'Press -> to play', menuConfig).setOrigin(0.5);

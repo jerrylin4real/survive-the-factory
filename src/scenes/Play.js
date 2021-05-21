@@ -47,6 +47,7 @@ class Play extends Phaser.Scene {
         this.bgmCreated = false;
         this.hasted = false;
         this.superWeaponRewarded = false;
+        this.openedInventory = false;
 
 
         //  Make the world larger than the actual canvas; buggy
@@ -263,19 +264,20 @@ class Play extends Phaser.Scene {
 
         if (Phaser.Input.Keyboard.JustDown(keyTAB)) {
             console.log("Pressed TAB");
-           
-            
-            // set the inventoryText to be visible
-            //inventoryText.alpha = 1;
-            
+
+
             //  Dispatch a Scene event
             this.events.emit('openInventory');
             console.log("EVENT openInventory dispatched");
 
+            // } else {
+            //     this.openedInventory = false;
+            //     //  Dispatch a Scene event
+            //     this.events.emit('closeInventory');
+            //     console.log("EVENT closeInventory dispatched");
+            // }
+
         }
-
-
-
 
         this.starfield.tilePositionX -= 0;  // update tile sprite
 

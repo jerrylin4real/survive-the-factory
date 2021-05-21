@@ -28,7 +28,8 @@ let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyA, keyD, keyQ,
 
 
 
-// global variables/
+// Macros, global variables:
+var BROWN = 0x664C47;
 
 /*
 var velocityFromRotation = Phaser.Physics.Arcade.ArcadePhysics.prototype.velocityFromRotation;
