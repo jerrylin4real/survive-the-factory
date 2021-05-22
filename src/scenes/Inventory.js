@@ -2,7 +2,7 @@ class Inventory extends Phaser.Scene {
 
     constructor() {
         // inventory scene is kind of a HUD/UI panel
-        super({ key: 'UIScene', active: true });
+        super({ key: 'UIScene', active: true }); // !There can only be one UIScene
 
         this.score = 0;
     }
@@ -13,15 +13,16 @@ class Inventory extends Phaser.Scene {
 
         // load audio
         //this.load.audio('switchsound', './assets/switchsound.wav');
-        
+
 
     }
     create() {
         //  Our GLOBAL Text object to display the Inventory
-        console.log("entered Inventory scene");
-        
+        console.log("entered UI scene");
 
-        this.inventoryText = this.add.text(10, 10, 'Inventory:  ', { font: '48px Arial', fill: 'WHITE' });
+
+        this.inventoryText = this.add.text(10, 10, '1.Inventory  ', { font: '48px Arial', fill: 'WHITE' });
+        this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '3.Metabolism  ', { font: '48px Arial', fill: 'WHITE' });
 
         // add UI Panel
         // @ param          (scene(neglected),    x, y,                          ,width,        
@@ -33,23 +34,36 @@ class Inventory extends Phaser.Scene {
             game.config.height * 2, BROWN).setOrigin(0, 0);
 
 
+        this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
+            //                          height, fillColor)
+            game.config.height - borderPadding, sadBLUE).setOrigin(0, 0);
+
+        this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
+            game.config.height * 2, sadBLUE).setOrigin(0, 0);
         // set the UI to be invisible as default
+
         this.inventoryUILeft.alpha = 0;
         this.inventoryUIRight.alpha = 0;
-
         this.inventoryText.alpha = 0;
+
+        this.metabolismText.alpha = 0;
+        this.metabolismUILeft.alpha = 0;
+        this.metabolismUIRight.alpha = 0;
+
 
         //  Grab a reference to the Play Scene
         this.ourGame = this.scene.get('playScene');
 
         // define key control
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+
 
         //  Listen for events from it
         this.ourGame.events.on('openInventory', function () {
             if (!this.openedInventory) {
                 console.log("Loading inventory");
-
+                this.closeMetabolism();
                 // visualize UI Panel            
                 this.inventoryUILeft.alpha = 1;
                 this.inventoryText.alpha = 1;
@@ -57,21 +71,47 @@ class Inventory extends Phaser.Scene {
 
                 this.openedInventory = true;
             } else {
-                console.log("closing inventory");
-                // close UI Panel            
-                this.inventoryUILeft.alpha = 0;
-                this.inventoryText.alpha = 0;
-                this.inventoryUIRight.alpha = 0;
-
-                this.openedInventory = false;
+                this.closeInventory();
             }
-
 
         }, this);
     }
 
     update() {
 
+        if (!this.openedMetabolism && Phaser.Input.Keyboard.JustDown(keyM)) {
+            console.log("Loading Metabolism");
+            this.closeInventory();
+            // visualize UI Panel            
+            this.metabolismUILeft.alpha = 1;
+            this.metabolismText.alpha = 1;
+            this.metabolismUIRight.alpha = 1;
+            this.openedMetabolism = true;
+        }
 
+        if (this.openedMetabolism && Phaser.Input.Keyboard.JustDown(keyM)) {
+            this.closeMetabolism();
+        }
+
+    }
+
+    closeInventory() {
+        console.log("closing inventory");
+        // close UI Panel            
+        this.inventoryUILeft.alpha = 0;
+        this.inventoryText.alpha = 0;
+        this.inventoryUIRight.alpha = 0;
+
+        this.openedInventory = false;
+    }
+
+    closeMetabolism() {
+        console.log("closing Metabolism");
+
+        // close UI Panel            
+        this.metabolismUILeft.alpha = 0;
+        this.metabolismText.alpha = 0;
+        this.metabolismUIRight.alpha = 0;
+        this.openedMetabolism = false;
     }
 }

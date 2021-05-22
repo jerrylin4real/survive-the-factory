@@ -25,7 +25,7 @@ class Play extends Phaser.Scene {
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('rocket2', './assets/rocket2.png');
         this.load.image('spaceship', './assets/spaceship.png');
-        this.load.image('starfield', './assets/nebulaRed2.png'); // Not showing the full img? Default: starfield.png 
+        this.load.image('starfield', './assets/nebulaRed.png'); // Not showing the full img? Default: starfield.png 
         this.load.image('smallfreighterspr', './assets/smallfreighterspr.png');
         this.load.image('speedship', './assets/speedship.png');
         this.load.image('player', './assets/Runner-obstacle.png'); // Placeholder file for now; FIXME!!!
@@ -48,6 +48,7 @@ class Play extends Phaser.Scene {
         this.hasted = false;
         this.superWeaponRewarded = false;
         this.openedInventory = false;
+        this.openedMetabolism = false;
 
 
         //  Make the world larger than the actual canvas; buggy
@@ -59,7 +60,7 @@ class Play extends Phaser.Scene {
         this.superWeaponCount = 0;
 
         // place tile sprite
-        this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+        this.starfield = this.add.tileSprite(0, 0, 9999, 9999, 'starfield').setOrigin(0, 0);
 
         // Azure/0x3e5861 UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderLimitDown, 0x00BBFF).setOrigin(0, 0);
@@ -269,14 +270,16 @@ class Play extends Phaser.Scene {
             //  Dispatch a Scene event
             this.events.emit('openInventory');
             console.log("EVENT openInventory dispatched");
+        }
 
-            // } else {
-            //     this.openedInventory = false;
-            //     //  Dispatch a Scene event
-            //     this.events.emit('closeInventory');
-            //     console.log("EVENT closeInventory dispatched");
-            // }
 
+        if (Phaser.Input.Keyboard.JustDown(keyM)) {
+            console.log("Pressed M");
+
+
+            //  Dispatch a Scene event
+            this.events.emit('openMetabolism');
+            console.log("EVENT openMetabolism dispatched");
         }
 
         this.starfield.tilePositionX -= 0;  // update tile sprite

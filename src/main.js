@@ -11,7 +11,7 @@ let config = {
   scene: [
     Menu,
     Play,
-    Inventory
+    Inventory,
   ]
 };
 
@@ -24,12 +24,13 @@ let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
 let borderLimitUp = borderUISize * 6;
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB;
+let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, key3;
 
 
 
 // Macros, global variables:
 var BROWN = 0x664C47;
+var sadBLUE = 0x194376;
 
 /*
 var velocityFromRotation = Phaser.Physics.Arcade.ArcadePhysics.prototype.velocityFromRotation;
