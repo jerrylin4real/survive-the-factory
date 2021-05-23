@@ -1,4 +1,4 @@
-class Inventory extends Phaser.Scene {
+class UI extends Phaser.Scene {
 
     constructor() {
         // inventory scene is kind of a HUD/UI panel
@@ -13,6 +13,7 @@ class Inventory extends Phaser.Scene {
 
         // load audio
         //this.load.audio('switchsound', './assets/switchsound.wav');
+        this.load.image('mouse', 'assets/sprites/mouse.png'); // for mouse control
 
 
     }
@@ -40,8 +41,8 @@ class Inventory extends Phaser.Scene {
 
         this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, sadBLUE).setOrigin(0, 0);
-        // set the UI to be invisible as default
 
+        // set the UI to be invisible as default
         this.inventoryUILeft.alpha = 0;
         this.inventoryUIRight.alpha = 0;
         this.inventoryText.alpha = 0;
@@ -57,6 +58,12 @@ class Inventory extends Phaser.Scene {
         // define key control
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+
+        // define mouse control
+        this.mouse = this.add.sprite(game.config.width / 2, game.config.height / 2, 'mouse').setScale(0.2);
+        this.input.mouse.capture = true;
+        this.mouseEvent(); // redirect to mouseEvent()
+        //Mouse Wheel example: https://phaser.io/examples/v3/view/input/mouse/mouse-wheel
 
 
         //  Listen for events from it
@@ -93,6 +100,22 @@ class Inventory extends Phaser.Scene {
             this.closeMetabolism();
         }
 
+    }
+
+    /******************************************************
+    * Module-level funcions defined below
+    *******************************************************/
+    mouseEvent() {
+        // crossair follows the user mouse input
+        this.input.on('pointermove', pointer => {
+            this.mouse.x = pointer.x;
+            this.mouse.y = pointer.y;
+        });
+
+        this.input.on('pointerdown', pointer => {
+            //create a seperate function for on click event
+
+        });
     }
 
     closeInventory() {

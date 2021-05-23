@@ -29,7 +29,6 @@ class Play extends Phaser.Scene {
         this.load.image('smallfreighterspr', './assets/smallfreighterspr.png');
         this.load.image('speedship', './assets/speedship.png');
         this.load.image('player', './assets/Runner-obstacle.png'); // Placeholder file for now; FIXME!!!
-        this.load.image('mouse', 'assets/sprites/mouse.png'); // for mouse control
 
 
         // load spritesheet
@@ -99,14 +98,6 @@ class Play extends Phaser.Scene {
         this.ship03 = new Spaceship(this, game.config.width, borderLimitUp + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
         this.ship04 = new Spaceship(this, game.config.width, borderLimitDown + 45, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
         this.ship04.moveSpeed = 10;
-
-        // define mouse control
-        this.mouse = this.add.sprite(game.config.width / 2, game.config.height / 2, 'mouse').setScale(0.2);
-        this.input.mouse.capture = true;
-        //!FIXME mouse cannot move beyound game window size
-        this.mouseEvent(); // redirect to mouseEvent()
-        //Mouse Wheel example: https://phaser.io/examples/v3/view/input/mouse/mouse-wheel
-
 
         // define key control
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -345,18 +336,6 @@ class Play extends Phaser.Scene {
     /******************************************************
     * Module-level funcions defined below
     *******************************************************/
-    mouseEvent() {
-        // crossair follows the user mouse input
-        this.input.on('pointermove', pointer => {
-            this.mouse.x = pointer.x;
-            this.mouse.y = pointer.y;
-        });
-
-        this.input.on('pointerdown', pointer => {
-            //create a seperate function for on click event
-            this.superWeaponCount += 1;
-        });
-    }
     formatTime(seconds) {
         // Minutes
         var minutes = Math.floor(seconds / 60);

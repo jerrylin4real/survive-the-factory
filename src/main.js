@@ -11,7 +11,7 @@ let config = {
   scene: [
     Menu,
     Play,
-    Inventory,
+    UI
   ]
 };
 
