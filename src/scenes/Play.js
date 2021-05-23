@@ -113,6 +113,12 @@ class Play extends Phaser.Scene {
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+        keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
+        key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
+        key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
+
 
 
         // animation config
@@ -150,8 +156,8 @@ class Play extends Phaser.Scene {
         this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: WSAD', redConfig);
         this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
-        // GAME OVER flag
-        this.gameOver = false;
+        // clear GAME OVER flag
+        gameOver = false;
 
         // play clock
         this.scoreConfig.fixedWidth = 0;
@@ -167,7 +173,7 @@ class Play extends Phaser.Scene {
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
-            this.gameOver = true;
+            gameOver = true;
         }, null, this);
         */
         // play background music 
@@ -196,19 +202,19 @@ class Play extends Phaser.Scene {
         // let paused = false;
         // check key input for restart / menu
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
-            this.gameOver = true;
+            gameOver = true;
             //this.initialTime = 0;
         }
         if (Phaser.Input.Keyboard.JustDown(keyESC)) {
-            this.gameOver = true;
+            gameOver = true;
             this.scene.start("menuScene");
         }
 
         // Game Over text
-        if (this.gameOver) {
+        if (gameOver) {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
-            this.gameOver = true;
+            gameOver = true;
         }
         // Pause feature
         /* if (Phaser.Input.Keyboard.JustDown(keyP)) {
@@ -231,7 +237,7 @@ class Play extends Phaser.Scene {
         }
 
 
-        if (this.gameOver)
+        if (gameOver)
             if (this.bgmCreated) {
                 this.bgm.pause()
                 this.bgmPlayed = false;
@@ -239,34 +245,35 @@ class Play extends Phaser.Scene {
 
         if (restartPlay || Phaser.Input.Keyboard.JustDown(keyR)) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
             this.scene.restart();
-            
+
             // clear event flag
             restartPlay = false;
         }
 
-        if (Phaser.Input.Keyboard.JustDown(keyTAB)) {
-            console.log("Pressed TAB");
-
-
-            //  Dispatch a Scene event
+        // ** Send events to UI.js
+        if (Phaser.Input.Keyboard.JustDown(keyTAB) || Phaser.Input.Keyboard.JustDown(keyI) || Phaser.Input.Keyboard.JustDown(key1)) {
+            //  Dispatch openInventory event
             this.events.emit('openInventory');
             console.log("EVENT openInventory dispatched");
         }
 
+        if (Phaser.Input.Keyboard.JustDown(keyM) || Phaser.Input.Keyboard.JustDown(key3)) {
+            //console.log("Pressed M");
 
-        if (Phaser.Input.Keyboard.JustDown(keyM)) {
-            console.log("Pressed M");
-
-
-            //  Dispatch a Scene event
+            //  Dispatch openMetabolism  event
             this.events.emit('openMetabolism');
             console.log("EVENT openMetabolism dispatched");
         }
+        if (Phaser.Input.Keyboard.JustDown(keyT) || Phaser.Input.Keyboard.JustDown(key4)){
+            this.events.emit('openTutorial');
+            console.log("EVENT openTutorial dispatched");
 
+        }
+        
         this.starfield.tilePositionX -= 0;  // update tile sprite
 
         // if game is not over...
-        if (!this.gameOver) {
+        if (!gameOver) {
 
             this.player1.update();             // update player1
             this.ship01.update();               // update spaceship (x4)
@@ -340,7 +347,7 @@ class Play extends Phaser.Scene {
     onTimeEvent() {
         // run update()
         this.update();
-        if (!this.gameOver) {
+        if (!gameOver) {
             this.initialTime += 1; // countdown 1 for one second
             this.timeText.setText('Time: ' + this.formatTime(this.initialTime));
             if (this.hasted == false) {

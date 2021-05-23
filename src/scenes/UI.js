@@ -30,7 +30,7 @@ class UI extends Phaser.Scene {
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
 
         // add Inventory UI Panel
-        this.inventoryText = this.add.text(10, 10, '1.Inventory  ', { font: '48px Arial', fill: 'WHITE' });
+        this.inventoryText = this.add.text(10, 10, '(I)nventory  ', { font: '48px Arial', fill: 'WHITE' });
 
         // @ param          (scene(neglected),    x, y,                          ,width,        
         this.inventoryUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
@@ -41,7 +41,7 @@ class UI extends Phaser.Scene {
             game.config.height * 2, BROWN).setOrigin(0, 0);
 
         // add Metabolism UI Panel
-        this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '3.Metabolism  ', { font: '48px Arial', fill: 'WHITE' });
+        this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '(M)etabolism  ', { font: '48px Arial', fill: 'WHITE' });
         this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
             //                          height, fillColor)
             game.config.height - borderPadding, sadBLUE).setOrigin(0, 0);
@@ -49,6 +49,10 @@ class UI extends Phaser.Scene {
         this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, sadBLUE).setOrigin(0, 0);
 
+
+        // add Tutorial UI Panel
+        this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
+        press M or 3 for metabolism UI').setOrigin(0.5);
 
         // set the UI to be invisible as default
         this.inventoryUILeft.alpha = 0;
@@ -59,10 +63,14 @@ class UI extends Phaser.Scene {
         this.metabolismUILeft.alpha = 0;
         this.metabolismUIRight.alpha = 0;
 
+        this.tutorialText.alpha = 0;
+
         // define key control
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
 
         // define mouse control
         this.mouse = this.add.sprite(game.config.width / 2, game.config.height / 2, 'mouse').setScale(0.2);
@@ -71,19 +79,32 @@ class UI extends Phaser.Scene {
         //Mouse Wheel example: https://phaser.io/examples/v3/view/input/mouse/mouse-wheel
 
 
-        //  Listen for events from it
+        //  Listen for events
         this.ourGame.events.on('openInventory', function () {
             if (!openedInventory) {
                 console.log("Loading inventory");
-                this.closeMetabolism();
-                // visualize UI Panel            
-                this.inventoryUILeft.alpha = 1;
-                this.inventoryText.alpha = 1;
-                this.inventoryUIRight.alpha = 1;
-
-                openedInventory = true;
+                this.openInventory();
             } else {
                 this.closeInventory();
+            }
+
+        }, this);
+
+        this.ourGame.events.on('openMetabolism', function () {
+            if (!openedMetabolism) {
+                console.log("Loading Metabolism");
+                this.openMetabolism();
+            } else {
+                this.closeMetabolism();
+            }
+
+        }, this);
+
+        this.ourGame.events.on('openTutorial', function () {
+            if (!openedTutorial) {
+                this.openTutorial();
+            } else {
+                this.closeTutorial();
             }
 
         }, this);
@@ -93,24 +114,8 @@ class UI extends Phaser.Scene {
 
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             // *** Restart the game ***
-            // reset initialTime
-            this.initialTime = 0;
             // set up event flag for restarting Play Scene
             restartPlay = true;
-        }
-
-        if (!this.openedMetabolism && Phaser.Input.Keyboard.JustDown(keyM)) {
-            console.log("Loading Metabolism");
-            this.closeInventory();
-            //visualize UI Panel            
-            this.metabolismUILeft.alpha = 1;
-            this.metabolismText.alpha = 1;
-            this.metabolismUIRight.alpha = 1;
-            this.openedMetabolism = true;
-        }
-
-        if (this.openedMetabolism && Phaser.Input.Keyboard.JustDown(keyM)) {
-            this.closeMetabolism();
         }
 
         if (this.initialTime > localStorage.getItem("Scum2DBestTimeSurvived")) {
@@ -136,10 +141,14 @@ class UI extends Phaser.Scene {
     onTimeEvent() {
         // run update()
         this.update();
-        if (!this.gameOver) {
+        if (!gameOver) {
             this.initialTime += 1; // countdown 1 for one second
-            this.timeText.setText('Time Survived: ' + this.formatTime(this.initialTime));
+        } else {
+            // game is over
+            this.initialTime = 0;
         }
+        this.timeText.setText('Time Survived: ' + this.formatTime(this.initialTime));
+
     }
 
     mouseEvent() {
@@ -165,6 +174,18 @@ class UI extends Phaser.Scene {
         openedInventory = false;
     }
 
+    openInventory() {
+        this.closeMetabolism();
+        this.closeTutorial();
+        console.log("opening inventory");
+        // visualize UI Panel            
+        this.inventoryUILeft.alpha = 1;
+        this.inventoryText.alpha = 1;
+        this.inventoryUIRight.alpha = 1;
+
+        openedInventory = true;
+    }
+
     closeMetabolism() {
         console.log("closing Metabolism");
 
@@ -172,6 +193,35 @@ class UI extends Phaser.Scene {
         this.metabolismUILeft.alpha = 0;
         this.metabolismText.alpha = 0;
         this.metabolismUIRight.alpha = 0;
-        this.openedMetabolism = false;
+        openedMetabolism = false;
+    }
+
+    openMetabolism() {
+        this.closeInventory();
+        this.closeTutorial();
+        console.log("opening metabolism");
+        // visualize UI Panel            
+        this.metabolismUILeft.alpha = 1;
+        this.metabolismText.alpha = 1;
+        this.metabolismUIRight.alpha = 1;
+
+        openedMetabolism = true;
+    }
+
+    closeTutorial() {
+        console.log("closing Metabolism");
+
+        // close UI Panel            
+        this.tutorialText.alpha = 0;
+        openedTutorial = false;
+    }
+
+    openTutorial() {
+        this.closeInventory();
+        this.closeMetabolism();
+        console.log("opening metabolism");
+        // visualize UI Panel            
+        this.tutorialText.alpha = 1;
+        openedTutorial = true;
     }
 }

@@ -31,11 +31,11 @@ class Menu extends Phaser.Scene {
       },
       fixedWidth: 0
     }
-
+    gameOver = true;
     // show menu text
     this.add.text(game.config.width / 2, game.config.height / 2 - borderUISize - borderPadding, 'SCUM-2D', menuConfig).setOrigin(0.5);
-    this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB for inventory\nPress T for Tutorial \
-    press M for metabolism UI',menuConfig).setOrigin(0.5);
+    this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
+    press M or 3 for metabolism UI',menuConfig).setOrigin(0.5);
     menuConfig.backgroundColor = '#00FF00';
     menuConfig.color = '#000';
     this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding, 'Press -> to play', menuConfig).setOrigin(0.5);

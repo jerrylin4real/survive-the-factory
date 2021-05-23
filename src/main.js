@@ -24,8 +24,8 @@ let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
 let borderLimitUp = borderUISize * 6;
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, 
-keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, key3;
+let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS,
+  keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, keyT, keyI, key1, key3, key4;
 
 
 /******************************************************
@@ -33,6 +33,10 @@ keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, key3;
 *******************************************************/
 var restartPlay = false;
 var openedInventory = false;
+var openedMetabolism = false;
+var openedTutorial = false;
+var gameOver = false;
+
 // Define colors 
 var BROWN = 0x664C47;
 var sadBLUE = 0x194376;
@@ -44,8 +48,8 @@ var textConfig = {
   color: '#843605', // color hex code: black
   align: 'left',
   padding: {  // set the size of the display box
-      top: 5,
-      bottom: 5,
+    top: 5,
+    bottom: 5,
   },
   fixedWidth: 100
 }
