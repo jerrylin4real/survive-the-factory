@@ -9,23 +9,29 @@ class UI extends Phaser.Scene {
     preload() {
 
         // load image
-        //this.load.image('testimg1', './assets/starfield.png');
+        this.load.image('mouse', 'assets/sprites/mouse.png'); // for mouse control
 
         // load audio
         //this.load.audio('switchsound', './assets/switchsound.wav');
-        this.load.image('mouse', 'assets/sprites/mouse.png'); // for mouse control
-
 
     }
     create() {
         //  Our GLOBAL Text object to display the Inventory
         console.log("entered UI scene");
+        //  Grab a reference to the Play Scene
+        this.ourGame = this.scene.get('playScene');
 
+        // Add time counters
+        this.initialTime = 0;
+        this.timeText = this.add.text(game.config.width / 1.3, borderUISize - borderPadding, 'Time Survived: ' + this.formatTime(this.initialTime), { font: '24px Arial', fill: 'WHITE' });
+        this.bestTimeSurvived = this.add.text(game.config.width / 1.7, borderUISize - borderPadding, 'Best Time: ' + this.formatTime(localStorage.getItem("Scum2DBestTimeSurvived")), { font: '24px Arial', fill: 'WHITE' });
 
+        // For each 1000 ms or 1 second, call onTimedEvent
+        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
+
+        // add Inventory UI Panel
         this.inventoryText = this.add.text(10, 10, '1.Inventory  ', { font: '48px Arial', fill: 'WHITE' });
-        this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '3.Metabolism  ', { font: '48px Arial', fill: 'WHITE' });
 
-        // add UI Panel
         // @ param          (scene(neglected),    x, y,                          ,width,        
         this.inventoryUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
             //                          height, fillColor)
@@ -34,13 +40,15 @@ class UI extends Phaser.Scene {
         this.inventoryUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, BROWN).setOrigin(0, 0);
 
-
+        // add Metabolism UI Panel
+        this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '3.Metabolism  ', { font: '48px Arial', fill: 'WHITE' });
         this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
             //                          height, fillColor)
             game.config.height - borderPadding, sadBLUE).setOrigin(0, 0);
 
         this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, sadBLUE).setOrigin(0, 0);
+
 
         // set the UI to be invisible as default
         this.inventoryUILeft.alpha = 0;
@@ -51,13 +59,10 @@ class UI extends Phaser.Scene {
         this.metabolismUILeft.alpha = 0;
         this.metabolismUIRight.alpha = 0;
 
-
-        //  Grab a reference to the Play Scene
-        this.ourGame = this.scene.get('playScene');
-
         // define key control
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
         // define mouse control
         this.mouse = this.add.sprite(game.config.width / 2, game.config.height / 2, 'mouse').setScale(0.2);
@@ -68,7 +73,7 @@ class UI extends Phaser.Scene {
 
         //  Listen for events from it
         this.ourGame.events.on('openInventory', function () {
-            if (!this.openedInventory) {
+            if (!openedInventory) {
                 console.log("Loading inventory");
                 this.closeMetabolism();
                 // visualize UI Panel            
@@ -76,7 +81,7 @@ class UI extends Phaser.Scene {
                 this.inventoryText.alpha = 1;
                 this.inventoryUIRight.alpha = 1;
 
-                this.openedInventory = true;
+                openedInventory = true;
             } else {
                 this.closeInventory();
             }
@@ -86,10 +91,18 @@ class UI extends Phaser.Scene {
 
     update() {
 
+        if (Phaser.Input.Keyboard.JustDown(keyR)) {
+            // *** Restart the game ***
+            // reset initialTime
+            this.initialTime = 0;
+            // set up event flag for restarting Play Scene
+            restartPlay = true;
+        }
+
         if (!this.openedMetabolism && Phaser.Input.Keyboard.JustDown(keyM)) {
             console.log("Loading Metabolism");
             this.closeInventory();
-            // visualize UI Panel            
+            //visualize UI Panel            
             this.metabolismUILeft.alpha = 1;
             this.metabolismText.alpha = 1;
             this.metabolismUIRight.alpha = 1;
@@ -100,11 +113,35 @@ class UI extends Phaser.Scene {
             this.closeMetabolism();
         }
 
+        if (this.initialTime > localStorage.getItem("Scum2DBestTimeSurvived")) {
+            localStorage.setItem("Scum2DBestTimeSurvived", this.initialTime);
+            this.bestTimeSurvived.setText('Best Time: ' + this.formatTime(localStorage.getItem("Scum2DBestTimeSurvived")));
+        }
     }
 
     /******************************************************
     * Module-level funcions defined below
     *******************************************************/
+    formatTime(seconds) {
+        // Minutes
+        var minutes = Math.floor(seconds / 60);
+        // Seconds
+        var partInSeconds = seconds % 60;
+        // Adds left zeros to seconds
+        partInSeconds = partInSeconds.toString().padStart(2, '0');
+        // Returns formated time
+        return `${minutes}:${partInSeconds}`;
+    }
+
+    onTimeEvent() {
+        // run update()
+        this.update();
+        if (!this.gameOver) {
+            this.initialTime += 1; // countdown 1 for one second
+            this.timeText.setText('Time Survived: ' + this.formatTime(this.initialTime));
+        }
+    }
+
     mouseEvent() {
         // crossair follows the user mouse input
         this.input.on('pointermove', pointer => {
@@ -125,7 +162,7 @@ class UI extends Phaser.Scene {
         this.inventoryText.alpha = 0;
         this.inventoryUIRight.alpha = 0;
 
-        this.openedInventory = false;
+        openedInventory = false;
     }
 
     closeMetabolism() {

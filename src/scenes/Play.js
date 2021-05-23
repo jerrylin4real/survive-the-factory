@@ -46,7 +46,6 @@ class Play extends Phaser.Scene {
         this.bgmCreated = false;
         this.hasted = false;
         this.superWeaponRewarded = false;
-        this.openedInventory = false;
         this.openedMetabolism = false;
 
 
@@ -133,18 +132,6 @@ class Play extends Phaser.Scene {
         this.p1Score = 0;
 
         // display text
-        let textConfig = {
-            fontFamily: 'Courier',
-            fontSize: '15px',
-            //backgroundColor: '#000000',
-            color: '#843605', // color hex code: black
-            align: 'left',
-            padding: {  // set the size of the display box
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 100
-        }
 
 
         // display Left and middle UI
@@ -250,8 +237,11 @@ class Play extends Phaser.Scene {
                 this.bgmPlayed = false;
             }
 
-        if (Phaser.Input.Keyboard.JustDown(keyR)) {
+        if (restartPlay || Phaser.Input.Keyboard.JustDown(keyR)) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
             this.scene.restart();
+            
+            // clear event flag
+            restartPlay = false;
         }
 
         if (Phaser.Input.Keyboard.JustDown(keyTAB)) {
