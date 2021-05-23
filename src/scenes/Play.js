@@ -4,6 +4,7 @@ class Play extends Phaser.Scene {
         super("playScene");
 
         // display score
+
         this.scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -35,6 +36,10 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
         this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12 });
         this.load.audio('bgm', './assets/mixkit-space-game-668.wav');
+
+        // load audio
+        this.load.audio('switchsound', './assets/Select.wav');
+
     }
     // Note: The keyword 'this' refers to the class 'Play'
 
@@ -53,7 +58,6 @@ class Play extends Phaser.Scene {
         //this.game.world.setBounds(1400, 1400);
 
         // Add time counters
-        this.initialTime = game.settings.gameTimer;
         this.hasteCounter = 0; // Increase ships' movespeed if >= 30.
         this.superWeaponCount = 0;
 
@@ -73,14 +77,13 @@ class Play extends Phaser.Scene {
 
         // add player 
         //this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'player').setScale(1); // scale the size of player1
+        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'player').setScale(1); // scale the size of this.player1
 
-        // add camera
-
+        //*** add camera
         // Set the camera bounds
         this.cameras.main.setBounds(0, 0, game.config.width * 10, game.config.height * 10);
         this.cameras.main.setZoom(1);
-        //Set the camera to follow player1
+        //Set the camera to follow this.player1
         this.cameras.main.startFollow(this.player1);
 
 
@@ -105,6 +108,7 @@ class Play extends Phaser.Scene {
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
@@ -136,9 +140,7 @@ class Play extends Phaser.Scene {
 
         // initialize score
         this.p1Score = 0;
-
         // display text
-
 
         // display Left and middle UI
         this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 5, 'Score:', textConfig);
@@ -160,14 +162,9 @@ class Play extends Phaser.Scene {
 
         // play clock
         this.scoreConfig.fixedWidth = 0;
-        this.timeText = this.add.text(440, borderUISize + borderPadding + 10, 'Time: ' + this.formatTime(this.initialTime));
 
         // super weapon indicator
         //this.superWeaponText = this.add.text(440, borderUISize + borderPadding + 40, 'Superweapon(V): ' + this.superWeaponCount);
-
-        // For each 1000 ms or 1 second, call onTimedEvent
-        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
-
         /*
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
@@ -202,7 +199,6 @@ class Play extends Phaser.Scene {
         // check key input for restart / menu
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
             gameOver = true;
-            //this.initialTime = 0;
         }
         if (Phaser.Input.Keyboard.JustDown(keyESC)) {
             gameOver = true;
@@ -243,6 +239,7 @@ class Play extends Phaser.Scene {
             }
 
         if (restartPlay || Phaser.Input.Keyboard.JustDown(keyR)) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
+            this.sound.play('switchsound');
             this.scene.restart();
 
             // clear event flag
@@ -252,29 +249,30 @@ class Play extends Phaser.Scene {
         // ** Send events to UI.js
         if (Phaser.Input.Keyboard.JustDown(keyTAB) || Phaser.Input.Keyboard.JustDown(keyI) || Phaser.Input.Keyboard.JustDown(key1)) {
             //  Dispatch openInventory event
+            this.sound.play('switchsound');
             this.events.emit('openInventory');
-            console.log("EVENT openInventory dispatched");
         }
 
         if (Phaser.Input.Keyboard.JustDown(keyM) || Phaser.Input.Keyboard.JustDown(key3)) {
             //console.log("Pressed M");
-
+            this.sound.play('switchsound');
             //  Dispatch openMetabolism  event
             this.events.emit('openMetabolism');
             console.log("EVENT openMetabolism dispatched");
         }
-        if (Phaser.Input.Keyboard.JustDown(keyT) || Phaser.Input.Keyboard.JustDown(key4)){
+        if (Phaser.Input.Keyboard.JustDown(keyT) || Phaser.Input.Keyboard.JustDown(key4)) {
+            this.sound.play('switchsound');
             this.events.emit('openTutorial');
             console.log("EVENT openTutorial dispatched");
 
         }
-        
+
         this.starfield.tilePositionX -= 0;  // update tile sprite
 
         // if game is not over...
         if (!gameOver) {
 
-            this.player1.update();             // update player1
+            this.player1.update();             // update this.player1
             this.ship01.update();               // update spaceship (x4)
             this.ship02.update();
             this.ship03.update();
@@ -343,23 +341,7 @@ class Play extends Phaser.Scene {
         return `${minutes}:${partInSeconds}`;
     }
 
-    onTimeEvent() {
-        // run update()
-        this.update();
-        if (!gameOver) {
-            this.initialTime += 1; // countdown 1 for one second
-            this.timeText.setText('Time: ' + this.formatTime(this.initialTime));
-            if (this.hasted == false) {
-                this.hasteCounter += 1; // if >= 30, ships will go faster
-            }
-            // add superweapon
-            if (this.p1Score >= 30 && this.p1Score <= 100 && !this.superWeaponRewarded) {
-                this.superWeaponRewarded = true;
-                this.superWeaponCount += 1;
-            }
-            //this.superWeaponText.setText('Superweapon(V): ' + this.superWeaponCount);
-        }
-    }
+
 
     checkCollision(player, ship) {
         // simple AABB checking
@@ -400,9 +382,8 @@ class Play extends Phaser.Scene {
             'sfx_explosion_crash'
         ];
         let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
-        this.sound.play(soundFXLib[random4SoundFX]);
-        // add time bonus
-        this.initialTime += ship.timeBonus;
+        this.explosionFX = this.sound.add(soundFXLib[random4SoundFX], { volume: 0.1 });
+        this.explosionFX.play();
     }
 
     shipExplode2(ship) {
@@ -432,9 +413,9 @@ class Play extends Phaser.Scene {
             'sfx_explosion_crash'
         ];
         let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
-        this.sound.play(soundFXLib[random4SoundFX]);
+        this.explosionFX = this.sound.add(soundFXLib[random4SoundFX], { volume: 0.1 });
+        this.explosionFX.play();
         // add time bonus
-        this.initialTime += ship.timeBonus;
     }
 
     setMap(scene, mapName) {

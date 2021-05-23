@@ -2,8 +2,7 @@ class UI extends Phaser.Scene {
 
     constructor() {
         // inventory scene is kind of a HUD/UI panel
-        super({ key: 'UIScene', active: true }); // !There can only be one UIScene
-
+        super({ key: 'UIScene', active: true }); // !Note that there can only be one UIScene
         this.score = 0;
     }
     preload() {
@@ -18,12 +17,11 @@ class UI extends Phaser.Scene {
     create() {
         //  Our GLOBAL Text object to display the Inventory
         console.log("entered UI scene");
-        //  Grab a reference to the Play Scene
-        this.ourGame = this.scene.get('playScene');
-
+        //  Grab a reference to the Scenes
+        this.ourPlayScene = this.scene.get('playScene');
         // Add time counters
-        this.initialTime = 0;
-        this.timeText = this.add.text(game.config.width / 1.3, borderUISize - borderPadding, 'Time Survived: ' + this.formatTime(this.initialTime), { font: '24px Arial', fill: 'WHITE' });
+        initialTime = 0;
+        this.timeText = this.add.text(game.config.width / 1.3, borderUISize - borderPadding, 'Time Survived: ' + this.formatTime(initialTime), { font: '24px Arial', fill: 'WHITE' });
         this.bestTimeSurvived = this.add.text(game.config.width / 1.7, borderUISize - borderPadding, 'Best Time: ' + this.formatTime(localStorage.getItem("Scum2DBestTimeSurvived")), { font: '24px Arial', fill: 'WHITE' });
 
         // For each 1000 ms or 1 second, call onTimedEvent
@@ -49,11 +47,14 @@ class UI extends Phaser.Scene {
         this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, sadBLUE).setOrigin(0, 0);
 
+        this.exhaustedText = this.add.text(borderUISize * 2, borderUISize * 2, 'Status: run-able', { font: '24px Arial', fill: 'WHITE' });
+
 
         // add Tutorial UI Panel
         this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
         press M or 3 for metabolism UI').setOrigin(0.5);
 
+        //! add Player Stat UI Panel
         // set the UI to be invisible as default
         this.inventoryUILeft.alpha = 0;
         this.inventoryUIRight.alpha = 0;
@@ -64,6 +65,7 @@ class UI extends Phaser.Scene {
         this.metabolismUIRight.alpha = 0;
 
         this.tutorialText.alpha = 0;
+        this.exhaustedText.alpha = 0;
 
         // define key control
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
@@ -80,7 +82,7 @@ class UI extends Phaser.Scene {
 
 
         //**  Listen for events
-        this.ourGame.events.on('openInventory', function () {
+        this.ourPlayScene.events.on('openInventory', function () {
             if (!openedInventory) {
                 console.log("Loading inventory");
                 this.openInventory();
@@ -90,7 +92,7 @@ class UI extends Phaser.Scene {
 
         }, this);
 
-        this.ourGame.events.on('openMetabolism', function () {
+        this.ourPlayScene.events.on('openMetabolism', function () {
             if (!openedMetabolism) {
                 console.log("Loading Metabolism");
                 this.openMetabolism();
@@ -100,7 +102,7 @@ class UI extends Phaser.Scene {
 
         }, this);
 
-        this.ourGame.events.on('openTutorial', function () {
+        this.ourPlayScene.events.on('openTutorial', function () {
             if (!openedTutorial) {
                 this.openTutorial();
             } else {
@@ -114,13 +116,18 @@ class UI extends Phaser.Scene {
 
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             // *** Restart the game ***
-            this.initialTime = 0;
+            initialTime = 0;
             // set up event flag for restarting Play Scene
             restartPlay = true;
         }
+        if (player_exhausted) {
+            this.exhaustedText.setText("Status: exhausted");
+        } else if (!player_exhausted) {
+            this.exhaustedText.setText("Status: run-able");
+        }
 
-        if (this.initialTime > localStorage.getItem("Scum2DBestTimeSurvived")) {
-            localStorage.setItem("Scum2DBestTimeSurvived", this.initialTime);
+        if (initialTime > localStorage.getItem("Scum2DBestTimeSurvived")) {
+            localStorage.setItem("Scum2DBestTimeSurvived", initialTime);
             this.bestTimeSurvived.setText('Best Time: ' + this.formatTime(localStorage.getItem("Scum2DBestTimeSurvived")));
         }
     }
@@ -143,12 +150,12 @@ class UI extends Phaser.Scene {
         // run update()
         this.update();
         if (!gameOver) {
-            this.initialTime += 1; // countdown 1 for one second
+            initialTime += 1; // countdown 1 for one second
         } else {
             // game is over
-            this.initialTime = 0;
+            initialTime = 0;
         }
-        this.timeText.setText('Time Survived: ' + this.formatTime(this.initialTime));
+        this.timeText.setText('Time Survived: ' + this.formatTime(initialTime));
 
     }
 
@@ -194,6 +201,8 @@ class UI extends Phaser.Scene {
         this.metabolismUILeft.alpha = 0;
         this.metabolismText.alpha = 0;
         this.metabolismUIRight.alpha = 0;
+        this.exhaustedText.alpha = 0;
+
         openedMetabolism = false;
     }
 
@@ -205,6 +214,8 @@ class UI extends Phaser.Scene {
         this.metabolismUILeft.alpha = 1;
         this.metabolismText.alpha = 1;
         this.metabolismUIRight.alpha = 1;
+        this.exhaustedText.alpha = 1;
+
 
         openedMetabolism = true;
     }
@@ -225,4 +236,6 @@ class UI extends Phaser.Scene {
         this.tutorialText.alpha = 1;
         openedTutorial = true;
     }
+
 }
+

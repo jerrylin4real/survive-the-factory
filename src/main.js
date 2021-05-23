@@ -24,18 +24,24 @@ let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
 let borderLimitUp = borderUISize * 6;
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS,
+let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyShift,
   keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, keyT, keyI, key1, key3, key4;
 
 
 /******************************************************
 // Macros, global variables:
 *******************************************************/
+var initialTime = 0;
+
 var restartPlay = false;
 var openedInventory = false;
 var openedMetabolism = false;
 var openedTutorial = false;
 var gameOver = false;
+
+//*** Global Player Variables
+var player_exhausted  = false;
+
 
 // Define colors 
 var BROWN = 0x664C47;
