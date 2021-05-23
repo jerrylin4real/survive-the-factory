@@ -79,7 +79,7 @@ class UI extends Phaser.Scene {
         //Mouse Wheel example: https://phaser.io/examples/v3/view/input/mouse/mouse-wheel
 
 
-        //  Listen for events
+        //**  Listen for events
         this.ourGame.events.on('openInventory', function () {
             if (!openedInventory) {
                 console.log("Loading inventory");

@@ -22,7 +22,7 @@ class Play extends Phaser.Scene {
         console.log("preload");
 
         // load images/tile sprites
-        this.load.image('rocket', './assets/rocket.png');
+        //this.load.image('rocket', './assets/rocket.png');
         this.load.image('rocket2', './assets/rocket2.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/nebulaRed.png'); // Not showing the full img? Default: starfield.png 
@@ -146,7 +146,6 @@ class Play extends Phaser.Scene {
 
         this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
         this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
-            //!FIXME implement ("Scum2DTopScore") mechanism;
             localStorage.getItem("RocketPatrolTopScore"), textConfig);
 
         let redConfig = {
