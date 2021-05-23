@@ -114,6 +114,7 @@ class UI extends Phaser.Scene {
 
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             // *** Restart the game ***
+            this.initialTime = 0;
             // set up event flag for restarting Play Scene
             restartPlay = true;
         }
