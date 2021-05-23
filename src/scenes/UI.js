@@ -1,0 +1,140 @@
+class UI extends Phaser.Scene {
+
+    constructor() {
+        // inventory scene is kind of a HUD/UI panel
+        super({ key: 'UIScene', active: true }); // !There can only be one UIScene
+
+        this.score = 0;
+    }
+    preload() {
+
+        // load image
+        //this.load.image('testimg1', './assets/starfield.png');
+
+        // load audio
+        //this.load.audio('switchsound', './assets/switchsound.wav');
+        this.load.image('mouse', 'assets/sprites/mouse.png'); // for mouse control
+
+
+    }
+    create() {
+        //  Our GLOBAL Text object to display the Inventory
+        console.log("entered UI scene");
+
+
+        this.inventoryText = this.add.text(10, 10, '1.Inventory  ', { font: '48px Arial', fill: 'WHITE' });
+        this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '3.Metabolism  ', { font: '48px Arial', fill: 'WHITE' });
+
+        // add UI Panel
+        // @ param          (scene(neglected),    x, y,                          ,width,        
+        this.inventoryUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
+            //                          height, fillColor)
+            game.config.height - borderPadding, BROWN).setOrigin(0, 0);
+
+        this.inventoryUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
+            game.config.height * 2, BROWN).setOrigin(0, 0);
+
+
+        this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
+            //                          height, fillColor)
+            game.config.height - borderPadding, sadBLUE).setOrigin(0, 0);
+
+        this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
+            game.config.height * 2, sadBLUE).setOrigin(0, 0);
+
+        // set the UI to be invisible as default
+        this.inventoryUILeft.alpha = 0;
+        this.inventoryUIRight.alpha = 0;
+        this.inventoryText.alpha = 0;
+
+        this.metabolismText.alpha = 0;
+        this.metabolismUILeft.alpha = 0;
+        this.metabolismUIRight.alpha = 0;
+
+
+        //  Grab a reference to the Play Scene
+        this.ourGame = this.scene.get('playScene');
+
+        // define key control
+        keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+
+        // define mouse control
+        this.mouse = this.add.sprite(game.config.width / 2, game.config.height / 2, 'mouse').setScale(0.2);
+        this.input.mouse.capture = true;
+        this.mouseEvent(); // redirect to mouseEvent()
+        //Mouse Wheel example: https://phaser.io/examples/v3/view/input/mouse/mouse-wheel
+
+
+        //  Listen for events from it
+        this.ourGame.events.on('openInventory', function () {
+            if (!this.openedInventory) {
+                console.log("Loading inventory");
+                this.closeMetabolism();
+                // visualize UI Panel            
+                this.inventoryUILeft.alpha = 1;
+                this.inventoryText.alpha = 1;
+                this.inventoryUIRight.alpha = 1;
+
+                this.openedInventory = true;
+            } else {
+                this.closeInventory();
+            }
+
+        }, this);
+    }
+
+    update() {
+
+        if (!this.openedMetabolism && Phaser.Input.Keyboard.JustDown(keyM)) {
+            console.log("Loading Metabolism");
+            this.closeInventory();
+            // visualize UI Panel            
+            this.metabolismUILeft.alpha = 1;
+            this.metabolismText.alpha = 1;
+            this.metabolismUIRight.alpha = 1;
+            this.openedMetabolism = true;
+        }
+
+        if (this.openedMetabolism && Phaser.Input.Keyboard.JustDown(keyM)) {
+            this.closeMetabolism();
+        }
+
+    }
+
+    /******************************************************
+    * Module-level funcions defined below
+    *******************************************************/
+    mouseEvent() {
+        // crossair follows the user mouse input
+        this.input.on('pointermove', pointer => {
+            this.mouse.x = pointer.x;
+            this.mouse.y = pointer.y;
+        });
+
+        this.input.on('pointerdown', pointer => {
+            //create a seperate function for on click event
+
+        });
+    }
+
+    closeInventory() {
+        console.log("closing inventory");
+        // close UI Panel            
+        this.inventoryUILeft.alpha = 0;
+        this.inventoryText.alpha = 0;
+        this.inventoryUIRight.alpha = 0;
+
+        this.openedInventory = false;
+    }
+
+    closeMetabolism() {
+        console.log("closing Metabolism");
+
+        // close UI Panel            
+        this.metabolismUILeft.alpha = 0;
+        this.metabolismText.alpha = 0;
+        this.metabolismUIRight.alpha = 0;
+        this.openedMetabolism = false;
+    }
+}

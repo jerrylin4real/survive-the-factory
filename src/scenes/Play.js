@@ -25,11 +25,10 @@ class Play extends Phaser.Scene {
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('rocket2', './assets/rocket2.png');
         this.load.image('spaceship', './assets/spaceship.png');
-        this.load.image('starfield', './assets/nebulaRed2.png'); // Not showing the full img? Default: starfield.png 
+        this.load.image('starfield', './assets/nebulaRed.png'); // Not showing the full img? Default: starfield.png 
         this.load.image('smallfreighterspr', './assets/smallfreighterspr.png');
         this.load.image('speedship', './assets/speedship.png');
         this.load.image('player', './assets/Runner-obstacle.png'); // Placeholder file for now; FIXME!!!
-        this.load.image('mouse', 'assets/sprites/mouse.png'); // for mouse control
 
 
         // load spritesheet
@@ -47,7 +46,12 @@ class Play extends Phaser.Scene {
         this.bgmCreated = false;
         this.hasted = false;
         this.superWeaponRewarded = false;
+        this.openedInventory = false;
+        this.openedMetabolism = false;
 
+
+        //  Make the world larger than the actual canvas; buggy
+        //this.game.world.setBounds(1400, 1400);
 
         // Add time counters
         this.initialTime = game.settings.gameTimer;
@@ -55,35 +59,45 @@ class Play extends Phaser.Scene {
         this.superWeaponCount = 0;
 
         // place tile sprite
-        this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
+        this.starfield = this.add.tileSprite(0, 0, 9999, 9999, 'starfield').setOrigin(0, 0);
 
         // Azure/0x3e5861 UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00BBFF).setOrigin(0, 0);
+        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderLimitDown, 0x00BBFF).setOrigin(0, 0);
 
         // Grey/0x00BBFF borders 
+        /* Borders might be Unnecessary in SCUM-2D
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0x3e5861).setOrigin(0, 0);
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x3e5861).setOrigin(0, 0);
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
+        */
 
         // add player 
-        this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-        this.player1 = new Player(this, borderUISize * 3, game.config.height - borderUISize * 2.5, 'player').setScale(0.2); // scale the size of player1
+        //this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
+        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'player').setScale(1); // scale the size of player1
 
+        // add camera
+
+        // Set the camera bounds
+        this.cameras.main.setBounds(0, 0, game.config.width * 10, game.config.height * 10);
+        this.cameras.main.setZoom(1);
+        //Set the camera to follow player1
+        this.cameras.main.startFollow(this.player1);
+
+
+        // follow style switch buttons
+        /*btn0 = game.add.button(6, 40, 'button', lockonFollow, this, 0, 0, 0);
+        btn1 = game.add.button(6, 120, 'button', platformerFollow, this, 1, 1, 1);
+        btn2 = game.add.button(6, 200, 'button', topdownFollow, this, 2, 2, 2);
+        btn3 = game.add.button(6, 280, 'button', topdownTightFollow, this, 3, 3, 3);
+        */
         // add Spaceships (x3)
 
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
+        this.ship01 = new Spaceship(this, game.config.width + borderLimitUp, borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20, 2).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
-        this.ship04 = new Spaceship(this, game.config.width, borderUISize * 2 + 45, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, game.config.width, borderLimitUp + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
+        this.ship04 = new Spaceship(this, game.config.width, borderLimitDown + 45, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
         this.ship04.moveSpeed = 10;
-
-        // define mouse control
-        this.mouse = this.add.sprite(game.config.width / 2, game.config.height / 2, 'mouse').setScale(0.2);
-        this.input.mouse.capture = true;
-        this.mouseEvent(); // redirect to mouseEvent()
-        //Mouse Wheel example: https://phaser.io/examples/v3/view/input/mouse/mouse-wheel
-
 
         // define key control
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -97,6 +111,10 @@ class Play extends Phaser.Scene {
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         keyV = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
+        keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+        keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+
 
         // animation config
         this.anims.create({
@@ -135,13 +153,14 @@ class Play extends Phaser.Scene {
 
         this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
         this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
+            //!FIXME implement ("Scum2DTopScore") mechanism;
             localStorage.getItem("RocketPatrolTopScore"), textConfig);
 
         let redConfig = {
             color: 'red', // color hex code: black
             fixedWidth: 150
         }
-        this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: F <- ->', redConfig);
+        this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: WSAD', redConfig);
         this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
         // GAME OVER flag
@@ -149,18 +168,18 @@ class Play extends Phaser.Scene {
 
         // play clock
         this.scoreConfig.fixedWidth = 0;
-        this.countdownText = this.add.text(440, borderUISize + borderPadding + 10, 'Countdown: ' + this.formatTime(this.initialTime));
+        this.timeText = this.add.text(440, borderUISize + borderPadding + 10, 'Time: ' + this.formatTime(this.initialTime));
 
         // super weapon indicator
-        this.superWeaponText = this.add.text(440, borderUISize + borderPadding + 40, 'Superweapon(V): ' + this.superWeaponCount);
+        //this.superWeaponText = this.add.text(440, borderUISize + borderPadding + 40, 'Superweapon(V): ' + this.superWeaponCount);
 
-        // For each 1000 ms or 1 second, call onEvent
-        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
+        // For each 1000 ms or 1 second, call onTimedEvent
+        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
 
         /*
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', this.scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
         */
@@ -172,7 +191,7 @@ class Play extends Phaser.Scene {
             }
             this.bgm = this.sound.add('bgm', {
                 mute: false,
-                volume: 0.7,
+                volume: 0.3,
                 rate: 1,
                 loop: true,
                 delay: 0
@@ -185,31 +204,23 @@ class Play extends Phaser.Scene {
         }
     }
 
-    mouseEvent(){ 
-        // crossair follows the user mouse input
-        this.input.on('pointermove', pointer =>{
-            this.mouse.x = pointer.x;
-            this.mouse.y = pointer.y;
-        });
-
-        this.input.on('pointerdown', pointer =>{
-            //create a seperate function for on click event
-
-        });
-    }
-
-
     update() {
+        //console.log("update()");
         // let paused = false;
         // check key input for restart / menu
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
             this.gameOver = true;
-            this.initialTime = 0;
+            //this.initialTime = 0;
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyESC)) {
+            this.gameOver = true;
+            this.scene.start("menuScene");
         }
 
-        if (this.initialTime <= 0) {
+        // Game Over text
+        if (this.gameOver) {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', this.scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }
         // Pause feature
@@ -233,24 +244,41 @@ class Play extends Phaser.Scene {
         }
 
 
-        if (this.gameOver && this.bgmCreated) {
-            this.bgm.pause()
-            this.bgmPlayed = false;
-        }
+        if (this.gameOver)
+            if (this.bgmCreated) {
+                this.bgm.pause()
+                this.bgmPlayed = false;
+            }
 
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
+        if (Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
 
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-            this.scene.start("menuScene");
+        if (Phaser.Input.Keyboard.JustDown(keyTAB)) {
+            console.log("Pressed TAB");
+
+
+            //  Dispatch a Scene event
+            this.events.emit('openInventory');
+            console.log("EVENT openInventory dispatched");
         }
 
-        this.starfield.tilePositionX -= 4;  // update tile sprite
 
+        if (Phaser.Input.Keyboard.JustDown(keyM)) {
+            console.log("Pressed M");
+
+
+            //  Dispatch a Scene event
+            this.events.emit('openMetabolism');
+            console.log("EVENT openMetabolism dispatched");
+        }
+
+        this.starfield.tilePositionX -= 0;  // update tile sprite
+
+        // if game is not over...
         if (!this.gameOver) {
 
-            this.p1Rocket.update();             // update p1
+            this.player1.update();             // update player1
             this.ship01.update();               // update spaceship (x4)
             this.ship02.update();
             this.ship03.update();
@@ -259,8 +287,6 @@ class Play extends Phaser.Scene {
             // Debugging Only
             // console.log('gametime: ' + this.game.getTimer());
         }
-        // update mouse control
-
 
         // new weapon
         if (this.superWeaponCount > 0 && Phaser.Input.Keyboard.JustDown(keyV)) { // if pressed v for superweapon
@@ -272,45 +298,44 @@ class Play extends Phaser.Scene {
             ];
 
             let randomShip = ships[Math.floor(Math.random() * ships.length)];
-            this.p1Rocket.reset();
+            //this.player1.reset();
             this.shipExplode2(randomShip);
             this.superWeaponCount -= 1;
         }
 
         // check collisions
-        if (this.checkCollision(this.p1Rocket, this.ship04)) {
-            this.p1Rocket.reset();
+        if (this.checkCollision(this.player1, this.ship04)) {
+            //this.player1.reset();
             this.shipExplode(this.ship04);
         }
 
-        if (this.checkCollision(this.p1Rocket, this.ship03)) {
-            this.p1Rocket.reset();
+        if (this.checkCollision(this.player1, this.ship03)) {
+            //this.player1.reset();
             this.shipExplode(this.ship03);
         }
-        if (this.checkCollision(this.p1Rocket, this.ship02)) {
-            this.p1Rocket.reset();
+        if (this.checkCollision(this.player1, this.ship02)) {
+            //this.player1.reset();
             this.shipExplode(this.ship02);
         }
-        if (this.checkCollision(this.p1Rocket, this.ship01)) {
-            this.p1Rocket.reset();
+        if (this.checkCollision(this.player1, this.ship01)) {
+            //this.player1.reset();
             this.shipExplode(this.ship01);
         }
 
     }
 
     render() {
-        // mouse debug
+        /* mouse debug
         this.debug.text("Left Button: " + game.input.activePointer.leftButton.isDown, 300, 132);
         this.debug.text("Middle Button: " + game.input.activePointer.middleButton.isDown, 300, 196);
         this.debug.text("Right Button: " + game.input.activePointer.rightButton.isDown, 300, 260);
-
+        */
     }
 
 
     /******************************************************
     * Module-level funcions defined below
     *******************************************************/
-
     formatTime(seconds) {
         // Minutes
         var minutes = Math.floor(seconds / 60);
@@ -322,30 +347,30 @@ class Play extends Phaser.Scene {
         return `${minutes}:${partInSeconds}`;
     }
 
-    onEvent() {
-
-        // console.log("initialTime: " + this.initialTime); // debug only
+    onTimeEvent() {
+        // run update()
         this.update();
         if (!this.gameOver) {
-            this.initialTime -= 1; // countdown 1 for one second
-            this.countdownText.setText('Countdown: ' + this.formatTime(this.initialTime));
+            this.initialTime += 1; // countdown 1 for one second
+            this.timeText.setText('Time: ' + this.formatTime(this.initialTime));
             if (this.hasted == false) {
-                this.hasteCounter += 1;
+                this.hasteCounter += 1; // if >= 30, ships will go faster
             }
+            // add superweapon
             if (this.p1Score >= 30 && this.p1Score <= 100 && !this.superWeaponRewarded) {
                 this.superWeaponRewarded = true;
                 this.superWeaponCount += 1;
             }
-            this.superWeaponText.setText('Superweapon(V): ' + this.superWeaponCount);
+            //this.superWeaponText.setText('Superweapon(V): ' + this.superWeaponCount);
         }
     }
 
-    checkCollision(rocket, ship) {
+    checkCollision(player, ship) {
         // simple AABB checking
-        if (rocket.x < ship.x + ship.width &&
-            rocket.x + rocket.width > ship.x &&
-            rocket.y < ship.y + ship.height &&
-            rocket.height + rocket.y > ship.y) {
+        if (player.x < ship.x + ship.width &&
+            player.x + player.width > ship.x &&
+            player.y < ship.y + ship.height &&
+            player.height + player.y > ship.y) {
             return true;
         } else {
             return false;

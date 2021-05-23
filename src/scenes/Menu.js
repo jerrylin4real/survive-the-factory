@@ -6,6 +6,8 @@ class Menu extends Phaser.Scene {
   preload() {
     // load audio
 
+    this.load.audio('switchsound', './assets/Select.wav');
+
     this.load.audio('sfx_select', './assets/blip_select12.wav');
     this.load.audio('sfx_explosion0', './assets/explosion38.wav');
     this.load.audio('sfx_explosion_spell', './assets/mixkit-explosion-spell-1685.wav');
@@ -31,11 +33,12 @@ class Menu extends Phaser.Scene {
     }
 
     // show menu text
-    this.add.text(game.config.width / 2, game.config.height / 2 - borderUISize - borderPadding, 'ROCKET PATROL?!', menuConfig).setOrigin(0.5);
-    this.add.text(game.config.width / 2, game.config.height / 2, 'Use ←→ arrows to move & (F) to fire', menuConfig).setOrigin(0.5);
+    this.add.text(game.config.width / 2, game.config.height / 2 - borderUISize - borderPadding, 'SCUM-2D', menuConfig).setOrigin(0.5);
+    this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB for inventory\nPress T for Tutorial \
+    press M for metabolism UI',menuConfig).setOrigin(0.5);
     menuConfig.backgroundColor = '#00FF00';
     menuConfig.color = '#000';
-    this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', menuConfig).setOrigin(0.5);
+    this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding, 'Press -> to play', menuConfig).setOrigin(0.5);
 
     // define keys
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -49,18 +52,18 @@ class Menu extends Phaser.Scene {
       // Novice mode
       game.settings = {
         spaceshipSpeed: 3,
-        gameTimer: 60 // 60 second
+        gameTimer: 0 // 0 second
       }
-      this.sound.play('sfx_select');
+      this.sound.play('switchsound');
       this.scene.start("playScene");
     }
     if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
       // Expert mode
       game.settings = {
         spaceshipSpeed: 4,
-        gameTimer: 45
+        gameTimer: 0
       }
-      this.sound.play('sfx_select');
+      this.sound.play('switchsound');
       this.scene.start("playScene");
     }
 
@@ -68,7 +71,7 @@ class Menu extends Phaser.Scene {
       // Quick Test mode
       game.settings = { // a list of settings
         spaceshipSpeed: 5,
-        gameTimer: 3
+        gameTimer: 0
       }
       this.sound.play('sfx_select');
       this.scene.start("playScene");
