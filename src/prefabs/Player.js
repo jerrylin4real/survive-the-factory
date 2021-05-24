@@ -6,8 +6,8 @@ class Player extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);   // add to existing, displayList, updateList
         //! Translate variable to main.js as var(s), like what Leland did with player_exhausted 
         this.famePoint = 0;
-        this.hunger = 0; // character dies after their hunger reaches 100 for 7 days 
-        this.thrist = 0; // character dies after their thrist reaches 100 for 3 days 
+        this.hunger = 0; // character dies after their hunger reaches 100 for 7 days or 7 minutes
+        this.thrist = 0; // character dies after their thrist reaches 100 for 3 days or 3 minutes
         // Unavailiable for sprint 2
         // this.kcal_intake = 2500;
         // this.kcal_usage = 2500;
@@ -38,15 +38,26 @@ class Player extends Phaser.GameObjects.Sprite {
         this.walkspeed = 3 + stamina_lvl; // pixels per frame, will be faster for higher lvl
         this.runspeed = this.walkspeed * 2;
         this.init_exhausted_countdown = 600; // 6 seconds cd for exhausted status penalty 
-        
+
         exhausted_countdown = this.init_exhausted_countdown;
 
+        //!fixme
+        this.hunger_milestone = [25, 50, 75, 100];
+        // hunger will reduce current stamina
+        // movement will + hunger
+        // will die if reached 100 for 7 min
+
+        this.thrist_milestone = [25, 50, 75, 100];
+
+        // thrist will reduce current stamina
+        // movement will + thrist
+        // will die if reached 100 for 3 min
     }
 
 
     update() {
         // upload player stat to global variable
-        if(player_hp <= 0){
+        if (player_hp <= 0) {
             player_hp = 0;
             player_dead = true;
             gameOver = true;
