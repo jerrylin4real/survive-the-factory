@@ -48,18 +48,18 @@ class Player extends Phaser.GameObjects.Sprite {
         if (this.stamina <= 0) {
             player_exhausted = true;
         }
-        if (player_exausted) {
+        if (player_exhausted) {
 
             if (this.countdown > 0) {
                 this.countdown -= 1;
-                player_exausted = true;
+                player_exhausted = true;
             } else {
                 this.countdown = this.init_countdown;
-                player_exausted = false;
+                player_exhausted = false;
             }
 
         } else {
-            // not exausted 
+            // not exhausted 
             //***  player control:W S A D
             // is Down = keep pressed down
             if (keyA.isDown && this.x >= borderLimitDown) {
