@@ -19,14 +19,16 @@ class Player extends Phaser.GameObjects.Sprite {
         this.thrist = 0; // character dies after their thrist reaches 100 for 3 days 
 
         // Digestion Variables
+        // Unavailiable for sprint 2
+
         // volumes below are in percentage
-        this.stomach_volume = 0;
-        this.intestine_volume = 0;
-        this.colon_volume = 0;
+        // this.stomach_volume = 0;
+        // this.intestine_volume = 0;
+        // this.colon_volume = 0;
         this.bladder_volume = 0;
 
         this.walkspeed = 3; // pixels per frame
-        this.runspeed = 6;
+        this.runspeed = walkspeed * 2;
 
         this.init_countdown = 600; // 6 seconds
         this.countdown = this.init_countdown;
@@ -44,7 +46,7 @@ class Player extends Phaser.GameObjects.Sprite {
         }
 
         if (this.stamina <= 0) {
-            player_exausted = true;
+            player_exhausted = true;
         }
         if (player_exausted) {
 
