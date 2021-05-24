@@ -37,8 +37,9 @@ class Player extends Phaser.GameObjects.Sprite {
         this.restoredstamina = 0;
         this.walkspeed = 3 + stamina_lvl; // pixels per frame, will be faster for higher lvl
         this.runspeed = this.walkspeed * 2;
-        this.init_countdown = 600; // 6 seconds cd for exhausted status penalty 
-        this.countdown = this.init_countdown;
+        this.init_exhausted_countdown = 600; // 6 seconds cd for exhausted status penalty 
+        
+        exhausted_countdown = this.init_exhausted_countdown;
 
     }
 
@@ -68,11 +69,11 @@ class Player extends Phaser.GameObjects.Sprite {
         }
 
         if (player_exhausted) {
-            if (this.countdown > 0) {
-                this.countdown -= 1;
+            if (exhausted_countdown > 0) {
+                exhausted_countdown -= 1;
                 player_exhausted = true;
             } else {
-                this.countdown = this.init_countdown;
+                exhausted_countdown = this.init_exhausted_countdown;
                 player_exhausted = false;
             }
 

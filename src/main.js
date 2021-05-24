@@ -49,6 +49,8 @@ var player_hp = 100;
 var stamina_lvl = 0;
 var health_lvl = 0;
 
+var exhausted_countdown = 0;
+
 // Define colors 
 var BROWN = 0x664C47;
 var sadBLUE = 0x194376;

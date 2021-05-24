@@ -137,7 +137,7 @@ class UI extends Phaser.Scene {
             restartPlay = true;
         }
         if (player_exhausted) {
-            this.exhaustedText.setText("Status: exhausted");
+            this.exhaustedText.setText("Status: exhausted..." + exhausted_countdown / 100 + "s");
         } else if (!player_exhausted) {
             this.exhaustedText.setText("Status: run-able");
         }
