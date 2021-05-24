@@ -28,7 +28,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.bladder_volume = 0;
 
         this.walkspeed = 3; // pixels per frame
-        this.runspeed = walkspeed * 2;
+        this.runspeed = this.walkspeed * 2;
 
         this.init_countdown = 600; // 6 seconds
         this.countdown = this.init_countdown;
