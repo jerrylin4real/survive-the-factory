@@ -28,7 +28,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.health_milestone = [100, 120, 140, 160, 180, 200];
         this.restoredhealth = 0;
         this.max_health = this.health_milestone[health_lvl];
-        player_health = this.max_health;
+        player_hp = this.max_health;
 
         stamina_lvl = 0;
         this.stamina_milestone = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000];
@@ -45,6 +45,12 @@ class Player extends Phaser.GameObjects.Sprite {
 
     update() {
         // upload player stat to global variable
+        if(player_hp <= 0){
+            player_hp = 0;
+            player_dead = true;
+            gameOver = true;
+        }
+
         player_stamina = this.stamina;
         this.max_stamina = this.stamina_milestone[stamina_lvl];
 
@@ -54,8 +60,10 @@ class Player extends Phaser.GameObjects.Sprite {
             this.isFiring = true;
         }
 
-        if (this.stamina <= 0) {
+        if (this.stamina <= 0 && !player_exhausted) {
+            this.stamina = 0; // avoid negative stamina# to be bug-free
             console.log("player exhausted");
+            player_hp -= 50; //! change to -10 hp penalty for being exhausted
             player_exhausted = true;
         }
 
@@ -124,7 +132,7 @@ class Player extends Phaser.GameObjects.Sprite {
             //console.log("stamina: " + this.stamina);
         }
         //*** stamina level mechanism
-        if (this.stamina < this.max_stamina) {
+        if (this.stamina < this.max_stamina && !player_exhausted) {
             this.stamina += 1;
             this.restoredstamina += 1;
             if (stamina_lvl < this.stamina_milestone.length - 1 && this.restoredstamina / 2 >= this.stamina_milestone[stamina_lvl]) {
@@ -135,7 +143,7 @@ class Player extends Phaser.GameObjects.Sprite {
         }
 
         //*** health level mechanism
-        if (player_health < this.max_health) {
+        if (player_hp < this.max_health) {
             // if restored health:
             // this.restoredhealth += 1;
             if (health_lvl < this.health_milestone.length - 1 && this.restoredhealth / 2 >= this.health_milestone[health_lvl]) {

@@ -17,6 +17,8 @@ class UI extends Phaser.Scene {
     create() {
         //  Our GLOBAL Text object to display the Inventory
         console.log("entered UI scene");
+        at_MENU_Scene = false;
+
         //  Grab a reference to the Scenes
         this.ourPlayScene = this.scene.get('playScene');
 
@@ -48,17 +50,20 @@ class UI extends Phaser.Scene {
         this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, sadBLUE).setOrigin(0, 0);
 
+        //!FIXME finish Player Stat UI Panel
         // @ param                                   , borderUISize * y // change y to list-show stat
-        this.healthText = this.add.text(borderUISize, borderUISize * 1.5, 'Health: ' + player_health, { font: '24px Arial', fill: 'WHITE' });
+        this.healthText = this.add.text(borderUISize, borderUISize * 1.5, 'Health: ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
         this.staminaText = this.add.text(borderUISize, borderUISize * 2.5, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
         this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: run-able', { font: '24px Arial', fill: 'WHITE' });
 
 
         // add Tutorial UI Panel
         this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
-        press M or 3 for metabolism UI').setOrigin(0.5);
+        press M or 3 for metabolism UI\nPress Shift to sprint\nPress Q to end game').setOrigin(0.5);
 
-        //! add Player Stat UI Panel
+        // add gameOver UI
+        this.gameOverText = this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER\nPress (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
+
         // set the UI to be invisible as default
         this.inventoryUILeft.alpha = 0;
         this.inventoryUIRight.alpha = 0;
@@ -72,6 +77,8 @@ class UI extends Phaser.Scene {
         this.exhaustedText.alpha = 0;
         this.staminaText.alpha = 0;
         this.healthText.alpha = 0;
+
+        this.gameOverText.alpha = 0;
 
         // define key control
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
@@ -121,7 +128,7 @@ class UI extends Phaser.Scene {
     update() {
         // update texts to display
         this.staminaText.setText('Stamina(lvl.' + stamina_lvl + '): ' + player_stamina);
-        this.healthText.setText('Health: ' + player_health);
+        this.healthText.setText('Health: ' + player_hp);
 
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             // *** Restart the game ***
@@ -160,9 +167,24 @@ class UI extends Phaser.Scene {
         this.update();
         if (!gameOver) {
             initialTime += 1; // countdown 1 for one second
+            this.gameOverText.alpha = 0;
         } else {
             // game is over
+            if (openedInventory) {
+                this.closeInventory();
+            }
+            if (openedMetabolism) {
+                this.closeMetabolism();
+            }
+            if (openedTutorial) {
+                this.closeTutorial();
+            }
             initialTime = 0;
+            if (at_MENU_Scene) {
+                this.gameOverText.alpha = 0;
+            } else {
+                this.gameOverText.alpha = 1;
+            }
         }
         this.timeText.setText('Time Survived: ' + this.formatTime(initialTime));
 

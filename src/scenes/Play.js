@@ -47,6 +47,9 @@ class Play extends Phaser.Scene {
     create() {
         console.log("create");
         // Scene-level variables
+        gameOver = false;
+        at_MENU_Scene = false;
+        
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
@@ -158,7 +161,6 @@ class Play extends Phaser.Scene {
         this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
         // clear GAME OVER flag
-        gameOver = false;
 
         // play clock
         this.scoreConfig.fixedWidth = 0;
@@ -206,11 +208,7 @@ class Play extends Phaser.Scene {
         }
 
         // Game Over text
-        if (gameOver) {
-            this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
-            gameOver = true;
-        }
+
         // Pause feature
         /* if (Phaser.Input.Keyboard.JustDown(keyP)) {
             this.scene.pause();
@@ -232,18 +230,31 @@ class Play extends Phaser.Scene {
         }
 
 
-        if (gameOver)
+
+
+        if (gameOver) {
             if (this.bgmCreated) {
                 this.bgm.pause()
                 this.bgmPlayed = false;
             }
+            if (restartPlay || Phaser.Input.Keyboard.JustDown(keyR)) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
+                console.log("Restarting game...");
+                this.sound.play('switchsound');
+                this.scene.restart();
+                // clear event flag
+                restartPlay = false;
+            }
+        }
+        if (!gameOver) {
 
-        if (restartPlay || Phaser.Input.Keyboard.JustDown(keyR)) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
-            console.log("Restarting game...");
-            this.sound.play('switchsound');
-            this.scene.restart();
-            // clear event flag
-            restartPlay = false;
+            this.player1.update();             // update this.player1
+            this.ship01.update();               // update spaceship (x4)
+            this.ship02.update();
+            this.ship03.update();
+            this.ship04.update();
+
+            // Debugging Only
+            // console.log('gametime: ' + this.game.getTimer());
         }
 
         // ** Send events to UI.js
@@ -270,17 +281,7 @@ class Play extends Phaser.Scene {
         this.starfield.tilePositionX -= 0;  // update tile sprite
 
         // if game is not over...
-        if (!gameOver) {
 
-            this.player1.update();             // update this.player1
-            this.ship01.update();               // update spaceship (x4)
-            this.ship02.update();
-            this.ship03.update();
-            this.ship04.update();
-
-            // Debugging Only
-            // console.log('gametime: ' + this.game.getTimer());
-        }
 
         // new weapon
         if (this.superWeaponCount > 0 && Phaser.Input.Keyboard.JustDown(keyV)) { // if pressed v for superweapon
