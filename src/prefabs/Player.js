@@ -5,18 +5,13 @@ class Player extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
         scene.add.existing(this);   // add to existing, displayList, updateList
         //! Translate variable to main.js as var(s), like what Leland did with player_exhausted 
-        this.health = 100;
         this.famePoint = 0;
-        this.stamina = 1000;
-        this.max_stamina = 1000;
-
+        this.hunger = 0; // character dies after their hunger reaches 100 for 7 days 
+        this.thrist = 0; // character dies after their thrist reaches 100 for 3 days 
         // Unavailiable for sprint 2
         // this.kcal_intake = 2500;
         // this.kcal_usage = 2500;
         // this.target_percentage = this.kcal_intake * 100 / this.kcal_usage;
-
-        this.hunger = 0; // character dies after their hunger reaches 100 for 7 days 
-        this.thrist = 0; // character dies after their thrist reaches 100 for 3 days 
 
         // Digestion Variables
         // Unavailiable for sprint 2
@@ -27,17 +22,31 @@ class Player extends Phaser.GameObjects.Sprite {
         // this.colon_volume = 0;
         this.bladder_volume = 0;
 
-        this.walkspeed = 3; // pixels per frame
-        this.runspeed = this.walkspeed * 2;
 
-        this.init_countdown = 600; // 6 seconds
+        // Level UP milestones:  [lvl0, lvl1, lvl2, ...]
+        health_lvl = 0;
+        this.health_milestone = [100, 120, 140, 160, 180, 200];
+        this.restoredhealth = 0;
+        this.max_health = this.health_milestone[health_lvl];
+        player_health = this.max_health;
+
+        stamina_lvl = 0;
+        this.stamina_milestone = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000];
+        this.max_stamina = this.stamina_milestone[stamina_lvl];
+        this.stamina = this.max_stamina;
+        this.restoredstamina = 0;
+        this.walkspeed = 3 + stamina_lvl; // pixels per frame, will be faster for higher lvl
+        this.runspeed = this.walkspeed * 2;
+        this.init_countdown = 600; // 6 seconds cd for exhausted status penalty 
         this.countdown = this.init_countdown;
 
     }
 
 
     update() {
-        // left/right movement
+        // upload player stat to global variable
+        player_stamina = this.stamina;
+        this.max_stamina = this.stamina_milestone[stamina_lvl];
 
         // Interact button
         if (Phaser.Input.Keyboard.JustDown(keyF)) {
@@ -46,10 +55,11 @@ class Player extends Phaser.GameObjects.Sprite {
         }
 
         if (this.stamina <= 0) {
+            console.log("player exhausted");
             player_exhausted = true;
         }
-        if (player_exhausted) {
 
+        if (player_exhausted) {
             if (this.countdown > 0) {
                 this.countdown -= 1;
                 player_exhausted = true;
@@ -60,7 +70,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
         } else {
             // not exhausted 
-            //***  player control:W S A D
+            //***  player movement control:W S A D
             // is Down = keep pressed down
             if (keyA.isDown && this.x >= borderLimitDown) {
                 if (keyShift.isDown) {
@@ -109,12 +119,30 @@ class Player extends Phaser.GameObjects.Sprite {
             // metabolism 
 
         }
-        if (this.stamina < 500) {
-            console.log("stamina: " + this.stamina);
+        if (this.stamina < this.stamina / 5) {
+            //!fixme add sound/text warning @ 1/5 lvl before exhuased; example: send boolean to UI
+            //console.log("stamina: " + this.stamina);
         }
-        // restore stamina 
+        //*** stamina level mechanism
         if (this.stamina < this.max_stamina) {
             this.stamina += 1;
+            this.restoredstamina += 1;
+            if (stamina_lvl < this.stamina_milestone.length - 1 && this.restoredstamina / 2 >= this.stamina_milestone[stamina_lvl]) {
+                stamina_lvl += 1;
+                console.log("stamina_lvl up to " + stamina_lvl);
+                this.restoredstamina = 0;
+            }
+        }
+
+        //*** health level mechanism
+        if (player_health < this.max_health) {
+            // if restored health:
+            // this.restoredhealth += 1;
+            if (health_lvl < this.health_milestone.length - 1 && this.restoredhealth / 2 >= this.health_milestone[health_lvl]) {
+                health_lvl += 1;
+                console.log("health_lvl up to " + health_lvl);
+                this.restoredhealth = 0;
+            }
         }
 
         // reset on miss

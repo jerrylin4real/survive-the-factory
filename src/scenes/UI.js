@@ -19,6 +19,7 @@ class UI extends Phaser.Scene {
         console.log("entered UI scene");
         //  Grab a reference to the Scenes
         this.ourPlayScene = this.scene.get('playScene');
+
         // Add time counters
         initialTime = 0;
         this.timeText = this.add.text(game.config.width / 1.3, borderUISize - borderPadding, 'Time Survived: ' + this.formatTime(initialTime), { font: '24px Arial', fill: 'WHITE' });
@@ -27,7 +28,7 @@ class UI extends Phaser.Scene {
         // For each 1000 ms or 1 second, call onTimedEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
 
-        // add Inventory UI Panel
+        //*** add Inventory UI Panel
         this.inventoryText = this.add.text(10, 10, '(I)nventory  ', { font: '48px Arial', fill: 'WHITE' });
 
         // @ param          (scene(neglected),    x, y,                          ,width,        
@@ -38,7 +39,7 @@ class UI extends Phaser.Scene {
         this.inventoryUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, BROWN).setOrigin(0, 0);
 
-        // add Metabolism UI Panel
+        //*** add Metabolism UI Panel
         this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '(M)etabolism  ', { font: '48px Arial', fill: 'WHITE' });
         this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
             //                          height, fillColor)
@@ -47,7 +48,10 @@ class UI extends Phaser.Scene {
         this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, sadBLUE).setOrigin(0, 0);
 
-        this.exhaustedText = this.add.text(borderUISize * 2, borderUISize * 2, 'Status: run-able', { font: '24px Arial', fill: 'WHITE' });
+        // @ param                                   , borderUISize * y // change y to list-show stat
+        this.healthText = this.add.text(borderUISize, borderUISize * 1.5, 'Health: ' + player_health, { font: '24px Arial', fill: 'WHITE' });
+        this.staminaText = this.add.text(borderUISize, borderUISize * 2.5, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
+        this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: run-able', { font: '24px Arial', fill: 'WHITE' });
 
 
         // add Tutorial UI Panel
@@ -66,6 +70,8 @@ class UI extends Phaser.Scene {
 
         this.tutorialText.alpha = 0;
         this.exhaustedText.alpha = 0;
+        this.staminaText.alpha = 0;
+        this.healthText.alpha = 0;
 
         // define key control
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
@@ -113,6 +119,9 @@ class UI extends Phaser.Scene {
     }
 
     update() {
+        // update texts to display
+        this.staminaText.setText('Stamina(lvl.' + stamina_lvl + '): ' + player_stamina);
+        this.healthText.setText('Health: ' + player_health);
 
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             // *** Restart the game ***
@@ -169,6 +178,8 @@ class UI extends Phaser.Scene {
         this.input.on('pointerdown', pointer => {
             //create a seperate function for on click event
 
+            // show (x, y) on click
+            console.log("x:" + pointer.x + " y:" + pointer.y);
         });
     }
 
@@ -202,7 +213,8 @@ class UI extends Phaser.Scene {
         this.metabolismText.alpha = 0;
         this.metabolismUIRight.alpha = 0;
         this.exhaustedText.alpha = 0;
-
+        this.staminaText.alpha = 0;
+        this.healthText.alpha = 0;
         openedMetabolism = false;
     }
 
@@ -210,12 +222,14 @@ class UI extends Phaser.Scene {
         this.closeInventory();
         this.closeTutorial();
         console.log("opening metabolism");
+
         // visualize UI Panel            
         this.metabolismUILeft.alpha = 1;
         this.metabolismText.alpha = 1;
         this.metabolismUIRight.alpha = 1;
         this.exhaustedText.alpha = 1;
-
+        this.staminaText.alpha = 1;
+        this.healthText.alpha = 1;
 
         openedMetabolism = true;
     }

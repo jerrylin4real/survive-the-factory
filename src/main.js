@@ -41,8 +41,10 @@ var gameOver = false;
 
 //*** Global Player Variables
 var player_exhausted  = false;
-
-
+var player_stamina = 1000;
+var player_health = 100;
+var stamina_lvl = 0;
+var health_lvl = 0;
 // Define colors 
 var BROWN = 0x664C47;
 var sadBLUE = 0x194376;

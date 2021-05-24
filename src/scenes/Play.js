@@ -239,9 +239,9 @@ class Play extends Phaser.Scene {
             }
 
         if (restartPlay || Phaser.Input.Keyboard.JustDown(keyR)) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
+            console.log("Restarting game...");
             this.sound.play('switchsound');
             this.scene.restart();
-
             // clear event flag
             restartPlay = false;
         }
@@ -258,12 +258,12 @@ class Play extends Phaser.Scene {
             this.sound.play('switchsound');
             //  Dispatch openMetabolism  event
             this.events.emit('openMetabolism');
-            console.log("EVENT openMetabolism dispatched");
+            // console.log("EVENT openMetabolism dispatched");
         }
         if (Phaser.Input.Keyboard.JustDown(keyT) || Phaser.Input.Keyboard.JustDown(key4)) {
             this.sound.play('switchsound');
             this.events.emit('openTutorial');
-            console.log("EVENT openTutorial dispatched");
+            // console.log("EVENT openTutorial dispatched");
 
         }
 
