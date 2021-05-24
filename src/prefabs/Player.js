@@ -92,7 +92,7 @@ class Player extends Phaser.GameObjects.Sprite {
             // not exhausted 
             //***  player movement control:W S A D
             // is Down = keep pressed down
-            if (keyA.isDown && this.x >= borderLimitDown) {
+            if (keyA.isDown && this.x >= borderUISize) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.x -= this.runspeed;

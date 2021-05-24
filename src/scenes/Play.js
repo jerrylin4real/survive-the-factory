@@ -49,7 +49,7 @@ class Play extends Phaser.Scene {
         // Scene-level variables
         gameOver = false;
         at_MENU_Scene = false;
-        
+
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
@@ -68,7 +68,7 @@ class Play extends Phaser.Scene {
         this.starfield = this.add.tileSprite(0, 0, 9999, 9999, 'starfield').setOrigin(0, 0);
 
         // Azure/0x3e5861 UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderLimitDown, 0x00BBFF).setOrigin(0, 0);
+        //this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderLimitDown, 0x00BBFF).setOrigin(0, 0);
 
         // Grey/0x00BBFF borders 
         /* Borders might be Unnecessary in SCUM-2D
@@ -146,19 +146,19 @@ class Play extends Phaser.Scene {
         // display text
 
         // display Left and middle UI
-        this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 5, 'Score:', textConfig);
-        this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding + 5, this.p1Score, textConfig);
+        //this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 5, 'Score:', textConfig);
+        //this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding + 5, this.p1Score, textConfig);
 
-        this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
-        this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
-            localStorage.getItem("RocketPatrolTopScore"), textConfig);
+        // this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
+        // this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
+        //     localStorage.getItem("RocketPatrolTopScore"), textConfig);
 
         let redConfig = {
             color: 'red', // color hex code: black
             fixedWidth: 150
         }
-        this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: WSAD', redConfig);
-        this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
+        // this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: WSAD', redConfig);
+        // this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
         // clear GAME OVER flag
 
@@ -204,6 +204,7 @@ class Play extends Phaser.Scene {
         }
         if (Phaser.Input.Keyboard.JustDown(keyESC)) {
             gameOver = true;
+            at_MENU_Scene = true;
             this.scene.start("menuScene");
         }
 
@@ -369,12 +370,12 @@ class Play extends Phaser.Scene {
         });
 
         // score add and repaint
-        this.p1Score += ship.points;
-        if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
-            localStorage.setItem("RocketPatrolTopScore", this.p1Score);
-            this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
-        }
-        this.scoreLeft.text = this.p1Score;
+        // this.p1Score += ship.points;
+        // if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
+        //     localStorage.setItem("RocketPatrolTopScore", this.p1Score);
+        //     this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
+        // }
+        // this.scoreLeft.text = this.p1Score;
 
         let soundFXLib = [
             'sfx_explosion_spell',
@@ -400,12 +401,12 @@ class Play extends Phaser.Scene {
         });
 
         // score add and repaint
-        this.p1Score += ship.points;
-        if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
-            localStorage.setItem("RocketPatrolTopScore", this.p1Score);
-            this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
-        }
-        this.scoreLeft.text = this.p1Score;
+        // this.p1Score += ship.points;
+        // if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
+        //     localStorage.setItem("RocketPatrolTopScore", this.p1Score);
+        //     this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
+        // }
+        // this.scoreLeft.text = this.p1Score;
 
         let soundFXLib = [
             'sfx_explosion_spell',

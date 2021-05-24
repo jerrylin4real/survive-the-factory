@@ -22,7 +22,7 @@ var game = new Phaser.Game(config);
 let borderUISize = game.config.height / 17;
 let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
-let borderLimitUp = borderUISize * 6;
+let borderLimitUp = borderUISize * 2;
 // reserve keyboard variables
 let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyShift,
   keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, keyT, keyI, key1, key3, key4;

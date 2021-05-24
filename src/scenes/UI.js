@@ -30,6 +30,11 @@ class UI extends Phaser.Scene {
         // For each 1000 ms or 1 second, call onTimedEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
 
+        
+        // add gameOver UI
+        this.gameOverText = this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER\nPress (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
+        this.gameOverText.alpha = 0;
+        
         //*** add Inventory UI Panel
         this.inventoryText = this.add.text(10, 10, '(I)nventory  ', { font: '48px Arial', fill: 'WHITE' });
 
@@ -61,8 +66,6 @@ class UI extends Phaser.Scene {
         this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
         press M or 3 for metabolism UI\nPress Shift to sprint\nPress Q to end game').setOrigin(0.5);
 
-        // add gameOver UI
-        this.gameOverText = this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER\nPress (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
 
         // set the UI to be invisible as default
         this.inventoryUILeft.alpha = 0;
@@ -78,7 +81,6 @@ class UI extends Phaser.Scene {
         this.staminaText.alpha = 0;
         this.healthText.alpha = 0;
 
-        this.gameOverText.alpha = 0;
 
         // define key control
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
