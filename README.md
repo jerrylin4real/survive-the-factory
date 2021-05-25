@@ -33,6 +33,7 @@ Spring 2021
 - https://phaser.io/examples/v2/camera/follow-styles
 - https://github.com/jerrylin4real/Endless-runner
 - https://github.com/leland-jin/Rocket_Patrol_Mod
+- https://phaser.io/examples/v2/games/tanks
  
 ### Credit  
 - [FPSOSU! Crosshair + Minimal skin](https://steamcommunity.com/sharedfiles/filedetails/?id=1789952373)
