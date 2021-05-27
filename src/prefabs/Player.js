@@ -6,7 +6,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.famePoint = 0;
         this.hunger = 0; // character dies after their hunger reaches 100 for 7 days or 7 minutes
         this.thrist = 0; // character dies after their thrist reaches 100 for 3 days or 3 minutes
-        
+
         // Unavailiable for sprint 2
         // this.kcal_intake = 2500;
         // this.kcal_usage = 2500;
@@ -58,7 +58,7 @@ class Player extends Phaser.GameObjects.Sprite {
         // movement will + thrist
         // will die if reached 100 for 3 min
 
-        
+
         this.width = 10;
         this.height = 10;
     }
@@ -73,19 +73,19 @@ class Player extends Phaser.GameObjects.Sprite {
         }
 
         // make sure player stat is within range
-        if(player_hp > this.max_health){
+        if (player_hp > this.max_health) {
             player_hp = this.max_health;
         }
 
-        if(player_thrist > this.max_thrist){
+        if (player_thrist > this.max_thrist) {
             player_thrist = this.max_thrist;
         }
 
-        if(player_thrist < 0){ // no negative thrist
+        if (player_thrist < 0) { // no negative thrist
             player_thrist = 0;
         }
 
-        if(player_hunger < 0){ // no negative hunger
+        if (player_hunger < 0) { // no negative hunger
             player_hunger = 0;
         }
 
@@ -126,7 +126,7 @@ class Player extends Phaser.GameObjects.Sprite {
                     this.stamina -= 1;
                 }
 
-            } else if (keyD.isDown && this.x <= game.config.width * 10) {
+            } else if (keyD.isDown && this.x < game.config.width * 10 - borderUISize) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.x += this.runspeed;

@@ -65,7 +65,7 @@ class UI extends Phaser.Scene {
         this.healthText_LowerLeft = this.add.text(borderUISize, borderUISize * 15, 'Health: ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
         this.staminaText = this.add.text(borderUISize, borderUISize * 2.5, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
         this.staminaText_LowerLeft = this.add.text(borderUISize, borderUISize * 16, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
-        this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: run-able', { font: '24px Arial', fill: 'RED' });
+        this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: run-able', { font: '24px Arial', fill: 'GREEN' });
 
         this.hungerText = this.add.text(borderUISize, borderUISize * 4.5, 'Hunger: ' + player_hunger, { font: '24px Arial', fill: 'ORANGE' });
 
@@ -170,8 +170,11 @@ class UI extends Phaser.Scene {
 
         if (player_exhausted) {
             this.exhaustedText.setText("Status: exhausted..." + exhausted_countdown / 100 + "s");
+            this.exhaustedText.setColor("RED");
+
         } else if (!player_exhausted) {
             this.exhaustedText.setText("Status: run-able");
+            this.exhaustedText.setColor("GREEN");
         }
 
         if (initialTime > localStorage.getItem("Scum2DBestTimeSurvived")) {
@@ -182,16 +185,22 @@ class UI extends Phaser.Scene {
         if (initialTime > 1) { // make sure not doing 0 % x; 
 
             //*  increment thrist
-            if ((initialTime % 14) == 0) {
+            if ((initialTime % 14) == 0 || player_exhausted) {
                 // set flag one sec before the event
                 thristCounted = false;
             }
-            if (!thristCounted && (initialTime % 15) == 0) { // for every 15 second...
-                player_thrist += 1;
-                // clear flag
-                thristCounted = true;
-            }
+            if (!thristCounted) {
+                if ((initialTime % 15) == 0) { // for every 15 second...
+                    player_thrist += 1;
+                    // clear flag
+                    thristCounted = true;
+                }
+                if (player_exhausted) {
+                    player_thrist += 10; // get kind of thristy when player is exhausted 
+                    thristCounted = true;
 
+                }
+            }
 
             //*  increment hunger
             if ((initialTime % 24) == 0) {
@@ -202,6 +211,19 @@ class UI extends Phaser.Scene {
                 player_hunger += 1;
                 // clear flag
                 hungerCounted = true;
+            }
+
+            if (!hungerCounted) {
+                if ((initialTime % 25) == 0) { // for every 15 second...
+                    player_hunger += 1;
+                    // clear flag
+                    hungerCounted = true;
+                }
+                if (player_exhausted) {
+                    player_hunger += 10; // get kind of hungry when player is exhausted 
+                    hungerCounted = true;
+
+                }
             }
 
 
