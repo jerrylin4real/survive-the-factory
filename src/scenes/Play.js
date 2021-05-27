@@ -231,8 +231,6 @@ class Play extends Phaser.Scene {
         }
 
 
-
-
         if (gameOver) {
             if (this.bgmCreated) {
                 this.bgm.pause()
@@ -332,19 +330,6 @@ class Play extends Phaser.Scene {
     /******************************************************
     * Module-level funcions defined below
     *******************************************************/
-    formatTime(seconds) {
-        // Minutes
-        var minutes = Math.floor(seconds / 60);
-        // Seconds
-        var partInSeconds = seconds % 60;
-        // Adds left zeros to seconds
-        partInSeconds = partInSeconds.toString().padStart(2, '0');
-        // Returns formated time
-        return `${minutes}:${partInSeconds}`;
-    }
-
-
-
     checkCollision(player, ship) {
         // simple AABB checking
         if (player.x < ship.x + ship.width &&
@@ -420,7 +405,7 @@ class Play extends Phaser.Scene {
         // add time bonus
     }
 
-    setMap(scene, mapName) {
+    setMap(scene, mapName) { //! not used 
         currentMap = mapName;
         // currentMap = "dungeonMap";
         map = scene.make.tilemap({ key: currentMap });

@@ -56,7 +56,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
     update() {
         // upload player stat to global variable
-        if (player_hp <= 0) {
+        if (player_hp <= 0 || player_hunger >= 100) { //!use simple hunger condition for now
             player_hp = 0;
             player_dead = true;
             gameOver = true;

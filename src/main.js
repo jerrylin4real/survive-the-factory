@@ -44,12 +44,14 @@ var gameOver = false;
 var player_exhausted = false;
 var player_dead = false;
 
+var exhausted_countdown = 0;
+
 var player_stamina = 1000;
 var player_hp = 100;
 var stamina_lvl = 0;
 var health_lvl = 0;
-
-var exhausted_countdown = 0;
+var player_hunger = 0;
+var hungerCounter = false;
 
 // Define colors 
 var BROWN = 0x664C47;

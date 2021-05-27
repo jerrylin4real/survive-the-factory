@@ -30,11 +30,11 @@ class UI extends Phaser.Scene {
         // For each 1000 ms or 1 second, call onTimedEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
 
-        
+
         // add gameOver UI
         this.gameOverText = this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER\nPress (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
         this.gameOverText.alpha = 0;
-        
+
         //*** add Inventory UI Panel
         this.inventoryText = this.add.text(10, 10, '(I)nventory  ', { font: '48px Arial', fill: 'WHITE' });
 
@@ -58,13 +58,16 @@ class UI extends Phaser.Scene {
         //!FIXME finish Player Stat UI Panel
         // @ param                                   , borderUISize * y // change y to list-show stat
         this.healthText = this.add.text(borderUISize, borderUISize * 1.5, 'Health: ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
+        this.healthText_LowerLeft = this.add.text(borderUISize, borderUISize * 15, 'Health: ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
         this.staminaText = this.add.text(borderUISize, borderUISize * 2.5, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
+        this.staminaText_LowerLeft = this.add.text(borderUISize, borderUISize * 16, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
         this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: run-able', { font: '24px Arial', fill: 'WHITE' });
+        this.hungerText = this.add.text(borderUISize, borderUISize * 4.5, 'Hunger: ' + player_hunger, { font: '24px Arial', fill: 'ORANGE' });
 
 
         // add Tutorial UI Panel
         this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
-        press M or 3 for metabolism UI\nPress Shift to sprint\nPress Q to end game').setOrigin(0.5);
+        press M or 3 for metabolism UI\nPress Shift to sprint\nPress Q to end game', { font: '36px Arial', fill: 'WHITE' }).setOrigin(0.5);
 
 
         // set the UI to be invisible as default
@@ -78,8 +81,11 @@ class UI extends Phaser.Scene {
 
         this.tutorialText.alpha = 0;
         this.exhaustedText.alpha = 0;
+        this.hungerText.alpha = 0;
         this.staminaText.alpha = 0;
         this.healthText.alpha = 0;
+        this.healthText_LowerLeft.alpha = 0;
+        this.staminaText_LowerLeft.alpha = 0;
 
 
         // define key control
@@ -131,6 +137,19 @@ class UI extends Phaser.Scene {
         // update texts to display
         this.staminaText.setText('Stamina(lvl.' + stamina_lvl + '): ' + player_stamina);
         this.healthText.setText('Health: ' + player_hp);
+        this.hungerText.setText('Hunger: ' + player_hunger);
+        
+        //sync always-on display text outside Metabolism
+        if (initialTime > 0.2 && !openedMetabolism) {
+            this.staminaText_LowerLeft.alpha = 1;
+            this.healthText_LowerLeft.alpha = 1;
+        } else {
+            this.staminaText_LowerLeft.alpha = 0;
+            this.healthText_LowerLeft.alpha = 0;
+        }
+
+        this.staminaText_LowerLeft.setText('Stamina(lvl.' + stamina_lvl + '): ' + player_stamina);
+        this.healthText_LowerLeft.setText('Health: ' + player_hp);
 
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             // *** Restart the game ***
@@ -138,6 +157,7 @@ class UI extends Phaser.Scene {
             // set up event flag for restarting Play Scene
             restartPlay = true;
         }
+
         if (player_exhausted) {
             this.exhaustedText.setText("Status: exhausted..." + exhausted_countdown / 100 + "s");
         } else if (!player_exhausted) {
@@ -148,6 +168,21 @@ class UI extends Phaser.Scene {
             localStorage.setItem("Scum2DBestTimeSurvived", initialTime);
             this.bestTimeSurvived.setText('Best Time: ' + this.formatTime(localStorage.getItem("Scum2DBestTimeSurvived")));
         }
+
+        
+        // increment hunger
+        if((initialTime % 29) == 0){
+            // set flag one sec before the event
+            hungerCounter = false; 
+        }
+        if (!hungerCounter && initialTime > 1 && (initialTime % 30) == 0){ // for every 30 second; make sure no 0 is modded.
+            player_hunger += 1; 
+            // clear flag
+            hungerCounter = false; 
+            hungerCounter = true; 
+        }
+        // reset hungerCounter flag
+
     }
 
     /******************************************************
@@ -239,6 +274,8 @@ class UI extends Phaser.Scene {
         this.exhaustedText.alpha = 0;
         this.staminaText.alpha = 0;
         this.healthText.alpha = 0;
+        this.hungerText.alpha = 0;
+
         openedMetabolism = false;
     }
 
@@ -254,6 +291,7 @@ class UI extends Phaser.Scene {
         this.exhaustedText.alpha = 1;
         this.staminaText.alpha = 1;
         this.healthText.alpha = 1;
+        this.hungerText.alpha = 1;
 
         openedMetabolism = true;
     }
