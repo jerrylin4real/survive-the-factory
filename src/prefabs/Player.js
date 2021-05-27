@@ -85,6 +85,10 @@ class Player extends Phaser.GameObjects.Sprite {
             player_thrist = 0;
         }
 
+        if(player_hunger < 0){ // no negative hunger
+            player_hunger = 0;
+        }
+
         player_stamina = this.stamina;
         this.max_stamina = this.stamina_milestone[stamina_lvl];
 
