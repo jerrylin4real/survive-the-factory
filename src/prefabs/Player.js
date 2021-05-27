@@ -1,5 +1,3 @@
-// Player Class prefab; might not be necessary
-
 class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
@@ -25,6 +23,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
         // Level UP milestones:  [lvl0, lvl1, lvl2, ...]
         health_lvl = 0;
+        this.hp_regen_rate = 0.1; // regeneration rate of hp
         this.health_milestone = [100, 120, 140, 160, 180, 200];
         this.restoredhealth = 0;
         this.max_health = this.health_milestone[health_lvl];
