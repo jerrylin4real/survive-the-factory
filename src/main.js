@@ -50,8 +50,11 @@ var player_stamina = 1000;
 var player_hp = 100;
 var stamina_lvl = 0;
 var health_lvl = 0;
+var healthregen = false;
+var healthregenCounted = false;
+
 var player_hunger = 0;
-var hungerCounter = false;
+var hungerCounted = false;
 
 // Define colors 
 var BROWN = 0x664C47;

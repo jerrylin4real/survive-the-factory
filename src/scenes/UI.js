@@ -138,7 +138,7 @@ class UI extends Phaser.Scene {
         this.staminaText.setText('Stamina(lvl.' + stamina_lvl + '): ' + player_stamina);
         this.healthText.setText('Health: ' + player_hp);
         this.hungerText.setText('Hunger: ' + player_hunger);
-        
+
         //sync always-on display text outside Metabolism
         if (initialTime > 0.2 && !openedMetabolism) {
             this.staminaText_LowerLeft.alpha = 1;
@@ -169,19 +169,30 @@ class UI extends Phaser.Scene {
             this.bestTimeSurvived.setText('Best Time: ' + this.formatTime(localStorage.getItem("Scum2DBestTimeSurvived")));
         }
 
-        
-        // increment hunger
-        if((initialTime % 14) == 0){
-            // set flag one sec before the event
-            hungerCounter = false; 
-        }
-        if (!hungerCounter && initialTime > 1 && (initialTime % 15) == 0){ // for every 15 second...
-            player_hunger += 1; 
-            // clear flag
-            hungerCounter = true; 
-        }
-        // reset hungerCounter flag
+        if (initialTime > 1) { // make sure not doing 0 % x; 
+            //*  increment hunger
+            if ((initialTime % 14) == 0) {
+                // set flag one sec before the event
+                hungerCounted = false;
+            }
+            if (!hungerCounted && (initialTime % 15) == 0) { // for every 15 second...
+                player_hunger += 1;
+                // clear flag
+                hungerCounted = true;
+            } 
 
+            //* health regen
+            if ((initialTime % 29) == 0 && player_hunger < 50) {
+                // set flag one sec before the event
+                healthregenCounted = false;
+            }
+            if (!healthregenCounted && (initialTime % 30) == 0) { // for every 30 second...
+                // restore 1 hp
+                player_hp += 1;
+                // clear flag
+                healthregenCounted = true;
+            } 
+        }
     }
 
     /******************************************************
