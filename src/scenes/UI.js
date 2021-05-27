@@ -48,7 +48,8 @@ class UI extends Phaser.Scene {
 
         //! maybe we can make inventory item as a button
         this.peachText = this.add.text(borderUISize, borderUISize * 1.5, 'Peach#: ' + num_peach + "F for more", { font: '24px Arial', fill: 'PINK' });
-
+        this.peachText.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
+        
         //*** add Metabolism UI Panel
         this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '(M)etabolism  ', { font: '48px Arial', fill: 'WHITE' });
         this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
@@ -295,7 +296,6 @@ class UI extends Phaser.Scene {
         this.inventoryText.alpha = 1;
         this.inventoryUIRight.alpha = 1;
         this.peachText.alpha = 1;
-        this.peachText.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
 
 
         openedInventory = true;
