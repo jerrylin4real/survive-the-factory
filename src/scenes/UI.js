@@ -47,9 +47,9 @@ class UI extends Phaser.Scene {
             game.config.height * 2, BROWN).setOrigin(0, 0);
 
         //! maybe we can make inventory item as a button
-        this.peachText = this.add.text(borderUISize, borderUISize * 1.5, 'Peach#: ' + num_peach + "F for more", { font: '24px Arial', fill: 'PINK' });
+        this.peachText = this.add.text(borderUISize, borderUISize * 1.5, 'Peach#: ' + num_peach + " F for more", { font: '24px Arial', fill: 'PINK' });
         this.peachText.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
-        
+
         //*** add Metabolism UI Panel
         this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '(M)etabolism  ', { font: '48px Arial', fill: 'WHITE' });
         this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
@@ -74,7 +74,7 @@ class UI extends Phaser.Scene {
 
         // add Tutorial UI Panel
         this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
-        press M or 3 for metabolism UI\nPress Shift to sprint\nPress F to get item\nPress Q to end game', { font: '36px Arial', fill: 'WHITE' }).setOrigin(0.5);
+        press M or 3 for metabolism UI\nPress Shift to sprint\nPress F to get item\nClick on item to use\nPress Q to end game', { font: '36px Arial', fill: 'WHITE' }).setOrigin(0.5);
 
 
         // set the UI to be invisible as default
@@ -147,7 +147,7 @@ class UI extends Phaser.Scene {
         this.healthText.setText('Health: ' + player_hp);
         this.hungerText.setText('Hunger: ' + player_hunger);
         this.thristText.setText("Thrist: " + player_thrist);
-        this.peachText.setText("Peach#: " + num_peach + "F for more");
+        this.peachText.setText("Peach#: " + num_peach + " F for more");
 
         //sync always-on display text outside Metabolism
         if (initialTime > 0 && !openedMetabolism) {
