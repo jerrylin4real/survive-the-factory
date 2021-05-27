@@ -56,6 +56,10 @@ var healthregenCounted = false;
 var player_hunger = 0;
 var hungerCounted = false;
 
+var player_thrist = 0;
+var thristCounted = false;
+
+
 // Define colors 
 var BROWN = 0x664C47;
 var sadBLUE = 0x194376;

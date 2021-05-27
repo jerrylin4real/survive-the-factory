@@ -6,6 +6,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.famePoint = 0;
         this.hunger = 0; // character dies after their hunger reaches 100 for 7 days or 7 minutes
         this.thrist = 0; // character dies after their thrist reaches 100 for 3 days or 3 minutes
+        
         // Unavailiable for sprint 2
         // this.kcal_intake = 2500;
         // this.kcal_usage = 2500;
@@ -18,7 +19,7 @@ class Player extends Phaser.GameObjects.Sprite {
         // this.stomach_volume = 0;
         // this.intestine_volume = 0;
         // this.colon_volume = 0;
-        this.bladder_volume = 0;
+        // this.bladder_volume = 0;
 
 
         // Level UP milestones:  [lvl0, lvl1, lvl2, ...]

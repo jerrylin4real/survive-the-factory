@@ -61,8 +61,11 @@ class UI extends Phaser.Scene {
         this.healthText_LowerLeft = this.add.text(borderUISize, borderUISize * 15, 'Health: ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
         this.staminaText = this.add.text(borderUISize, borderUISize * 2.5, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
         this.staminaText_LowerLeft = this.add.text(borderUISize, borderUISize * 16, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
-        this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: run-able', { font: '24px Arial', fill: 'WHITE' });
+        this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: run-able', { font: '24px Arial', fill: 'RED' });
+        
         this.hungerText = this.add.text(borderUISize, borderUISize * 4.5, 'Hunger: ' + player_hunger, { font: '24px Arial', fill: 'ORANGE' });
+        
+        this.thristText = this.add.text(borderUISize, borderUISize * 5.5, 'Thrist: ' + player_thrist, { font: '24px Arial', fill: 'WHITE' });
 
 
         // add Tutorial UI Panel
@@ -86,7 +89,7 @@ class UI extends Phaser.Scene {
         this.healthText.alpha = 0;
         this.healthText_LowerLeft.alpha = 0;
         this.staminaText_LowerLeft.alpha = 0;
-
+        this.thristText.alpha = 0;
 
         // define key control
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
@@ -138,6 +141,7 @@ class UI extends Phaser.Scene {
         this.staminaText.setText('Stamina(lvl.' + stamina_lvl + '): ' + player_stamina);
         this.healthText.setText('Health: ' + player_hp);
         this.hungerText.setText('Hunger: ' + player_hunger);
+        this.thristText.setText("Thrist: " + player_thrist);
 
         //sync always-on display text outside Metabolism
         if (initialTime > 0.2 && !openedMetabolism) {
@@ -170,19 +174,33 @@ class UI extends Phaser.Scene {
         }
 
         if (initialTime > 1) { // make sure not doing 0 % x; 
-            //*  increment hunger
+            
+            //*  increment thrist
             if ((initialTime % 14) == 0) {
+                // set flag one sec before the event
+                thristCounted = false;
+            }
+            if (!thristCounted && (initialTime % 15) == 0) { // for every 15 second...
+                player_thrist += 1;
+                // clear flag
+                thristCounted = true;
+            } 
+
+
+            //*  increment hunger
+            if ((initialTime % 24) == 0) {
                 // set flag one sec before the event
                 hungerCounted = false;
             }
-            if (!hungerCounted && (initialTime % 15) == 0) { // for every 15 second...
+            if (!hungerCounted && (initialTime % 25) == 0) { // for every 25 second...
                 player_hunger += 1;
                 // clear flag
                 hungerCounted = true;
             } 
 
+
             //* health regen
-            if ((initialTime % 29) == 0 && player_hunger < 50) {
+            if ((initialTime % 29) == 0 && player_hunger < 50 && player_thrist < 90) {
                 // set flag one sec before the event
                 healthregenCounted = false;
             }
@@ -285,6 +303,7 @@ class UI extends Phaser.Scene {
         this.staminaText.alpha = 0;
         this.healthText.alpha = 0;
         this.hungerText.alpha = 0;
+        this.thristText.alpha = 0;
 
         openedMetabolism = false;
     }
@@ -302,6 +321,7 @@ class UI extends Phaser.Scene {
         this.staminaText.alpha = 1;
         this.healthText.alpha = 1;
         this.hungerText.alpha = 1;
+        this.thristText.alpha = 1;
 
         openedMetabolism = true;
     }
