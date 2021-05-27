@@ -40,6 +40,9 @@ class Play extends Phaser.Scene {
         // load audio
         this.load.audio('switchsound', './assets/Select.wav');
 
+        this.load.path = './assets/';
+        this.load.atlas('platformer', 'player-and-food.png', 'player-and-food.json');
+
     }
     // Note: The keyword 'this' refers to the class 'Play'
 
@@ -80,7 +83,7 @@ class Play extends Phaser.Scene {
 
         // add player 
         //this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'player').setScale(1); // scale the size of this.player1
+        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown,  'platformer', 'stand').setScale(1); // scale the size of this.player1
 
         //*** add camera
         // Set the camera bounds
@@ -139,6 +142,54 @@ class Play extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('explosion2', { start: 0, end: 12, first: 0 }),
             frameRate: 10
         });
+        this.anims.create({
+            key: 'walkleft',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'walkleft' }
+            ],
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'walkright',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'walkright' }
+            ],
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'go-up',
+            defaultTextureKey: 'platformer',
+            frames: this.anims.generateFrameNames('platformer', {
+                prefix: 'go-up',
+                start: 1,
+                end: 2,
+                suffix: '',
+                zeroPad: 2
+            }),
+        });
+        this.anims.create({
+            key: 'go-down',
+            defaultTextureKey: 'platformer',
+            frames: this.anims.generateFrameNames('platformer', {
+                prefix: 'go-down',
+                start: 1,
+                end: 2,
+                suffix: '',
+                zeroPad: 2
+            }),
+        });
+        this.anims.create({
+            key: 'stand',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'stand' }
+            ],
+            repeat: -1
+        });
+
+        
 
 
         // initialize score
@@ -229,6 +280,8 @@ class Play extends Phaser.Scene {
             this.ship04.moveSpeed += 2;
             this.hasted = true;
         }
+
+
 
 
         if (gameOver) {
@@ -330,6 +383,19 @@ class Play extends Phaser.Scene {
     /******************************************************
     * Module-level funcions defined below
     *******************************************************/
+    formatTime(seconds) {
+        // Minutes
+        var minutes = Math.floor(seconds / 60);
+        // Seconds
+        var partInSeconds = seconds % 60;
+        // Adds left zeros to seconds
+        partInSeconds = partInSeconds.toString().padStart(2, '0');
+        // Returns formated time
+        return `${minutes}:${partInSeconds}`;
+    }
+
+
+
     checkCollision(player, ship) {
         // simple AABB checking
         if (player.x < ship.x + ship.width &&
@@ -405,7 +471,7 @@ class Play extends Phaser.Scene {
         // add time bonus
     }
 
-    setMap(scene, mapName) { //! not used 
+    setMap(scene, mapName) {
         currentMap = mapName;
         // currentMap = "dungeonMap";
         map = scene.make.tilemap({ key: currentMap });
