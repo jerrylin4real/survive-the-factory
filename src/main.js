@@ -40,12 +40,13 @@ var openedTutorial = false;
 var at_MENU_Scene = true;
 var gameOver = false;
 
+//*** Global Inventory Variables
+var num_peach = 2;
+
 //*** Global Player Variables
 var player_exhausted = false;
 var player_dead = false;
-
 var exhausted_countdown = 0;
-
 var player_stamina = 1000;
 var player_hp = 100;
 var stamina_lvl = 0;
@@ -53,9 +54,11 @@ var health_lvl = 0;
 var healthregen = false;
 var healthregenCounted = false;
 
+var hunger_lvl = 0;
 var player_hunger = 0;
 var hungerCounted = false;
 
+var thrist_lvl = 0;
 var player_thrist = 0;
 var thristCounted = false;
 

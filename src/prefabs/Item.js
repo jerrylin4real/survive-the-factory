@@ -10,6 +10,8 @@ class Item extends Phaser.GameObjects.Sprite {
         this.durability = 100;
         this.name = "peach";
 
+        this.width = 10;
+        this.height = 10;
     }
 
     update() {
@@ -18,12 +20,14 @@ class Item extends Phaser.GameObjects.Sprite {
             //!FIXME destory item
         }
         // allocate hunger_restore_value based on food type
+        //!not effective for now
         if (this.name == "cherry") {
             this.hunger_restore_value = 5;
         }
 
         if (this.name == "peach") {
             this.hunger_restore_value = 10;
+            //player_thrist -= 5;
         }
 
         if (this.name == "pitaya") {

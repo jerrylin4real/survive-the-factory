@@ -46,6 +46,9 @@ class UI extends Phaser.Scene {
         this.inventoryUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, BROWN).setOrigin(0, 0);
 
+        //! maybe we can make inventory item as a button
+        this.peachText = this.add.text(borderUISize, borderUISize * 1.5, 'Peach#: ' + num_peach, { font: '24px Arial', fill: 'PINK' });
+
         //*** add Metabolism UI Panel
         this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '(M)etabolism  ', { font: '48px Arial', fill: 'WHITE' });
         this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
@@ -62,15 +65,15 @@ class UI extends Phaser.Scene {
         this.staminaText = this.add.text(borderUISize, borderUISize * 2.5, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
         this.staminaText_LowerLeft = this.add.text(borderUISize, borderUISize * 16, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
         this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: run-able', { font: '24px Arial', fill: 'RED' });
-        
+
         this.hungerText = this.add.text(borderUISize, borderUISize * 4.5, 'Hunger: ' + player_hunger, { font: '24px Arial', fill: 'ORANGE' });
-        
+
         this.thristText = this.add.text(borderUISize, borderUISize * 5.5, 'Thrist: ' + player_thrist, { font: '24px Arial', fill: 'WHITE' });
 
 
         // add Tutorial UI Panel
         this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
-        press M or 3 for metabolism UI\nPress Shift to sprint\nPress Q to end game', { font: '36px Arial', fill: 'WHITE' }).setOrigin(0.5);
+        press M or 3 for metabolism UI\nPress Shift to sprint\nPress F to get item\nPress Q to end game', { font: '36px Arial', fill: 'WHITE' }).setOrigin(0.5);
 
 
         // set the UI to be invisible as default
@@ -90,6 +93,7 @@ class UI extends Phaser.Scene {
         this.healthText_LowerLeft.alpha = 0;
         this.staminaText_LowerLeft.alpha = 0;
         this.thristText.alpha = 0;
+        this.peachText.alpha = 0;
 
         // define key control
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
@@ -142,9 +146,10 @@ class UI extends Phaser.Scene {
         this.healthText.setText('Health: ' + player_hp);
         this.hungerText.setText('Hunger: ' + player_hunger);
         this.thristText.setText("Thrist: " + player_thrist);
+        this.peachText.setText("Peach#: " + num_peach);
 
         //sync always-on display text outside Metabolism
-        if (initialTime > 0.2 && !openedMetabolism) {
+        if (initialTime > 0 && !openedMetabolism) {
             this.staminaText_LowerLeft.alpha = 1;
             this.healthText_LowerLeft.alpha = 1;
         } else {
@@ -174,7 +179,7 @@ class UI extends Phaser.Scene {
         }
 
         if (initialTime > 1) { // make sure not doing 0 % x; 
-            
+
             //*  increment thrist
             if ((initialTime % 14) == 0) {
                 // set flag one sec before the event
@@ -184,7 +189,7 @@ class UI extends Phaser.Scene {
                 player_thrist += 1;
                 // clear flag
                 thristCounted = true;
-            } 
+            }
 
 
             //*  increment hunger
@@ -196,7 +201,7 @@ class UI extends Phaser.Scene {
                 player_hunger += 1;
                 // clear flag
                 hungerCounted = true;
-            } 
+            }
 
 
             //* health regen
@@ -209,7 +214,7 @@ class UI extends Phaser.Scene {
                 player_hp += 1;
                 // clear flag
                 healthregenCounted = true;
-            } 
+            }
         }
     }
 
@@ -276,6 +281,7 @@ class UI extends Phaser.Scene {
         this.inventoryUILeft.alpha = 0;
         this.inventoryText.alpha = 0;
         this.inventoryUIRight.alpha = 0;
+        this.peachText.alpha = 0;
 
         openedInventory = false;
     }
@@ -288,6 +294,9 @@ class UI extends Phaser.Scene {
         this.inventoryUILeft.alpha = 1;
         this.inventoryText.alpha = 1;
         this.inventoryUIRight.alpha = 1;
+        this.peachText.alpha = 1;
+        this.peachText.setInteractive().on('pointerup', () => this.consumeItem("peach"));
+
 
         openedInventory = true;
     }
@@ -341,6 +350,21 @@ class UI extends Phaser.Scene {
         // visualize UI Panel            
         this.tutorialText.alpha = 1;
         openedTutorial = true;
+    }
+
+    consumeItem(item_name) {
+        if (openedInventory) {
+            if (item_name == "peach") {
+                if (num_peach > 0) {
+                    num_peach -= 1;
+                    player_hunger -= 10;
+                    player_thrist -= 5;
+                } else {
+                    //! print "no more peach"
+                    console.log("No more peach!");
+                }
+            }
+        }
     }
 
 }

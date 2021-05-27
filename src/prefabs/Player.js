@@ -35,23 +35,32 @@ class Player extends Phaser.GameObjects.Sprite {
         this.max_stamina = this.stamina_milestone[stamina_lvl];
         this.stamina = this.max_stamina;
         this.restoredstamina = 0;
-        this.walkspeed = 3 + stamina_lvl; // pixels per frame, will be faster for higher lvl
+        this.walkspeed = 3 + stamina_lvl; // pixels per frame, will move faster for higher stamina lvl
         this.runspeed = this.walkspeed * 2;
         this.init_exhausted_countdown = 600; // 6 seconds cd for exhausted status penalty 
 
         exhausted_countdown = this.init_exhausted_countdown;
 
-        //!fixme
-        this.hunger_milestone = [25, 50, 75, 100];
+        //!fixme for final sprint [optional]
+        hunger_lvl = 0;
+        this.hunger_milestone = [100, 125, 150, 175, 200];
+        this.max_hunger = this.hunger_milestone[hunger_lvl];
+
         // hunger will reduce current stamina
         // movement will + hunger
         // will die if reached 100 for 7 min
 
-        this.thrist_milestone = [25, 50, 75, 100];
+        thrist_lvl = 0;
+        this.thrist_milestone = [100, 125, 150, 175, 200];
+        this.max_thrist = this.thrist_milestone[thrist_lvl];
 
         // thrist will reduce current stamina
         // movement will + thrist
         // will die if reached 100 for 3 min
+
+        
+        this.width = 10;
+        this.height = 10;
     }
 
 
@@ -63,19 +72,27 @@ class Player extends Phaser.GameObjects.Sprite {
             gameOver = true;
         }
 
+        // make sure player stat is within range
+        if(player_hp > this.max_health){
+            player_hp = this.max_health;
+        }
+
+        if(player_thrist > this.max_thrist){
+            player_thrist = this.max_thrist;
+        }
+
+        if(player_thrist < 0){ // no negative thrist
+            player_thrist = 0;
+        }
+
         player_stamina = this.stamina;
         this.max_stamina = this.stamina_milestone[stamina_lvl];
 
-        // Interact button
-        if (Phaser.Input.Keyboard.JustDown(keyF)) {
-            //!implement interaction
-            this.isFiring = true;
-        }
 
         if (this.stamina <= 0 && !player_exhausted) {
             this.stamina = 0; // avoid negative stamina# to be bug-free
             console.log("player exhausted");
-            player_hp -= 50; //! change to -10 hp penalty for being exhausted
+            player_hp -= 10;
             player_exhausted = true;
         }
 
@@ -90,6 +107,8 @@ class Player extends Phaser.GameObjects.Sprite {
 
         } else {
             // not exhausted 
+            //!move keycontrol to play!!!
+
             //***  player movement control:W S A D
             // is Down = keep pressed down
             if (keyA.isDown && this.x >= borderUISize) {
@@ -165,13 +184,13 @@ class Player extends Phaser.GameObjects.Sprite {
             }
         }
 
-        // reset on miss
+        //! reset on miss; might not be necessary
         if (this.y <= borderUISize * 3 + borderPadding) {
             // this.reset();
         }
     }
 
-    // reset player to "ground"
+    //! reset player to "ground"; might not be necessary
     reset() {
         this.y = game.config.height - borderUISize - borderPadding;
     }

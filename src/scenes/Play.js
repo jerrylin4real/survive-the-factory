@@ -83,7 +83,7 @@ class Play extends Phaser.Scene {
 
         // add player 
         //this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown,  'platformer', 'stand').setScale(1); // scale the size of this.player1
+        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'platformer', 'stand').setScale(1); // scale the size of this.player1
 
         //*** add camera
         // Set the camera bounds
@@ -189,7 +189,7 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
 
-        
+
 
 
         // initialize score
@@ -259,20 +259,17 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
 
-        // Game Over text
+        // Interact button
+        if (Phaser.Input.Keyboard.JustDown(keyF)) {
+            //!implement interaction
+            //! add peach for sprint 2
+            num_peach += 1;
+            // if F a loot
+                // randomly gerenate an item/weapon;
 
-        // Pause feature
-        /* if (Phaser.Input.Keyboard.JustDown(keyP)) {
-            this.scene.pause();
-            paused = true;
-            this.add.text(game.config.width / 2, game.config.height / 2, 'GAME PAUSED').setOrigin(0.5);
-            if (paused == true) {
-                this.scene.resume();
-                paused = false;
-            }
+            
         }
-        */
-
+    
         if (this.hasteCounter > 30 && this.hasted == false) {
             this.ship01.moveSpeed += 2;
             this.ship02.moveSpeed += 2;
@@ -396,12 +393,12 @@ class Play extends Phaser.Scene {
 
 
 
-    checkCollision(player, ship) {
+    checkCollision(player, item) { //!FIXME rewrite this !
         // simple AABB checking
-        if (player.x < ship.x + ship.width &&
-            player.x + player.width > ship.x &&
-            player.y < ship.y + ship.height &&
-            player.height + player.y > ship.y) {
+        if (player.x < item.x + item.width &&
+            player.x + player.width > item.x &&
+            player.y < item.y + item.height &&
+            player.height + player.y > item.y) {
             return true;
         } else {
             return false;
