@@ -8,12 +8,37 @@ class Item extends Phaser.GameObjects.Sprite {
         this.number = 1; // number/packs of food
         this.hunger_restore_value;
         this.durability = 100;
+        this.name = "peach";
 
     }
+
     update() {
-        if(this.durability <= 0){
+
+        if (this.durability <= 0) {
             //!FIXME destory item
         }
+        // allocate hunger_restore_value based on food type
+        if (this.name == "cherry") {
+            this.hunger_restore_value = 5;
+        }
+
+        if (this.name == "peach") {
+            this.hunger_restore_value = 10;
+        }
+
+        if (this.name == "pitaya") {
+            this.hunger_restore_value = 20;
+        }
+
+        if (this.name == "watermalon") {
+            this.hunger_restore_value = 30;
+        }
+
+
+        if (this.name == "canned_beef") {
+            this.hunger_restore_value = 50;
+        }
+
 
     }
 }

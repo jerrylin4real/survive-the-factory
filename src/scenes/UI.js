@@ -171,14 +171,13 @@ class UI extends Phaser.Scene {
 
         
         // increment hunger
-        if((initialTime % 29) == 0){
+        if((initialTime % 14) == 0){
             // set flag one sec before the event
             hungerCounter = false; 
         }
-        if (!hungerCounter && initialTime > 1 && (initialTime % 30) == 0){ // for every 30 second; make sure no 0 is modded.
+        if (!hungerCounter && initialTime > 1 && (initialTime % 15) == 0){ // for every 15 second...
             player_hunger += 1; 
             // clear flag
-            hungerCounter = false; 
             hungerCounter = true; 
         }
         // reset hungerCounter flag
