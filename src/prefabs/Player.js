@@ -33,13 +33,11 @@ class Player extends Phaser.GameObjects.Sprite {
         stamina_lvl = 0;
         this.stamina_milestone = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000];
         this.max_stamina = this.stamina_milestone[stamina_lvl];
-        this.stamina = this.max_stamina;
+        player_stamina = this.max_stamina;
         this.restoredstamina = 0;
         this.walkspeed = 3 + stamina_lvl; // pixels per frame, will move faster for higher stamina lvl
         this.runspeed = this.walkspeed * 2;
-        init_exhausted_countdown = 600; // 6 seconds cd for exhausted status penalty 
 
-        exhausted_countdown = init_exhausted_countdown;
 
         //!fixme for final sprint [optional]
         hunger_lvl = 0;
@@ -94,12 +92,11 @@ class Player extends Phaser.GameObjects.Sprite {
             player_hunger = 0;
         }
 
-        player_stamina = this.stamina;
         this.max_stamina = this.stamina_milestone[stamina_lvl];
 
 
-        if (this.stamina <= 0 && !player_exhausted) {
-            this.stamina = 0; // avoid negative stamina# to be bug-free
+        if (player_stamina <= 0 && !player_exhausted) {
+            player_stamina = 0; // avoid negative stamina# to be bug-free
             console.log("player exhausted");
 
             // apply penalties
@@ -109,76 +106,13 @@ class Player extends Phaser.GameObjects.Sprite {
             player_exhausted = true;
         }
 
-        if (player_exhausted) {
-            if (exhausted_countdown > 0) {
-                exhausted_countdown -= 1;
-                player_exhausted = true;
-            } else {
-                exhausted_countdown = init_exhausted_countdown;
-                player_exhausted = false;
-            }
-
-        } else {
-            // not exhausted 
-            //!move keycontrol to play!!!
-
-            //***  player movement control:W S A D
-            // is Down = keep pressed down
-            if (keyA.isDown && this.x >= borderUISize) {
-                if (keyShift.isDown) {
-                    // speed up if boost
-                    this.x -= this.runspeed;
-                    // running loses more stamina
-                    this.stamina -= 2;
-                } else {
-                    this.x -= this.walkspeed;
-                    this.stamina -= 1;
-                }
-
-            } else if (keyD.isDown && this.x <= game.config.width * 10) {
-                if (keyShift.isDown) {
-                    // speed up if boost
-                    this.x += this.runspeed;
-                    // running loses more stamina
-                    this.stamina -= 2;
-                } else {
-                    this.x += this.walkspeed;
-                    this.stamina -= 1;
-                }
-            }
-            if (keyW.isDown && this.y >= borderLimitUp - borderUISize) {
-                if (keyShift.isDown) {
-                    // speed up if boost
-                    this.y -= this.runspeed;
-                    // running loses more stamina
-                    this.stamina -= 2;
-                } else {
-                    this.y -= this.walkspeed;
-                    this.stamina -= 1;
-                }
-            } else if (keyS.isDown && this.y <= game.config.height * 10 - borderLimitDown) {
-                if (keyShift.isDown) {
-                    // speed up if boost
-                    this.y += this.runspeed;
-                    // running loses more stamina
-                    this.stamina -= 2;
-                } else {
-                    this.y += this.walkspeed;
-                    this.stamina -= 1;
-                }
-            }
-            //state machines
-            // metabolism 
-
-        }
-
-        if (this.stamina < this.stamina / 5) {
+        if (player_stamina < player_stamina / 5) {
             //!fixme add sound/text warning @ 1/5 lvl before exhuased; example: send boolean to UI
-            //console.log("stamina: " + this.stamina);
+            //console.log("stamina: " + player_stamina);
         }
         //*** stamina level mechanism
-        if (this.stamina < this.max_stamina && !player_exhausted) {
-            this.stamina += 1;
+        if (player_stamina < this.max_stamina && !player_exhausted) {
+            player_stamina += 1;
             this.restoredstamina += 1;
             if (stamina_lvl < this.stamina_milestone.length - 1 && this.restoredstamina / 2 >= this.stamina_milestone[stamina_lvl]) {
                 stamina_lvl += 1;

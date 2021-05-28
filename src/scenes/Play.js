@@ -67,6 +67,9 @@ class Play extends Phaser.Scene {
         this.hasteCounter = 0; // Increase ships' movespeed if >= 30.
         this.superWeaponCount = 0;
 
+        init_exhausted_countdown = 600; // 6 seconds cd for exhausted status penalty 
+        exhausted_countdown = init_exhausted_countdown;
+
         // place tile sprite
         this.starfield = this.add.tileSprite(0, 0, 9999, 9999, 'starfield').setOrigin(0, 0);
 
@@ -135,16 +138,6 @@ class Play extends Phaser.Scene {
 
         // animation config
         this.anims.create({
-            key: 'explode',
-            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0 }),
-            frameRate: 30
-        });
-        this.anims.create({
-            key: 'explode2',
-            frames: this.anims.generateFrameNumbers('explosion2', { start: 0, end: 12, first: 0 }),
-            frameRate: 10
-        });
-        this.anims.create({
             key: 'walkleft',
             defaultTextureKey: 'platformer',
             frames: [
@@ -191,6 +184,16 @@ class Play extends Phaser.Scene {
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'explode',
+            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0 }),
+            frameRate: 30
+        });
+        this.anims.create({
+            key: 'explode2',
+            frames: this.anims.generateFrameNumbers('explosion2', { start: 0, end: 12, first: 0 }),
+            frameRate: 10
+        });
 
 
 
@@ -303,26 +306,26 @@ class Play extends Phaser.Scene {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.x -= this.player1.runspeed;
-                    this.player1.anims.play('walkleft');
+                    this.player1.anims.play('walkleft').scaleX = 1; //! Note: use scaleX to flip animation
                     // running loses more stamina
-                    this.player1.stamina -= 2;
+                    player_stamina -= 2;
                 } else {
                     this.player1.x -= this.player1.walkspeed;
-                    this.player1.anims.play('walkleft');
-                    this.player1.stamina -= 1;
+                    this.player1.anims.play('walkleft').scaleX = 1;
+                    player_stamina -= 1;
                 }
 
             } else if (keyD.isDown && this.player1.x < game.config.width * 10 - borderUISize) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.x += this.player1.runspeed;
-                    this.player1.anims.play('walkright');
+                    this.player1.anims.play('walkright').scaleX = -1;
                     // running loses more stamina
-                    this.player1.stamina -= 2;
+                    player_stamina -= 2;
                 } else {
                     this.player1.x += this.player1.walkspeed;
-                    this.player1.anims.play('walkright');
-                    this.player1.stamina -= 1;
+                    this.player1.anims.play('walkright').scaleX = -1;
+                    player_stamina -= 1;
                 }
             }
             if (keyW.isDown && this.player1.y >= borderLimitUp - borderUISize) {
@@ -331,11 +334,11 @@ class Play extends Phaser.Scene {
                     this.player1.y -= this.player1.runspeed;
                     //this.player1.anims.play('go-up');
                     // running loses more stamina
-                    this.player1.stamina -= 2;
+                    player_stamina -= 2;
                 } else {
                     this.player1.y -= this.player1.walkspeed;
                     //this.player1.anims.play('go-up');
-                    this.player1.stamina -= 1;
+                    player_stamina -= 1;
                 }
             } else if (keyS.isDown && this.player1.y <= game.config.height * 10 - borderLimitDown) {
                 if (keyShift.isDown) {
@@ -343,11 +346,11 @@ class Play extends Phaser.Scene {
                     this.player1.y += this.player1.runspeed;
                     //this.player1.anims.play('go-down');
                     // running loses more stamina
-                    this.player1.stamina -= 2;
+                    player_stamina -= 2;
                 } else {
                     this.player1.y += this.player1.walkspeed;
                     //.player1.anims.play('go-down');
-                    this.player1.stamina -= 1;
+                    player_stamina -= 1;
                 }
             }
             //state machines
