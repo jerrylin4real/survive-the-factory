@@ -24,11 +24,10 @@ class Player extends Phaser.GameObjects.Sprite {
 
         // Level UP milestones:  [lvl0, lvl1, lvl2, ...]
         health_lvl = 0;
-        this.hp_regen_rate = 0.1; // regeneration rate of hp
         this.health_milestone = [100, 120, 140, 160, 180, 200];
-        this.restoredhealth = 0;
+        restoredhealth = 0;
         this.max_health = this.health_milestone[health_lvl];
-        player_hp = this.max_health;
+        player_hp = this.max_health; // init hp match
 
         stamina_lvl = 0;
         this.stamina_milestone = [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000];
@@ -69,7 +68,7 @@ class Player extends Phaser.GameObjects.Sprite {
 
 
         // upload player stat to global variable
-        if (player_hp <= 0 || player_hunger >= 100) { //!use simple hunger condition for now
+        if (player_hp <= 0 || player_hunger >= 100 || player_thrist >= 100) { //!use simple hunger condition for now
             player_hp = 0;
             player_dead = true;
             gameOver = true;
@@ -113,22 +112,23 @@ class Player extends Phaser.GameObjects.Sprite {
         //*** stamina level mechanism
         if (player_stamina < this.max_stamina && !player_exhausted) {
             player_stamina += 1;
-            this.restoredstamina += 1;
+            this.restoredstamina += 1; //! not calculated by the timer in UI.js
             if (stamina_lvl < this.stamina_milestone.length - 1 && this.restoredstamina / 2 >= this.stamina_milestone[stamina_lvl]) {
                 stamina_lvl += 1;
-                console.log("stamina_lvl up to " + stamina_lvl);
                 this.restoredstamina = 0;
+
+                console.log("stamina_lvl up to " + stamina_lvl);
             }
         }
 
-        //*** health level mechanism
+        //*** hp level mechanism
         if (player_hp < this.max_health) {
             // if restored health:
-            // this.restoredhealth += 1;
-            if (health_lvl < this.health_milestone.length - 1 && this.restoredhealth / 2 >= this.health_milestone[health_lvl]) {
+            // restoredhealth += 1; done in UI.js
+            if (health_lvl < this.health_milestone.length - 1 && restoredhealth * 2 >= this.health_milestone[health_lvl]) {
                 health_lvl += 1;
+                restoredhealth = 0;
                 console.log("health_lvl up to " + health_lvl);
-                this.restoredhealth = 0;
             }
         }
 

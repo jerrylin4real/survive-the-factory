@@ -49,12 +49,15 @@ var player1_x;
 var player1_y;
 var player_exhausted = false;
 var player_dead = false;
+
+var stamina_lvl = 0;
 var exhausted_countdown = 0;
 var init_exhausted_countdown;
 var player_stamina = 1000;
-var player_hp = 100;
-var stamina_lvl = 0;
+
 var health_lvl = 0;
+var restoredhealth;
+var player_hp = 100;
 var healthregen = false;
 var healthregenCounted = false;
 

@@ -298,8 +298,6 @@ class Play extends Phaser.Scene {
             }
         } else {
             // not exhausted 
-            //!move keycontrol to play!!!
-
             //***  player movement control:W S A D
             // is Down = keep pressed down
             if (keyA.isDown && this.player1.x >= borderUISize) {

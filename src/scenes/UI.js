@@ -61,8 +61,8 @@ class UI extends Phaser.Scene {
 
         //!FIXME finish Player Stat UI Panel
         // @ param                                   , borderUISize * y // change y to list-show stat
-        this.healthText = this.add.text(borderUISize, borderUISize * 1.5, 'Health: ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
-        this.healthText_LowerLeft = this.add.text(borderUISize, borderUISize * 15, 'Health: ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
+        this.healthText = this.add.text(borderUISize, borderUISize * 1.5, 'HP(lvl.' + health_lvl + '): ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
+        this.healthText_LowerLeft = this.add.text(borderUISize, borderUISize * 15, 'HP(lvl.' + health_lvl + '): ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
         this.staminaText = this.add.text(borderUISize, borderUISize * 2.5, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
         this.staminaText_LowerLeft = this.add.text(borderUISize, borderUISize * 16, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
         this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: run-able', { font: '24px Arial', fill: 'GREEN' });
@@ -145,7 +145,7 @@ class UI extends Phaser.Scene {
     update() {
         // update texts to display
         this.staminaText.setText('Stamina(lvl.' + stamina_lvl + '): ' + player_stamina);
-        this.healthText.setText('Health: ' + player_hp);
+        this.healthText.setText('HP(lvl.' + health_lvl + '): ' + player_hp);
         this.hungerText.setText('Hunger: ' + player_hunger);
         this.thristText.setText("Thrist: " + player_thrist);
         this.peachText.setText("Peach#: " + num_peach + " F for more");
@@ -160,7 +160,7 @@ class UI extends Phaser.Scene {
         }
 
         this.staminaText_LowerLeft.setText('Stamina(lvl.' + stamina_lvl + '): ' + player_stamina);
-        this.healthText_LowerLeft.setText('Health: ' + player_hp);
+        this.healthText_LowerLeft.setText('HP(lvl.' + health_lvl + '): ' + player_hp);
 
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             // *** Restart the game ***
@@ -197,12 +197,12 @@ class UI extends Phaser.Scene {
                     // clear flag
                     thristCounted = true;
                 }
-                
+
             }
 
 
             //*  increment hunger
-            if ((initialTime % 24) == 0 ) {
+            if ((initialTime % 24) == 0) {
                 // set flag one sec before the event
                 hungerCounted = false;
             }
@@ -223,7 +223,9 @@ class UI extends Phaser.Scene {
             }
             if (!healthregenCounted && (initialTime % 30) == 0) { // for every 30 second...
                 // restore 1 hp
+
                 player_hp += 1;
+                restoredhealth += 1; //aka restoredhp
                 // clear flag
                 healthregenCounted = true;
             }
