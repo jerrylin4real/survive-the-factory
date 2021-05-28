@@ -303,10 +303,12 @@ class Play extends Phaser.Scene {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.x -= this.player1.runspeed;
+                    this.player1.anims.play('walkleft');
                     // running loses more stamina
                     this.player1.stamina -= 2;
                 } else {
                     this.player1.x -= this.player1.walkspeed;
+                    this.player1.anims.play('walkleft');
                     this.player1.stamina -= 1;
                 }
 
@@ -314,10 +316,12 @@ class Play extends Phaser.Scene {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.x += this.player1.runspeed;
+                    this.player1.anims.play('walkright');
                     // running loses more stamina
                     this.player1.stamina -= 2;
                 } else {
                     this.player1.x += this.player1.walkspeed;
+                    this.player1.anims.play('walkright');
                     this.player1.stamina -= 1;
                 }
             }
@@ -325,20 +329,24 @@ class Play extends Phaser.Scene {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.y -= this.player1.runspeed;
+                    //this.player1.anims.play('go-up');
                     // running loses more stamina
                     this.player1.stamina -= 2;
                 } else {
                     this.player1.y -= this.player1.walkspeed;
+                    //this.player1.anims.play('go-up');
                     this.player1.stamina -= 1;
                 }
             } else if (keyS.isDown && this.player1.y <= game.config.height * 10 - borderLimitDown) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.y += this.player1.runspeed;
+                    //this.player1.anims.play('go-down');
                     // running loses more stamina
                     this.player1.stamina -= 2;
                 } else {
                     this.player1.y += this.player1.walkspeed;
+                    //.player1.anims.play('go-down');
                     this.player1.stamina -= 1;
                 }
             }
