@@ -244,6 +244,10 @@ class Play extends Phaser.Scene {
             // Resume bgm if bgm exists
             this.bgm.resume();
         }
+
+        // * reset values
+        player_hunger = 0;
+        player_thrist = 0;
     }
 
     update() {
@@ -265,9 +269,70 @@ class Play extends Phaser.Scene {
             //! add peach for sprint 2
             num_peach += 1;
             // if F a loot
-                // randomly gerenate an item/weapon;
+                // randomly gerenate an item/weapon;      
+        }
 
-            
+        
+        if (player_exhausted) {
+            if (exhausted_countdown > 0) {
+                exhausted_countdown -= 1;
+                player_exhausted = true;
+            } else {
+                exhausted_countdown = init_exhausted_countdown;
+                player_exhausted = false;
+            }
+
+        } else {
+            // not exhausted 
+            //!move keycontrol to play!!!
+
+            //***  player movement control:W S A D
+            // is Down = keep pressed down
+            if (keyA.isDown && this.player1.x >= borderUISize) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.player1.x -= this.player1.runspeed;
+                    // running loses more stamina
+                    this.player1.stamina -= 2;
+                } else {
+                    this.player1.x -= this.player1.walkspeed;
+                    this.player1.stamina -= 1;
+                }
+
+            } else if (keyD.isDown && this.player1.x < game.config.width * 10 - borderUISize) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.player1.x += this.player1.runspeed;
+                    // running loses more stamina
+                    this.player1.stamina -= 2;
+                } else {
+                    this.player1.x += this.player1.walkspeed;
+                    this.player1.stamina -= 1;
+                }
+            }
+            if (keyW.isDown && this.player1.y >= borderLimitUp - borderUISize) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.player1.y -= this.player1.runspeed;
+                    // running loses more stamina
+                    this.player1.stamina -= 2;
+                } else {
+                    this.player1.y -= this.player1.walkspeed;
+                    this.player1.stamina -= 1;
+                }
+            } else if (keyS.isDown && this.player1.y <= game.config.height * 10 - borderLimitDown) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.player1.y += this.player1.runspeed;
+                    // running loses more stamina
+                    this.player1.stamina -= 2;
+                } else {
+                    this.player1.y += this.player1.walkspeed;
+                    this.player1.stamina -= 1;
+                }
+            }
+            //state machines
+            // metabolism 
         }
     
         if (this.hasteCounter > 30 && this.hasted == false) {

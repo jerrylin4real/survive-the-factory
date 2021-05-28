@@ -47,6 +47,7 @@ var num_peach = 2;
 var player_exhausted = false;
 var player_dead = false;
 var exhausted_countdown = 0;
+var init_exhausted_countdown;
 var player_stamina = 1000;
 var player_hp = 100;
 var stamina_lvl = 0;

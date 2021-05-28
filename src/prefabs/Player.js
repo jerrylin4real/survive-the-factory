@@ -37,9 +37,9 @@ class Player extends Phaser.GameObjects.Sprite {
         this.restoredstamina = 0;
         this.walkspeed = 3 + stamina_lvl; // pixels per frame, will move faster for higher stamina lvl
         this.runspeed = this.walkspeed * 2;
-        this.init_exhausted_countdown = 600; // 6 seconds cd for exhausted status penalty 
+        init_exhausted_countdown = 600; // 6 seconds cd for exhausted status penalty 
 
-        exhausted_countdown = this.init_exhausted_countdown;
+        exhausted_countdown = init_exhausted_countdown;
 
         //!fixme for final sprint [optional]
         hunger_lvl = 0;
@@ -100,68 +100,6 @@ class Player extends Phaser.GameObjects.Sprite {
             player_exhausted = true;
         }
 
-        if (player_exhausted) {
-            if (exhausted_countdown > 0) {
-                exhausted_countdown -= 1;
-                player_exhausted = true;
-            } else {
-                exhausted_countdown = this.init_exhausted_countdown;
-                player_exhausted = false;
-            }
-
-        } else {
-            // not exhausted 
-            //!move keycontrol to play!!!
-
-            //***  player movement control:W S A D
-            // is Down = keep pressed down
-            if (keyA.isDown && this.x >= borderUISize) {
-                if (keyShift.isDown) {
-                    // speed up if boost
-                    this.x -= this.runspeed;
-                    // running loses more stamina
-                    this.stamina -= 2;
-                } else {
-                    this.x -= this.walkspeed;
-                    this.stamina -= 1;
-                }
-
-            } else if (keyD.isDown && this.x < game.config.width * 10 - borderUISize) {
-                if (keyShift.isDown) {
-                    // speed up if boost
-                    this.x += this.runspeed;
-                    // running loses more stamina
-                    this.stamina -= 2;
-                } else {
-                    this.x += this.walkspeed;
-                    this.stamina -= 1;
-                }
-            }
-            if (keyW.isDown && this.y >= borderLimitUp - borderUISize) {
-                if (keyShift.isDown) {
-                    // speed up if boost
-                    this.y -= this.runspeed;
-                    // running loses more stamina
-                    this.stamina -= 2;
-                } else {
-                    this.y -= this.walkspeed;
-                    this.stamina -= 1;
-                }
-            } else if (keyS.isDown && this.y <= game.config.height * 10 - borderLimitDown) {
-                if (keyShift.isDown) {
-                    // speed up if boost
-                    this.y += this.runspeed;
-                    // running loses more stamina
-                    this.stamina -= 2;
-                } else {
-                    this.y += this.walkspeed;
-                    this.stamina -= 1;
-                }
-            }
-            //state machines
-            // metabolism 
-
-        }
         if (this.stamina < this.stamina / 5) {
             //!fixme add sound/text warning @ 1/5 lvl before exhuased; example: send boolean to UI
             //console.log("stamina: " + this.stamina);
