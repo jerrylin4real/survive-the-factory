@@ -1,5 +1,6 @@
 # Final CMPM120 Project: SCUM-2D
-Author: [Leland Jin](mailto:nli32@ucsc.edu), Jerry Lin, Lakery Cao \
+Authors: [Leland Jin](mailto:nli32@ucsc.edu), Jerry Lin, Lakery Cao \
+Group: 4rA
 Date: May 14, 2021 \
 Spring 2021  
 
@@ -29,7 +30,7 @@ You can read more about the background story of SCUM [here](https://scum-game.fa
 `Patch v0.3 (Final sprint):`
 - Coming soon!
 
-`Patch v0.2 (Sprint 2):`
+`Patch v0.2 (Sprint 2): May 28, 2021`
 - Hours taken: 
   - 12 hours
 - Features implemented:

@@ -39,11 +39,11 @@ class UI extends Phaser.Scene {
         this.inventoryText = this.add.text(10, 10, '(I)nventory  ', { font: '48px Arial', fill: 'WHITE' });
 
         // @ param          (scene(neglected),    x, y,                          ,width,        
-        this.inventoryUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
+        this.inventoryUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 11,
             //                          height, fillColor)
             game.config.height - borderPadding, BROWN).setOrigin(0, 0);
 
-        this.inventoryUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
+        this.inventoryUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 9, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, BROWN).setOrigin(0, 0);
 
         //! maybe we can make inventory item as a button
@@ -52,11 +52,11 @@ class UI extends Phaser.Scene {
 
         //*** add Metabolism UI Panel
         this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '(M)etabolism  ', { font: '48px Arial', fill: 'WHITE' });
-        this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 8,
+        this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 11,
             //                          height, fillColor)
             game.config.height - borderPadding, sadBLUE).setOrigin(0, 0);
 
-        this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 6, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
+        this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 9, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, sadBLUE).setOrigin(0, 0);
 
         //!FIXME finish Player Stat UI Panel
@@ -150,15 +150,19 @@ class UI extends Phaser.Scene {
         this.thristText.setText("Thrist: " + player_thrist);
         this.peachText.setText("Peach#: " + num_peach + " F for more");
 
-        //sync always-on display text outside Metabolism
-        if (initialTime > 0 && !openedMetabolism) {
-            this.staminaText_LowerLeft.alpha = 1;
-            this.healthText_LowerLeft.alpha = 1;
-        } else {
-            this.staminaText_LowerLeft.alpha = 0;
-            this.healthText_LowerLeft.alpha = 0;
-        }
+        //sync always-on display text outside Metabolism or Inventory
 
+        if (initialTime > 0){
+            if (openedMetabolism || openedInventory) {
+                this.staminaText_LowerLeft.alpha = 0;
+                this.healthText_LowerLeft.alpha = 0;
+            } else {
+                this.staminaText_LowerLeft.alpha = 1;
+                this.healthText_LowerLeft.alpha = 1;
+            }
+    
+        }
+      
         this.staminaText_LowerLeft.setText('Stamina(lvl.' + stamina_lvl + '): ' + player_stamina);
         this.healthText_LowerLeft.setText('HP(lvl.' + health_lvl + '): ' + player_hp);
 
@@ -296,7 +300,7 @@ class UI extends Phaser.Scene {
         this.inventoryText.alpha = 0;
         this.inventoryUIRight.alpha = 0;
         this.peachText.alpha = 0;
-
+        
         openedInventory = false;
     }
 
