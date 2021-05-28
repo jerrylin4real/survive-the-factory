@@ -65,6 +65,11 @@ class Player extends Phaser.GameObjects.Sprite {
 
 
     update() {
+        // pass playerx and playery to the globle variables
+        player1_x = this.x;
+        player1_y = this.y;
+
+
         // upload player stat to global variable
         if (player_hp <= 0 || player_hunger >= 100) { //!use simple hunger condition for now
             player_hp = 0;
@@ -96,8 +101,75 @@ class Player extends Phaser.GameObjects.Sprite {
         if (this.stamina <= 0 && !player_exhausted) {
             this.stamina = 0; // avoid negative stamina# to be bug-free
             console.log("player exhausted");
+
+            // apply penalties
             player_hp -= 10;
+            player_thrist += 10;
+            player_hunger += 6;
             player_exhausted = true;
+        }
+
+        if (player_exhausted) {
+            if (exhausted_countdown > 0) {
+                exhausted_countdown -= 1;
+                player_exhausted = true;
+            } else {
+                exhausted_countdown = init_exhausted_countdown;
+                player_exhausted = false;
+            }
+
+        } else {
+            // not exhausted 
+            //!move keycontrol to play!!!
+
+            //***  player movement control:W S A D
+            // is Down = keep pressed down
+            if (keyA.isDown && this.x >= borderUISize) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.x -= this.runspeed;
+                    // running loses more stamina
+                    this.stamina -= 2;
+                } else {
+                    this.x -= this.walkspeed;
+                    this.stamina -= 1;
+                }
+
+            } else if (keyD.isDown && this.x <= game.config.width * 10) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.x += this.runspeed;
+                    // running loses more stamina
+                    this.stamina -= 2;
+                } else {
+                    this.x += this.walkspeed;
+                    this.stamina -= 1;
+                }
+            }
+            if (keyW.isDown && this.y >= borderLimitUp - borderUISize) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.y -= this.runspeed;
+                    // running loses more stamina
+                    this.stamina -= 2;
+                } else {
+                    this.y -= this.walkspeed;
+                    this.stamina -= 1;
+                }
+            } else if (keyS.isDown && this.y <= game.config.height * 10 - borderLimitDown) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.y += this.runspeed;
+                    // running loses more stamina
+                    this.stamina -= 2;
+                } else {
+                    this.y += this.walkspeed;
+                    this.stamina -= 1;
+                }
+            }
+            //state machines
+            // metabolism 
+
         }
 
         if (this.stamina < this.stamina / 5) {

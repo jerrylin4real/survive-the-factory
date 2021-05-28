@@ -37,7 +37,7 @@ class Menu extends Phaser.Scene {
     // show menu text
     this.add.text(game.config.width / 2, game.config.height / 2 - borderUISize - borderPadding, 'SCUM-2D', menuConfig).setOrigin(0.5);
     this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
-    press M or 3 for metabolism UI\nPress Shift to sprint\nPress Q to end game\nPress F to get item').setOrigin(0.5);
+    press M or 3 for metabolism UI\nPress Shift to sprint\nPress Q end game\nPress ESC to MENU\nPress F to get item').setOrigin(0.5);
     menuConfig.backgroundColor = '#00FF00';
     menuConfig.color = '#000';
     this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding, 'Press -> to play', menuConfig).setOrigin(0.5);

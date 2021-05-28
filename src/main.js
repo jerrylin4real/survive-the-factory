@@ -24,7 +24,7 @@ let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
 let borderLimitUp = borderUISize * 2;
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyShift,
+let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyShift, keyL,
   keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, keyT, keyI, key1, key3, key4;
 
 
@@ -44,6 +44,9 @@ var gameOver = false;
 var num_peach = 2;
 
 //*** Global Player Variables
+var player1;
+var player1_x;
+var player1_y;
 var player_exhausted = false;
 var player_dead = false;
 var exhausted_countdown = 0;

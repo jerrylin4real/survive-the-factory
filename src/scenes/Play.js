@@ -84,13 +84,14 @@ class Play extends Phaser.Scene {
         // add player 
         //this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
         this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'platformer', 'stand').setScale(1); // scale the size of this.player1
+        player1 = this.player1;
 
         //*** add camera
         // Set the camera bounds
         this.cameras.main.setBounds(0, 0, game.config.width * 10, game.config.height * 10);
         this.cameras.main.setZoom(1);
         //Set the camera to follow this.player1
-        this.cameras.main.startFollow(this.player1);
+        this.cameras.main.startFollow(player1);
 
 
         // follow style switch buttons
@@ -123,6 +124,7 @@ class Play extends Phaser.Scene {
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        keyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L); // show player location on console.log
         keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
         keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
         key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
@@ -269,19 +271,28 @@ class Play extends Phaser.Scene {
             //! add peach for sprint 2
             num_peach += 1;
             // if F a loot
-                // randomly gerenate an item/weapon;      
+            // randomly gerenate an item/weapon;      
         }
 
-        
+        // Press L to show player location
+        if (Phaser.Input.Keyboard.JustDown(keyL)) {
+            // console.log("x:" + this.player1.x + " y:" + this.player1.y);
+            console.log("x:" + player1_x + " y:" + player1_y);
+
+        }
+
+
         if (player_exhausted) {
+
             if (exhausted_countdown > 0) {
                 exhausted_countdown -= 1;
                 player_exhausted = true;
+
             } else {
                 exhausted_countdown = init_exhausted_countdown;
+                player_stamina = 1; // to get out of infinate loop
                 player_exhausted = false;
             }
-
         } else {
             // not exhausted 
             //!move keycontrol to play!!!
@@ -334,7 +345,7 @@ class Play extends Phaser.Scene {
             //state machines
             // metabolism 
         }
-    
+
         if (this.hasteCounter > 30 && this.hasted == false) {
             this.ship01.moveSpeed += 2;
             this.ship02.moveSpeed += 2;
@@ -342,9 +353,6 @@ class Play extends Phaser.Scene {
             this.ship04.moveSpeed += 2;
             this.hasted = true;
         }
-
-
-
 
         if (gameOver) {
             if (this.bgmCreated) {

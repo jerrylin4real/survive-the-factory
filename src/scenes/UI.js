@@ -185,8 +185,9 @@ class UI extends Phaser.Scene {
 
         if (initialTime > 1) { // make sure not doing 0 % x; 
             //! need to fix this logic
+
             //*  increment thrist
-            if ((initialTime % 14) == 0 && !player_exhausted) {
+            if ((initialTime % 14) == 0) {
                 // set flag one sec before the event
                 thristCounted = false;
             }
@@ -194,10 +195,6 @@ class UI extends Phaser.Scene {
                 if ((initialTime % 15) == 0) { // for every 15 second...
                     player_thrist += 1;
                     // clear flag
-                    thristCounted = true;
-                }
-                if (player_exhausted && !thristCounted) {
-                    player_thrist += 10; // get kind of hungry when player is exhausted 
                     thristCounted = true;
                 }
                 
@@ -209,13 +206,8 @@ class UI extends Phaser.Scene {
                 // set flag one sec before the event
                 hungerCounted = false;
             }
-
             if (!hungerCounted) {
-                if (player_exhausted && !hungerCounted) {
-                    player_hunger += 10; // get kind of hungry when player is exhausted 
-                    hungerCounted = true;
-                }
-                if ((initialTime % 25) == 0 && !player_exhausted) { // for every 25 second...
+                if ((initialTime % 25) == 0) { // for every 25 second...
                     player_hunger += 1;
                     // clear flag
                     hungerCounted = true;
@@ -292,6 +284,7 @@ class UI extends Phaser.Scene {
 
             // show (x, y) on click
             console.log("x:" + pointer.x + " y:" + pointer.y);
+
         });
     }
 
