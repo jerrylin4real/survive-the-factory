@@ -125,7 +125,7 @@ class Player extends Phaser.GameObjects.Sprite {
         if (player_hp < this.max_health) {
             // if restored health:
             // restoredhealth += 1; done in UI.js
-            if (health_lvl < this.health_milestone.length - 1 && restoredhealth * 2 >= this.health_milestone[health_lvl]) {
+            if (health_lvl < this.health_milestone.length - 1 && restoredhealth * 5 >= this.health_milestone[health_lvl]) {
                 health_lvl += 1;
                 restoredhealth = 0;
                 console.log("health_lvl up to " + health_lvl);

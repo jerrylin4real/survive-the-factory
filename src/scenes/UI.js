@@ -223,9 +223,8 @@ class UI extends Phaser.Scene {
             }
             if (!healthregenCounted && (initialTime % 30) == 0) { // for every 30 second...
                 // restore 1 hp
-
-                player_hp += 1;
-                restoredhealth += 1; //aka restoredhp
+                player_hp += (health_lvl + 1);
+                restoredhealth += (health_lvl + 1); //aka restoredhp
                 // clear flag
                 healthregenCounted = true;
             }
