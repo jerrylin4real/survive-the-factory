@@ -1,3 +1,11 @@
+/******************************************************
+* SCUM-2D Developers:
+* Leland Jin 
+* Jerry Lin
+* Lakery Cao
+//!fixme make sure it is in the canvaus comment as well.
+*******************************************************/
+
 let config = {
   type: Phaser.WEBGL,
   parent: "main", // name of main
@@ -94,5 +102,3 @@ var TOLERANCE = 0.02 * ROTATION_SPEED;
 */
 localStorage.setItem("Scum2DTopScore", 0);
 localStorage.setItem("Scum2DBestTimeSurvived", 0);
-
-
