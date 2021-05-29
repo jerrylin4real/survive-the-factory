@@ -1,4 +1,4 @@
-# Final CMPM120 Project: SCUM-2D
+# Final CMPM120 Project: Survive The Factory
 Authors: [Leland Jin](mailto:nli32@ucsc.edu), Jerry Lin, Lakery Cao \
 Group: 4rA
 Date: May 14, 2021 \
@@ -6,7 +6,7 @@ Spring 2021
 
 ---
 ### Game Description:
-- Paying tribute to [SCUM on Steam](https://store.steampowered.com/app/513710), SCUM-2D is a survival game built on Phaser 3. You are meant to survive as long as possible for the entertainment of tycoons from above:)
+- Paying tribute to [SCUM on Steam](https://store.steampowered.com/app/513710), Survive The Factory is a survival game built on Phaser 3. You are meant to survive as long as possible for the entertainment of tycoons from above:)
 You can read more about the background story of SCUM [here](https://scum-game.fandom.com/wiki/Scum).
 
 ### Links:
