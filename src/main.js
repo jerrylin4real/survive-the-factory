@@ -1,3 +1,11 @@
+/******************************************************
+* SCUM-2D Developers:
+* Leland Jin 
+* Jerry Lin
+* Lakery Cao
+//!fixme make sure it is in the canvaus comment as well.
+*******************************************************/
+
 let config = {
   type: Phaser.WEBGL,
   parent: "main", // name of main
@@ -22,20 +30,53 @@ var game = new Phaser.Game(config);
 let borderUISize = game.config.height / 17;
 let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
-let borderLimitUp = borderUISize * 6;
+let borderLimitUp = borderUISize * 2;
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS,
+let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyShift, keyL,
   keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, keyT, keyI, key1, key3, key4;
 
 
 /******************************************************
 // Macros, global variables:
 *******************************************************/
+var initialTime = 0;
+
 var restartPlay = false;
 var openedInventory = false;
 var openedMetabolism = false;
 var openedTutorial = false;
+var at_MENU_Scene = true;
 var gameOver = false;
+
+//*** Global Inventory Variables
+var num_peach = 2;
+
+//*** Global Player Variables
+var player1;
+var player1_x;
+var player1_y;
+var player_exhausted = false;
+var player_dead = false;
+
+var stamina_lvl = 0;
+var exhausted_countdown = 0;
+var init_exhausted_countdown;
+var player_stamina = 1000;
+
+var health_lvl = 0;
+var restoredhealth;
+var player_hp = 100;
+var healthregen = false;
+var healthregenCounted = false;
+
+var hunger_lvl = 0;
+var player_hunger = 0;
+var hungerCounted = false;
+
+var thrist_lvl = 0;
+var player_thrist = 0;
+var thristCounted = false;
+
 
 // Define colors 
 var BROWN = 0x664C47;
@@ -61,5 +102,3 @@ var TOLERANCE = 0.02 * ROTATION_SPEED;
 */
 localStorage.setItem("Scum2DTopScore", 0);
 localStorage.setItem("Scum2DBestTimeSurvived", 0);
-
-

@@ -4,6 +4,7 @@ class Play extends Phaser.Scene {
         super("playScene");
 
         // display score
+
         this.scoreConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
@@ -35,6 +36,13 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
         this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12 });
         this.load.audio('bgm', './assets/mixkit-space-game-668.wav');
+
+        // load audio
+        this.load.audio('switchsound', './assets/Select.wav');
+
+        this.load.path = './assets/';
+        this.load.atlas('platformer', 'player-and-food.png', 'player-and-food.json');
+
     }
     // Note: The keyword 'this' refers to the class 'Play'
 
@@ -42,6 +50,9 @@ class Play extends Phaser.Scene {
     create() {
         console.log("create");
         // Scene-level variables
+        gameOver = false;
+        at_MENU_Scene = false;
+
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
@@ -53,15 +64,17 @@ class Play extends Phaser.Scene {
         //this.game.world.setBounds(1400, 1400);
 
         // Add time counters
-        this.initialTime = game.settings.gameTimer;
         this.hasteCounter = 0; // Increase ships' movespeed if >= 30.
         this.superWeaponCount = 0;
+
+        init_exhausted_countdown = 600; // 6 seconds cd for exhausted status penalty 
+        exhausted_countdown = init_exhausted_countdown;
 
         // place tile sprite
         this.starfield = this.add.tileSprite(0, 0, 9999, 9999, 'starfield').setOrigin(0, 0);
 
         // Azure/0x3e5861 UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderLimitDown, 0x00BBFF).setOrigin(0, 0);
+        //this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderLimitDown, 0x00BBFF).setOrigin(0, 0);
 
         // Grey/0x00BBFF borders 
         /* Borders might be Unnecessary in SCUM-2D
@@ -73,15 +86,15 @@ class Play extends Phaser.Scene {
 
         // add player 
         //this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'player').setScale(1); // scale the size of player1
+        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'platformer', 'stand').setScale(1); // scale the size of this.player1
+        player1 = this.player1;
 
-        // add camera
-
+        //*** add camera
         // Set the camera bounds
         this.cameras.main.setBounds(0, 0, game.config.width * 10, game.config.height * 10);
         this.cameras.main.setZoom(1);
-        //Set the camera to follow player1
-        this.cameras.main.startFollow(this.player1);
+        //Set the camera to follow this.player1
+        this.cameras.main.startFollow(player1);
 
 
         // follow style switch buttons
@@ -105,6 +118,7 @@ class Play extends Phaser.Scene {
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
@@ -113,6 +127,7 @@ class Play extends Phaser.Scene {
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyTAB = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TAB);
+        keyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L); // show player location on console.log
         keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
         keyI = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
         key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
@@ -122,6 +137,53 @@ class Play extends Phaser.Scene {
 
 
         // animation config
+        this.anims.create({
+            key: 'walkleft',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'walkleft' }
+            ],
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'walkright',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'walkright' }
+            ],
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'go-up',
+            defaultTextureKey: 'platformer',
+            frames: this.anims.generateFrameNames('platformer', {
+                prefix: 'go-up',
+                start: 1,
+                end: 2,
+                suffix: '',
+                zeroPad: 2
+            }),
+        });
+        this.anims.create({
+            key: 'go-down',
+            defaultTextureKey: 'platformer',
+            frames: this.anims.generateFrameNames('platformer', {
+                prefix: 'go-down',
+                start: 1,
+                end: 2,
+                suffix: '',
+                zeroPad: 2
+            }),
+        });
+        this.anims.create({
+            key: 'stand',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'stand' }
+            ],
+            repeat: -1
+        });
+
         this.anims.create({
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0 }),
@@ -134,40 +196,33 @@ class Play extends Phaser.Scene {
         });
 
 
+
         // initialize score
         this.p1Score = 0;
-
         // display text
 
-
         // display Left and middle UI
-        this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 5, 'Score:', textConfig);
-        this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding + 5, this.p1Score, textConfig);
+        //this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 5, 'Score:', textConfig);
+        //this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding + 5, this.p1Score, textConfig);
 
-        this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
-        this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
-            localStorage.getItem("RocketPatrolTopScore"), textConfig);
+        // this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
+        // this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
+        //     localStorage.getItem("RocketPatrolTopScore"), textConfig);
 
         let redConfig = {
             color: 'red', // color hex code: black
             fixedWidth: 150
         }
-        this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: WSAD', redConfig);
-        this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
+        // this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: WSAD', redConfig);
+        // this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
         // clear GAME OVER flag
-        gameOver = false;
 
         // play clock
         this.scoreConfig.fixedWidth = 0;
-        this.timeText = this.add.text(440, borderUISize + borderPadding + 10, 'Time: ' + this.formatTime(this.initialTime));
 
         // super weapon indicator
         //this.superWeaponText = this.add.text(440, borderUISize + borderPadding + 40, 'Superweapon(V): ' + this.superWeaponCount);
-
-        // For each 1000 ms or 1 second, call onTimedEvent
-        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
-
         /*
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
@@ -194,6 +249,10 @@ class Play extends Phaser.Scene {
             // Resume bgm if bgm exists
             this.bgm.resume();
         }
+
+        // * reset values
+        player_hunger = 0;
+        player_thrist = 0;
     }
 
     update() {
@@ -202,30 +261,99 @@ class Play extends Phaser.Scene {
         // check key input for restart / menu
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
             gameOver = true;
-            //this.initialTime = 0;
         }
         if (Phaser.Input.Keyboard.JustDown(keyESC)) {
             gameOver = true;
+            at_MENU_Scene = true;
             this.scene.start("menuScene");
         }
 
-        // Game Over text
-        if (gameOver) {
-            this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
-            gameOver = true;
+        // Interact button
+        if (Phaser.Input.Keyboard.JustDown(keyF)) {
+            //!implement interaction
+            //! add peach for sprint 2
+            num_peach += 1;
+            // if F a loot
+            // randomly gerenate an item/weapon;      
         }
-        // Pause feature
-        /* if (Phaser.Input.Keyboard.JustDown(keyP)) {
-            this.scene.pause();
-            paused = true;
-            this.add.text(game.config.width / 2, game.config.height / 2, 'GAME PAUSED').setOrigin(0.5);
-            if (paused == true) {
-                this.scene.resume();
-                paused = false;
+
+        // Press L to show player location
+        if (Phaser.Input.Keyboard.JustDown(keyL)) {
+            // console.log("x:" + this.player1.x + " y:" + this.player1.y);
+            console.log("x:" + player1_x + " y:" + player1_y);
+
+        }
+
+
+        if (player_exhausted) {
+
+            if (exhausted_countdown > 0) {
+                exhausted_countdown -= 1;
+                player_exhausted = true;
+
+            } else {
+                exhausted_countdown = init_exhausted_countdown;
+                player_stamina = 1; // to get out of infinate loop
+                player_exhausted = false;
             }
+        } else {
+            // not exhausted 
+            //***  player movement control:W S A D
+            // is Down = keep pressed down
+            if (keyA.isDown && this.player1.x >= borderUISize) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.player1.x -= this.player1.runspeed;
+                    this.player1.anims.play('walkleft').scaleX = 1; //! Note: use scaleX to flip animation
+                    // running loses more stamina
+                    player_stamina -= 2;
+                } else {
+                    this.player1.x -= this.player1.walkspeed;
+                    this.player1.anims.play('walkleft').scaleX = 1;
+                    player_stamina -= 1;
+                }
+
+            } else if (keyD.isDown && this.player1.x < game.config.width * 10 - borderUISize) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.player1.x += this.player1.runspeed;
+                    this.player1.anims.play('walkright').scaleX = -1;
+                    // running loses more stamina
+                    player_stamina -= 2;
+                } else {
+                    this.player1.x += this.player1.walkspeed;
+                    this.player1.anims.play('walkright').scaleX = -1;
+                    player_stamina -= 1;
+                }
+            }
+            if (keyW.isDown && this.player1.y >= borderLimitUp - borderUISize) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.player1.y -= this.player1.runspeed;
+                    //this.player1.anims.play('go-up');
+                    // running loses more stamina
+                    player_stamina -= 2;
+                } else {
+                    this.player1.y -= this.player1.walkspeed;
+                    //this.player1.anims.play('go-up');
+                    player_stamina -= 1;
+                }
+            } else if (keyS.isDown && this.player1.y <= game.config.height * 10 - borderLimitDown) {
+                if (keyShift.isDown) {
+                    // speed up if boost
+                    this.player1.y += this.player1.runspeed;
+                    //this.player1.anims.play('go-down');
+                    // running loses more stamina
+                    player_stamina -= 2;
+                } else {
+                    this.player1.y += this.player1.walkspeed;
+                    //.player1.anims.play('go-down');
+                    player_stamina -= 1;
+                }
+            }
+            //state machines
+            // metabolism 
         }
-        */
 
         if (this.hasteCounter > 30 && this.hasted == false) {
             this.ship01.moveSpeed += 2;
@@ -235,46 +363,22 @@ class Play extends Phaser.Scene {
             this.hasted = true;
         }
 
-
-        if (gameOver)
+        if (gameOver) {
             if (this.bgmCreated) {
                 this.bgm.pause()
                 this.bgmPlayed = false;
             }
-
-        if (restartPlay || Phaser.Input.Keyboard.JustDown(keyR)) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
-            this.scene.restart();
-
-            // clear event flag
-            restartPlay = false;
+            if (restartPlay || Phaser.Input.Keyboard.JustDown(keyR)) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
+                console.log("Restarting game...");
+                this.sound.play('switchsound');
+                this.scene.restart();
+                // clear event flag
+                restartPlay = false;
+            }
         }
-
-        // ** Send events to UI.js
-        if (Phaser.Input.Keyboard.JustDown(keyTAB) || Phaser.Input.Keyboard.JustDown(keyI) || Phaser.Input.Keyboard.JustDown(key1)) {
-            //  Dispatch openInventory event
-            this.events.emit('openInventory');
-            console.log("EVENT openInventory dispatched");
-        }
-
-        if (Phaser.Input.Keyboard.JustDown(keyM) || Phaser.Input.Keyboard.JustDown(key3)) {
-            //console.log("Pressed M");
-
-            //  Dispatch openMetabolism  event
-            this.events.emit('openMetabolism');
-            console.log("EVENT openMetabolism dispatched");
-        }
-        if (Phaser.Input.Keyboard.JustDown(keyT) || Phaser.Input.Keyboard.JustDown(key4)){
-            this.events.emit('openTutorial');
-            console.log("EVENT openTutorial dispatched");
-
-        }
-        
-        this.starfield.tilePositionX -= 0;  // update tile sprite
-
-        // if game is not over...
         if (!gameOver) {
 
-            this.player1.update();             // update player1
+            this.player1.update();             // update this.player1
             this.ship01.update();               // update spaceship (x4)
             this.ship02.update();
             this.ship03.update();
@@ -283,6 +387,32 @@ class Play extends Phaser.Scene {
             // Debugging Only
             // console.log('gametime: ' + this.game.getTimer());
         }
+
+        // ** Send events to UI.js
+        if (Phaser.Input.Keyboard.JustDown(keyTAB) || Phaser.Input.Keyboard.JustDown(keyI) || Phaser.Input.Keyboard.JustDown(key1)) {
+            //  Dispatch openInventory event
+            this.sound.play('switchsound');
+            this.events.emit('openInventory');
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(keyM) || Phaser.Input.Keyboard.JustDown(key3)) {
+            //console.log("Pressed M");
+            this.sound.play('switchsound');
+            //  Dispatch openMetabolism  event
+            this.events.emit('openMetabolism');
+            // console.log("EVENT openMetabolism dispatched");
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyT) || Phaser.Input.Keyboard.JustDown(key4)) {
+            this.sound.play('switchsound');
+            this.events.emit('openTutorial');
+            // console.log("EVENT openTutorial dispatched");
+
+        }
+
+        this.starfield.tilePositionX -= 0;  // update tile sprite
+
+        // if game is not over...
+
 
         // new weapon
         if (this.superWeaponCount > 0 && Phaser.Input.Keyboard.JustDown(keyV)) { // if pressed v for superweapon
@@ -343,30 +473,14 @@ class Play extends Phaser.Scene {
         return `${minutes}:${partInSeconds}`;
     }
 
-    onTimeEvent() {
-        // run update()
-        this.update();
-        if (!gameOver) {
-            this.initialTime += 1; // countdown 1 for one second
-            this.timeText.setText('Time: ' + this.formatTime(this.initialTime));
-            if (this.hasted == false) {
-                this.hasteCounter += 1; // if >= 30, ships will go faster
-            }
-            // add superweapon
-            if (this.p1Score >= 30 && this.p1Score <= 100 && !this.superWeaponRewarded) {
-                this.superWeaponRewarded = true;
-                this.superWeaponCount += 1;
-            }
-            //this.superWeaponText.setText('Superweapon(V): ' + this.superWeaponCount);
-        }
-    }
 
-    checkCollision(player, ship) {
+
+    checkCollision(player, item) { //!FIXME rewrite this !
         // simple AABB checking
-        if (player.x < ship.x + ship.width &&
-            player.x + player.width > ship.x &&
-            player.y < ship.y + ship.height &&
-            player.height + player.y > ship.y) {
+        if (player.x < item.x + item.width &&
+            player.x + player.width > item.x &&
+            player.y < item.y + item.height &&
+            player.height + player.y > item.y) {
             return true;
         } else {
             return false;
@@ -386,12 +500,12 @@ class Play extends Phaser.Scene {
         });
 
         // score add and repaint
-        this.p1Score += ship.points;
-        if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
-            localStorage.setItem("RocketPatrolTopScore", this.p1Score);
-            this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
-        }
-        this.scoreLeft.text = this.p1Score;
+        // this.p1Score += ship.points;
+        // if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
+        //     localStorage.setItem("RocketPatrolTopScore", this.p1Score);
+        //     this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
+        // }
+        // this.scoreLeft.text = this.p1Score;
 
         let soundFXLib = [
             'sfx_explosion_spell',
@@ -400,9 +514,8 @@ class Play extends Phaser.Scene {
             'sfx_explosion_crash'
         ];
         let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
-        this.sound.play(soundFXLib[random4SoundFX]);
-        // add time bonus
-        this.initialTime += ship.timeBonus;
+        this.explosionFX = this.sound.add(soundFXLib[random4SoundFX], { volume: 0.1 });
+        this.explosionFX.play();
     }
 
     shipExplode2(ship) {
@@ -418,12 +531,12 @@ class Play extends Phaser.Scene {
         });
 
         // score add and repaint
-        this.p1Score += ship.points;
-        if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
-            localStorage.setItem("RocketPatrolTopScore", this.p1Score);
-            this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
-        }
-        this.scoreLeft.text = this.p1Score;
+        // this.p1Score += ship.points;
+        // if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
+        //     localStorage.setItem("RocketPatrolTopScore", this.p1Score);
+        //     this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
+        // }
+        // this.scoreLeft.text = this.p1Score;
 
         let soundFXLib = [
             'sfx_explosion_spell',
@@ -432,9 +545,9 @@ class Play extends Phaser.Scene {
             'sfx_explosion_crash'
         ];
         let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
-        this.sound.play(soundFXLib[random4SoundFX]);
+        this.explosionFX = this.sound.add(soundFXLib[random4SoundFX], { volume: 0.1 });
+        this.explosionFX.play();
         // add time bonus
-        this.initialTime += ship.timeBonus;
     }
 
     setMap(scene, mapName) {

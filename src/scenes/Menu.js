@@ -31,11 +31,13 @@ class Menu extends Phaser.Scene {
       },
       fixedWidth: 0
     }
+    at_MENU_Scene = true;
     gameOver = true;
+
     // show menu text
     this.add.text(game.config.width / 2, game.config.height / 2 - borderUISize - borderPadding, 'SCUM-2D', menuConfig).setOrigin(0.5);
-    this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
-    press M or 3 for metabolism UI',menuConfig).setOrigin(0.5);
+    this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
+    press M or 3 for metabolism UI\nPress Shift to sprint\nPress Q end game\nPress ESC to MENU\nPress F to get item').setOrigin(0.5);
     menuConfig.backgroundColor = '#00FF00';
     menuConfig.color = '#000';
     this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding, 'Press -> to play', menuConfig).setOrigin(0.5);
@@ -77,15 +79,15 @@ class Menu extends Phaser.Scene {
       this.scene.start("playScene");
     }
 
-    if (Phaser.Input.Keyboard.JustDown(keyM)) {
-      // Simultaneous two-player mode
-      game.settings = {
-        spaceshipSpeed: 5,
-        gameTimer: 120
-      }
-      this.sound.play('sfx_select');
-      this.scene.start("playScene");
-    }
+    // if (Phaser.Input.Keyboard.JustDown(keyM)) {
+    //   // Simultaneous two-player mode
+    //   game.settings = {
+    //     spaceshipSpeed: 5,
+    //     gameTimer: 120
+    //   }
+    //   this.sound.play('sfx_select');
+    //   this.scene.start("playScene");
+    // }
 
   }
 }
