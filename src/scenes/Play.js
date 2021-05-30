@@ -23,7 +23,6 @@ class Play extends Phaser.Scene {
         console.log("preload");
 
         // load images/tile sprites
-        //this.load.image('rocket', './assets/rocket.png');
         this.load.image('rocket2', './assets/rocket2.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('mainmap', './assets/map/SCUM-MAP.png'); // Not showing the full img? Default: mainmap.png 
@@ -40,6 +39,7 @@ class Play extends Phaser.Scene {
         // load audio
         this.load.audio('switchsound', './assets/Select.wav');
 
+        // load atlas animation
         this.load.path = './assets/';
         this.load.atlas('platformer', 'player-and-food.png', 'player-and-food.json');
 
@@ -122,7 +122,6 @@ class Play extends Phaser.Scene {
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
-        keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         keyV = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
@@ -281,12 +280,9 @@ class Play extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyL)) {
             // console.log("x:" + this.player1.x + " y:" + this.player1.y);
             console.log("x:" + player1_x + " y:" + player1_y);
-
         }
 
-
         if (player_exhausted) {
-
             if (exhausted_countdown > 0) {
                 exhausted_countdown -= 1;
                 player_exhausted = true;

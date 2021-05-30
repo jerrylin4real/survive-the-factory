@@ -5,16 +5,13 @@ class Menu extends Phaser.Scene {
 
   preload() {
     // load audio
-
     this.load.audio('switchsound', './assets/Select.wav');
-
     this.load.audio('sfx_select', './assets/blip_select12.wav');
-    this.load.audio('sfx_explosion0', './assets/explosion38.wav');
-    this.load.audio('sfx_explosion_spell', './assets/mixkit-explosion-spell-1685.wav');
-    this.load.audio('sfx_explosion_sea-mine', './assets/mixkit-sea-mine-explosion-1184.wav');
-    this.load.audio('sfx_explosion_shot-light', './assets/mixkit-shot-light-explosion-1682.wav');
-    this.load.audio('sfx_explosion_crash', './assets/mixkit-truck-crash-with-explosion-1616.wav');
-    this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
+
+    // load audio
+    this.load.image('MENU_img', './assets/pages/menu.png');
+    this.load.image('nebulatest', './assets/nebulaRed2.png');
+
   }
 
   create() {
@@ -34,6 +31,7 @@ class Menu extends Phaser.Scene {
     at_MENU_Scene = true;
     gameOver = true;
 
+
     // show menu text
     this.add.text(game.config.width / 2, game.config.height / 2 - borderUISize - borderPadding, 'SCUM-2D', menuConfig).setOrigin(0.5);
     this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
@@ -42,9 +40,12 @@ class Menu extends Phaser.Scene {
     menuConfig.color = '#000';
     this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding, 'Press -> to play', menuConfig).setOrigin(0.5);
 
+    // show menu img
+    this.menu_img = this.add.image(0, 0, 'MENU_img').setOrigin(0, 0);
+
     // define keys
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-    keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
     keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
     keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
   }
@@ -59,7 +60,7 @@ class Menu extends Phaser.Scene {
       this.sound.play('switchsound');
       this.scene.start("playScene");
     }
-    if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
+    if (Phaser.Input.Keyboard.JustDown(keyP)) {
       // Expert mode
       game.settings = {
         spaceshipSpeed: 4,
@@ -78,16 +79,6 @@ class Menu extends Phaser.Scene {
       this.sound.play('sfx_select');
       this.scene.start("playScene");
     }
-
-    // if (Phaser.Input.Keyboard.JustDown(keyM)) {
-    //   // Simultaneous two-player mode
-    //   game.settings = {
-    //     spaceshipSpeed: 5,
-    //     gameTimer: 120
-    //   }
-    //   this.sound.play('sfx_select');
-    //   this.scene.start("playScene");
-    // }
 
   }
 }
