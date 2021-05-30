@@ -51,7 +51,7 @@ class UI extends Phaser.Scene {
         this.peachText.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
 
         //*** add Metabolism UI Panel
-        this.metabolismText = this.add.text(10 + borderUISize * 6, 10, '(M)etabolism  ', { font: '48px Arial', fill: 'WHITE' });
+        this.metabolismText = this.add.text(10 + borderUISize * 6.2, 10, '(M)etabolism  ', { font: '48px Arial', fill: 'WHITE' });
         this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 11,
             //                          height, fillColor)
             game.config.height - borderPadding, sadBLUE).setOrigin(0, 0);
@@ -66,7 +66,7 @@ class UI extends Phaser.Scene {
         this.staminaText = this.add.text(borderUISize, borderUISize * 2.5, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
         this.staminaText_LowerLeft = this.add.text(borderUISize, borderUISize * 17
             , 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
-        this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'STA_Status: normal', { font: '24px Arial', fill: 'GREEN' });
+        this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: normal', { font: '24px Arial', fill: 'GREEN' });
 
         this.hungerText = this.add.text(borderUISize, borderUISize * 4.5, 'Hunger: ' + player_hunger, { font: '24px Arial', fill: 'ORANGE' });
         this.stomachText = this.add.text(borderUISize, borderUISize * 5.5, 'Stomach_Vol: ' + player_stomach_volume, { font: '24px Arial', fill: 'PINK' });
@@ -185,7 +185,7 @@ class UI extends Phaser.Scene {
         }
         //* Player Status Indicator
         if (player_exhausted && openedMetabolism) {
-            this.exhaustedText.setText("STA_Status: exhausted..." + exhausted_countdown / 100 + "s");
+            this.exhaustedText.setText("Status: exhausted..." + exhausted_countdown / 100 + "s");
             this.exhaustedText.setColor("RED");
             this.exclamationMarkText.alpha = 0;
 
@@ -196,7 +196,7 @@ class UI extends Phaser.Scene {
             this.exclamationMarkText.alpha = 0; // close prompt when countdown time is up
 
         } else if (!player_exhausted) {
-            this.exhaustedText.setText("STA_Status: normal");
+            this.exhaustedText.setText("Status: normal");
             this.exhaustedText.setColor("GREEN");
         }
 
@@ -422,6 +422,7 @@ class UI extends Phaser.Scene {
                 if (num_peach > 0) {
                     num_peach -= 1;
                     player_hunger -= 10;
+                    player_stomach_volume += 10;
                     player_thrist -= 5;
                 } else {
                     //! print "no more peach"

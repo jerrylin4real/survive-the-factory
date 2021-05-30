@@ -9,7 +9,6 @@ class Menu extends Phaser.Scene {
 
     // load img
     this.load.image('MENU_img', './assets/page_imgs/menu.png');
-    this.load.image('nebulatest', './assets/nebulaRed2.png');
     //!this.load.image('Tutorial_img', './assets/page_imgs/xxx');
 
   }

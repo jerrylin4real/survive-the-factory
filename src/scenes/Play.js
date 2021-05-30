@@ -300,8 +300,7 @@ class Play extends Phaser.Scene {
             console.log("x:" + player1_x + " y:" + player1_y);
         }
 
-        //! water area detection
-
+        // water area detection
         // river1
         if (this.player1.x >= 1300 && this.player1.x <= 1600 && this.player1.y >= 1345 && this.player1.y <= 3745) {
             console.log("near river!");
@@ -324,7 +323,48 @@ class Play extends Phaser.Scene {
             nearRiver = false;
         }
 
+        //! wall detection; abadoned - too hard to hard code
+        // building1 (Left-to-right order)
+        if (this.player1.x >= 100 && this.player1.x <= 110 && ((this.player1.y >= 1582 && this.player1.y <= 1687) ||
+            (this.player1.y >= 1807 && this.player1.y <= 1951) || (this.player1.y >= 1990 && this.player1.y <= 2137) ||
+            (this.player1.y >= 2236 && this.player1.y <= 2386))) {
+            rightIsWall = true;
 
+
+        } else if ((this.player1.x >= 659 && this.player1.x <= 669) && ((this.player1.y >= 1582 && this.player1.y <= 1687) ||
+            (this.player1.y >= 2236 && this.player1.y <= 2386)) || ((this.player1.x >= 314 && this.player1.x <= 324) &&
+                (((this.player1.y >= 2015 && this.player1.y <= 2143)) || (this.player1.y >= 1795 && this.player1.y <= 1950)))) {
+            leftIsWall = true;
+        }
+
+        else if ((this.player1.x >= 100 && this.player1.x <= 669) && (
+            (this.player1.y >= 2387 && this.player1.y <= 2397) || (this.player1.y >= 1676 && this.player1.y <= 1686))) {
+            upIsWall = true;
+        }
+
+        else if ((this.player1.x >= 146 && this.player1.x <= 330) && (
+            (this.player1.y >= 2115 && this.player1.y <= 2125) || (this.player1.y >= 1579 && this.player1.y <= 1589) || 
+            (this.player1.y >= 1919 && this.player1.y <= 1929))) {
+            upIsWall = true;
+        }
+        else if ((this.player1.x >= 95 && this.player1.x <= 668) && ((this.player1.y >= 1579 && this.player1.y <= 1589)||
+        (this.player1.y >= 2232 && this.player1.y <= 2332))){
+            downIsWall = true;
+        }
+
+        else if ((this.player1.x >= 156 && this.player1.x <= 326) && ((this.player1.y >= 1803 && this.player1.y <= 1813)||
+        (this.player1.y >= 1988 && this.player1.y <= 1998))){
+            downIsWall = true;
+        }
+
+        else {
+            upIsWall = false;
+            downIsWall = false;
+            leftIsWall = false;
+            rightIsWall = false;
+        }
+
+        //* Player stat detection
         if (player_exhausted) {
             if (exhausted_countdown > 0) {
                 exhausted_countdown -= 1;
@@ -361,7 +401,7 @@ class Play extends Phaser.Scene {
             // not exhausted 
             //***  player movement control:W S A D
             // is Down = keep pressed down
-            if (keyA.isDown && this.player1.x >= borderUISize) {
+            if (keyA.isDown && this.player1.x >= borderUISize && !leftIsWall) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.x -= this.player1.runspeed;
@@ -374,7 +414,7 @@ class Play extends Phaser.Scene {
                     player_stamina -= 1;
                 }
 
-            } else if (keyD.isDown && this.player1.x < borderLimitUp_x - borderUISize * 0.28) {
+            } else if (keyD.isDown && this.player1.x < borderLimitUp_x && !rightIsWall) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.x += this.player1.runspeed;
@@ -387,7 +427,7 @@ class Play extends Phaser.Scene {
                     player_stamina -= 1;
                 }
             }
-            if (keyW.isDown && this.player1.y >= borderLimitUp_y) {
+            if (keyW.isDown && this.player1.y >= borderLimitUp_y && !upIsWall) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.y -= this.player1.runspeed;
@@ -399,7 +439,7 @@ class Play extends Phaser.Scene {
                     //this.player1.anims.play('go-up');
                     player_stamina -= 1;
                 }
-            } else if (keyS.isDown && this.player1.y <= borderLimitDown_y - borderUISize * 0.3) {
+            } else if (keyS.isDown && this.player1.y <= borderLimitDown_y - borderUISize && !downIsWall) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.y += this.player1.runspeed;

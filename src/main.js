@@ -31,8 +31,8 @@ let borderUISize = game.config.height / 18;
 let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
 
-let borderLimitDown_x = 9962;
-let borderLimitDown_y = 5040;
+let borderLimitDown_x = 9980;
+let borderLimitDown_y = 5140;
 
 let borderLimitUp_x = 9965;
 let borderLimitUp_y = 1378;
@@ -83,7 +83,6 @@ var player_stomach_volume = 0;
 var poo = false;
 var poo_countdown = init_countdown;
 
-
 var thrist_lvl = 0;
 var player_thrist = 0;
 var thristCounted = false;
@@ -93,7 +92,10 @@ var pee = false;
 
 //*** Global Environment Variables
 var nearRiver = false;
-// var nearWall = false;
+var leftIsWall = false;
+var rightIsWall = false;
+var upIsWall = false;
+var downIsWall = false;
 
 
 // Define colors 
