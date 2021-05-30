@@ -34,7 +34,7 @@ class Play extends Phaser.Scene {
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
         this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12 });
-        
+
 
         // load audio
         this.load.audio('bgm', './assets/sound/scumbgm.mp3');
@@ -306,22 +306,22 @@ class Play extends Phaser.Scene {
         if (this.player1.x >= 1300 && this.player1.x <= 1600 && this.player1.y >= 1345 && this.player1.y <= 3745) {
             console.log("near river!");
             nearRiver = true;
-        }
-
-        if (this.player1.x >= 32 && this.player1.x <= 1412 && this.player1.y >= 3355 && this.player1.y <= 3745) {
+        } else if (this.player1.x >= 32 && this.player1.x <= 1412 && this.player1.y >= 3355 && this.player1.y <= 3745) {
             console.log("near river!");
             nearRiver = true;
         }
 
         // river2
-        if (this.player1.x >= 6437 && this.player1.x <= 6700 && this.player1.y >= 1345 && this.player1.y <= 3745) {
+        else if (this.player1.x >= 6437 && this.player1.x <= 6700 && this.player1.y >= 1345 && this.player1.y <= 3745) {
             console.log("near river!");
             nearRiver = true;
         }
 
-        if (this.player1.x >= 5072 && this.player1.x <= 6482 && this.player1.y >= 3415 && this.player1.y <= 3760) {
+        else if (this.player1.x >= 5072 && this.player1.x <= 6482 && this.player1.y >= 3415 && this.player1.y <= 3760) {
             console.log("near river!");
             nearRiver = true;
+        } else {
+            nearRiver = false;
         }
 
 
