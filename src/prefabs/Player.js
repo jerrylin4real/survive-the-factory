@@ -34,7 +34,7 @@ class Player extends Phaser.GameObjects.Sprite {
         this.max_stamina = this.stamina_milestone[stamina_lvl];
         player_stamina = this.max_stamina;
         this.restoredstamina = 0;
-        this.walkspeed = 3 + stamina_lvl; // pixels per frame, will move faster for higher stamina lvl
+        this.walkspeed = 30 + stamina_lvl; // pixels per frame, will move faster for higher stamina lvl
         this.runspeed = this.walkspeed * 2;
 
 

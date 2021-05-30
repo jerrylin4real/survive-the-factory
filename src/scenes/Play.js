@@ -51,7 +51,6 @@ class Play extends Phaser.Scene {
         console.log("create");
         // Scene-level variables
         gameOver = false;
-        at_MENU_Scene = false;
 
         this.bgmPlayed = false;
         this.bgmCreated = false;
@@ -84,14 +83,16 @@ class Play extends Phaser.Scene {
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
         */
 
-        // add player 
-        //this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'platformer', 'stand').setScale(1); // scale the size of this.player1
+        // add player at world(x, y)
+        this.init_spawn_x = 62;
+        this.init_spawn_y = 1510;
+
+        this.player1 = new Player(this, this.init_spawn_x, this.init_spawn_y, 'platformer', 'stand').setScale(1); // scale the size of this.player1
         player1 = this.player1;
 
         //*** add camera
         // Set the camera bounds
-        this.cameras.main.setBounds(0, 0, game.config.width * 10, game.config.height * 10);
+        this.cameras.main.setBounds(0, 0, borderLimitDown_x + borderUISize * 1.9, borderLimitDown_y + borderUISize * 1.9);
         this.cameras.main.setZoom(1);
         //Set the camera to follow this.player1
         this.cameras.main.startFollow(player1);
@@ -105,9 +106,9 @@ class Play extends Phaser.Scene {
         */
         // add Spaceships (x3)
 
-        this.ship01 = new Spaceship(this, game.config.width + borderLimitUp, borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
+        this.ship01 = new Spaceship(this, game.config.width + borderLimitUp_y, borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20, 2).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderLimitUp + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, game.config.width, borderLimitUp_y + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
         this.ship04 = new Spaceship(this, game.config.width, borderLimitDown + 45, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
         this.ship04.moveSpeed = 10;
 
@@ -263,7 +264,6 @@ class Play extends Phaser.Scene {
         }
         if (Phaser.Input.Keyboard.JustDown(keyESC)) {
             gameOver = true;
-            at_MENU_Scene = true;
             this.scene.start("menuScene");
         }
 
@@ -309,7 +309,7 @@ class Play extends Phaser.Scene {
                     player_stamina -= 1;
                 }
 
-            } else if (keyD.isDown && this.player1.x < game.config.width * 10 - borderUISize) {
+            } else if (keyD.isDown && this.player1.x < borderLimitUp_x - borderUISize * 0.28) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.x += this.player1.runspeed;
@@ -322,7 +322,7 @@ class Play extends Phaser.Scene {
                     player_stamina -= 1;
                 }
             }
-            if (keyW.isDown && this.player1.y >= borderLimitUp - borderUISize) {
+            if (keyW.isDown && this.player1.y >= borderLimitUp_y) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.y -= this.player1.runspeed;
@@ -334,7 +334,7 @@ class Play extends Phaser.Scene {
                     //this.player1.anims.play('go-up');
                     player_stamina -= 1;
                 }
-            } else if (keyS.isDown && this.player1.y <= game.config.height * 10 - borderLimitDown) {
+            } else if (keyS.isDown && this.player1.y <= borderLimitDown_y - borderUISize * 0.3) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.y += this.player1.runspeed;
@@ -503,15 +503,15 @@ class Play extends Phaser.Scene {
         // }
         // this.scoreLeft.text = this.p1Score;
 
-        let soundFXLib = [
-            'sfx_explosion_spell',
-            'sfx_explosion_sea-mine',
-            'sfx_explosion_shot-light',
-            'sfx_explosion_crash'
-        ];
-        let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
-        this.explosionFX = this.sound.add(soundFXLib[random4SoundFX], { volume: 0.1 });
-        this.explosionFX.play();
+        // let soundFXLib = [
+        //     'sfx_explosion_spell',
+        //     'sfx_explosion_sea-mine',
+        //     'sfx_explosion_shot-light',
+        //     'sfx_explosion_crash'
+        // ];
+        // let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
+        // this.explosionFX = this.sound.add(soundFXLib[random4SoundFX], { volume: 0.1 });
+        // this.explosionFX.play();
     }
 
     shipExplode2(ship) {

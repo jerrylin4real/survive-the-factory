@@ -17,7 +17,7 @@ class UI extends Phaser.Scene {
     create() {
         //  Our GLOBAL Text object to display the Inventory
         console.log("entered UI scene");
-        at_MENU_Scene = false;
+        at_MENU_Scene = true;
 
         //  Grab a reference to the Scenes
         this.ourPlayScene = this.scene.get('playScene');
@@ -255,6 +255,7 @@ class UI extends Phaser.Scene {
         if (!gameOver) {
             initialTime += 1; // countdown 1 for one second
             this.gameOverText.alpha = 0;
+
         } else {
             // game is over
             if (openedInventory) {
@@ -267,6 +268,7 @@ class UI extends Phaser.Scene {
                 this.closeTutorial();
             }
             initialTime = 0;
+
             if (at_MENU_Scene) {
                 this.gameOverText.alpha = 0;
             } else {
