@@ -51,7 +51,7 @@ class Play extends Phaser.Scene {
         console.log("create");
         // Scene-level variables
         gameOver = false;
-
+        at_MENU_Scene = false;
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
@@ -75,19 +75,21 @@ class Play extends Phaser.Scene {
         // Azure/0x3e5861 UI background
         //this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderLimitDown, 0x00BBFF).setOrigin(0, 0);
 
-        // Grey/0x00BBFF borders 
-        /* Borders might be Unnecessary in SCUM-2D
-        this.add.rectangle(0, 0, game.config.width, borderUISize, 0x3e5861).setOrigin(0, 0);
-        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x3e5861).setOrigin(0, 0);
-        this.add.rectangle(0, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
-        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
-        */
+        // Add river rectange for distance check
+        // new Rectangle                    (scene, x, y [, width] [, height] [, fillColor] [, fillAlpha])
+        //this.riverNS1 = this.add.rectangle(1400, 2000, 200, 2100, sadBLUE);
+        //this.riverEW1 = this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize,).setOrigin(0, 0);
+        // this.add.rectangle(0, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
+        // this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
+
 
         // add player at world(x, y)
         this.init_spawn_x = 62;
         this.init_spawn_y = 1510;
 
         this.player1 = new Player(this, this.init_spawn_x, this.init_spawn_y, 'platformer', 'stand').setScale(1); // scale the size of this.player1
+        // this.player1.body.setSize(20, 55, 0) // usage: setSize(width, height, center)
+
         player1 = this.player1;
 
         //*** add camera
@@ -282,6 +284,31 @@ class Play extends Phaser.Scene {
             console.log("x:" + player1_x + " y:" + player1_y);
         }
 
+        //! water area detection
+
+        // river1
+        if (this.player1.x >= 1300 && this.player1.x <= 1600 && this.player1.y >= 1345 && this.player1.y <= 3745) {
+            console.log("near river!");
+            nearRiver = true;
+        }
+
+        if (this.player1.x >= 32 && this.player1.x <= 1412 && this.player1.y >= 3355 && this.player1.y <= 3745) {
+            console.log("near river!");
+            nearRiver = true;
+        }
+
+        // river2
+        if (this.player1.x >= 6437 && this.player1.x <= 6700 && this.player1.y >= 1345 && this.player1.y <= 3745) {
+            console.log("near river!");
+            nearRiver = true;
+        }
+
+        if (this.player1.x >= 5072 && this.player1.x <= 6482 && this.player1.y >= 3415 && this.player1.y <= 3760) {
+            console.log("near river!");
+            nearRiver = true;
+        }
+
+
         if (player_exhausted) {
             if (exhausted_countdown > 0) {
                 exhausted_countdown -= 1;
@@ -292,7 +319,7 @@ class Play extends Phaser.Scene {
                 player_stamina = 1; // to get out of infinate loop
                 player_exhausted = false;
             }
-        } else {
+        } else if (!gameOver) {
             // not exhausted 
             //***  player movement control:W S A D
             // is Down = keep pressed down
@@ -481,6 +508,18 @@ class Play extends Phaser.Scene {
         } else {
             return false;
         }
+    }
+
+    checkInteractionInBound(player, item) { //!fix me 
+        this.interactionRange = 200;
+        this.distance = Phaser.Math.Between(player.x, player.y, item.x, item.y);
+        if (this.distance <= this.interactionRange) {
+            console.log("Interaction in range");
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     shipExplode(ship) {

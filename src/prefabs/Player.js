@@ -34,7 +34,9 @@ class Player extends Phaser.GameObjects.Sprite {
         this.max_stamina = this.stamina_milestone[stamina_lvl];
         player_stamina = this.max_stamina;
         this.restoredstamina = 0;
-        this.walkspeed = 30 + stamina_lvl; // pixels per frame, will move faster for higher stamina lvl
+
+        this.riverSpeedDebuff = 0;
+        this.walkspeed = 15 + stamina_lvl + this.riverSpeedDebuff; // pixels per frame, will move faster for higher stamina lvl //!speed was 3
         this.runspeed = this.walkspeed * 2;
 
 
@@ -130,6 +132,12 @@ class Player extends Phaser.GameObjects.Sprite {
                 restoredhealth = 0;
                 console.log("health_lvl up to " + health_lvl);
             }
+        }
+
+        if (nearRiver){
+            this.riverSpeedDebuff = 2;
+        } else {
+            this.riverSpeedDebuff = 0;
         }
 
         //! reset on miss; might not be necessary

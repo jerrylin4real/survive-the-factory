@@ -43,6 +43,13 @@ class Item extends Phaser.GameObjects.Sprite {
             this.hunger_restore_value = 50;
         }
 
+        if (this.name == "river") {
+            // near river
+            // if it is with in distance
+                // this.nearRiver = true;
+
+        }
 
     }
+
 }

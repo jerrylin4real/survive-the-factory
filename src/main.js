@@ -11,9 +11,9 @@ let config = {
   parent: "main", // name of main
   pixelArt: true,
   physics: {
-    default: "matter",
+    default: 'arcade',
     arcade: {
-      gravity: { y: 0 }
+      debug: true
     }
   },
   scene: [
@@ -81,6 +81,10 @@ var hungerCounted = false;
 var thrist_lvl = 0;
 var player_thrist = 0;
 var thristCounted = false;
+
+//*** Global Environment Variables
+var nearRiver = false;
+// var nearWall = false;
 
 
 // Define colors 
