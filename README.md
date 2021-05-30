@@ -12,7 +12,7 @@ You can read more about the background story of SCUM [here](https://scum-game.fa
 ### Links:
 - [Public GitHub repository](https://github.com/jerrylin4real/scum-2D)
 
-- [GitHub page](https://jerrylin4real.github.io/scum-2D/)
+- [GitHub page](https://jerrylin4real.github.io/survive-the-factory/)
 
 - [Group Google drive](https://drive.google.com/drive/folders/1LB6Vdx5lpXOuZgMV4hXCGnVQgUnjNuvu?usp=sharing)
 
