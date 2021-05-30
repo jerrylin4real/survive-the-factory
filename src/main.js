@@ -3,7 +3,7 @@
 * Leland Jin 
 * Jerry Lin
 * Lakery Cao
-//!fixme make sure it is in the canvaus comment as well.
+//!make sure it is in the canvaus comment as well.
 *******************************************************/
 
 let config = {
@@ -27,15 +27,15 @@ var game = new Phaser.Game(config);
 
 
 // set UI sizes
-let borderUISize = game.config.height / 19;
+let borderUISize = game.config.height / 18;
 let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
 
 let borderLimitDown_x = 9962;
-let borderLimitDown_y = 5032;
+let borderLimitDown_y = 5040;
 
 let borderLimitUp_x = 9965;
-let borderLimitUp_y = 1354;
+let borderLimitUp_y = 1378;
 // reserve keyboard variables
 let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyShift, keyL,
   keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, keyT, keyI, key1, key3, key4;
