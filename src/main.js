@@ -27,7 +27,7 @@ var game = new Phaser.Game(config);
 
 
 // set UI sizes
-let borderUISize = game.config.height / 17;
+let borderUISize = game.config.height / 19;
 let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
 
@@ -37,7 +37,7 @@ let borderLimitDown_y = 5032;
 let borderLimitUp_x = 9965;
 let borderLimitUp_y = 1354;
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyShift, keyL,
+let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyShift, keyL,
   keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, keyT, keyI, key1, key3, key4;
 
 
@@ -63,9 +63,11 @@ var player1_y;
 var player_exhausted = false;
 var player_dead = false;
 
+var init_countdown = 600;
+
 var stamina_lvl = 0;
 var exhausted_countdown = 0;
-var init_exhausted_countdown;
+var init_exhausted_countdown = init_countdown;
 var player_stamina = 1000;
 
 var health_lvl = 0;
@@ -77,10 +79,17 @@ var healthregenCounted = false;
 var hunger_lvl = 0;
 var player_hunger = 0;
 var hungerCounted = false;
+var player_stomach_volume = 0;
+var poo = false;
+var poo_countdown = init_countdown;
+
 
 var thrist_lvl = 0;
 var player_thrist = 0;
 var thristCounted = false;
+var player_bladder_volume = 0;
+var pee_countdown = init_countdown;
+var pee = false;
 
 //*** Global Environment Variables
 var nearRiver = false;

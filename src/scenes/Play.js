@@ -65,8 +65,8 @@ class Play extends Phaser.Scene {
         // Add time counters
         this.hasteCounter = 0; // Increase ships' movespeed if >= 30.
         this.superWeaponCount = 0;
-
-        init_exhausted_countdown = 600; // 6 seconds cd for exhausted status penalty 
+        init_countdown = 600;
+        init_exhausted_countdown = init_countdown; // 6 seconds cd for exhausted status penalty 
         exhausted_countdown = init_exhausted_countdown;
 
         // place tile sprite
@@ -119,6 +119,8 @@ class Play extends Phaser.Scene {
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
@@ -258,9 +260,10 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        //console.log("update()");
-        // let paused = false;
-        // check key input for restart / menu
+        // pass playerx and playery to the globle variables
+        player1_x = this.player1.x;
+        player1_y = this.player1.y;
+
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
             gameOver = true;
         }
@@ -269,15 +272,27 @@ class Play extends Phaser.Scene {
             this.scene.start("menuScene");
         }
 
-        // Interact button
+        // Interact button F
         if (Phaser.Input.Keyboard.JustDown(keyF)) {
-            //!implement interaction
+            if (nearRiver) {
+                // drink water!
+                player_thrist -= 20;
+                player_bladder_volume += 20;
+            }
             //! add peach for sprint 2
             num_peach += 1;
             // if F a loot
             // randomly gerenate an item/weapon;      
         }
 
+        // press UP to pee
+        if (Phaser.Input.Keyboard.JustDown(keyUP)) {
+            pee = true;
+        }
+        // preess DOWN to poo
+        if (Phaser.Input.Keyboard.JustDown(keyDOWN)) {
+            poo = true;
+        }
         // Press L to show player location
         if (Phaser.Input.Keyboard.JustDown(keyL)) {
             // console.log("x:" + this.player1.x + " y:" + this.player1.y);
@@ -319,7 +334,29 @@ class Play extends Phaser.Scene {
                 player_stamina = 1; // to get out of infinate loop
                 player_exhausted = false;
             }
-        } else if (!gameOver) {
+        } else if (pee) {
+            if (pee_countdown > 0) {
+                pee_countdown -= 1;
+                pee = true;
+
+            } else {
+                pee_countdown = init_countdown;
+                player_bladder_volume = 0; // empty bladder
+                pee = false;
+            }
+
+        } else if (poo) {
+            if (poo_countdown > 0) {
+                poo_countdown -= 1;
+                poo = true;
+
+            } else {
+                poo_countdown = init_countdown;
+                player_stomach_volume = 0; // empty stomach; well it is a compomise
+                poo = false;
+            }
+        }
+        else if (!gameOver) {
             // not exhausted 
             //***  player movement control:W S A D
             // is Down = keep pressed down
