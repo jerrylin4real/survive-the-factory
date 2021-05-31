@@ -76,7 +76,7 @@ class UI extends Phaser.Scene {
 
         // UI prompts
         this.exclamationMarkText = this.add.text(563, 312, '!! Press M for more info', { font: '24px Arial', fill: 'RED' });
-        this.MosaicRect = this.add.rectangle(511, 426, 50, 50, "BLACK"); // for pee and poo //(511,426)
+        this.MosaicRect = this.add.rectangle(511, 426, 30, 30, "BLACK"); // a 30^2 black square for pee and poo //(511,426) 
 
         // add Tutorial UI Panel
         this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
@@ -231,12 +231,12 @@ class UI extends Phaser.Scene {
             //! need to fix this logic
 
             //*  increment thrist
-            if ((initialTime % 14) == 0) {
+            if ((initialTime % 19) == 0) {
                 // set flag one sec before the event
                 thristCounted = false;
             }
             if (!thristCounted) {
-                if ((initialTime % 15) == 0) { // for every 15 second...
+                if ((initialTime % 20) == 0) { // for every 20 second...
                     player_thrist += 1;
                     // clear flag
                     thristCounted = true;

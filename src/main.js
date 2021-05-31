@@ -27,12 +27,12 @@ var game = new Phaser.Game(config);
 
 
 // set UI sizes
-let borderUISize = game.config.height / 18;
+let borderUISize = game.config.height / 19;
 let borderPadding = borderUISize / 3;
 let borderLimitDown = borderUISize * 2.5;
 
 let borderLimitDown_x = 9980;
-let borderLimitDown_y = 5140;
+let borderLimitDown_y = 5085;
 
 let borderLimitUp_x = 9965;
 let borderLimitUp_y = 1378;
