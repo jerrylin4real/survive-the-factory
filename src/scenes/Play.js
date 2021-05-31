@@ -210,10 +210,10 @@ class Play extends Phaser.Scene {
         });
 
         this.anims.create({
-            key: 'baoxiang2',
+            key: 'bingxiang',
             defaultTextureKey: 'platformer',
             frames: [
-                { frame: 'baoxiang2' }
+                { frame: 'bingxiang' }
             ],
             repeat: -1
         });
