@@ -85,8 +85,8 @@ class Play extends Phaser.Scene {
 
 
         // add player at world(x, y)
-        this.init_spawn_x = 2845; //!was 62
-        this.init_spawn_y = 2997; //!was 1510
+        this.init_spawn_x = 7960; //!was 62
+        this.init_spawn_y = 2975; //!was 1510
 
         this.player1 = new Player(this, this.init_spawn_x, this.init_spawn_y, 'platformer', 'stand').setScale(1); // scale the size of this.player1
         // this.player1.body.setSize(20, 55, 0) // usage: setSize(width, height, center)
@@ -337,6 +337,9 @@ class Play extends Phaser.Scene {
         this.bigBuilding1_x = 2845;
         this.bigBuilding1_y = 2997;
 
+        // * big building2  top left x = 7960 ; y = 2975
+        this.bigBuilding2_x = 7960;
+        this.bigBuilding2_y = 2997;
 
         if (this.player1.x >= this.smallBuilding1_x && this.player1.x <= this.smallBuilding1_x + 10 && ((this.player1.y >= this.smallBuilding1_y && this.player1.y <= this.smallBuilding1_y + 107) ||
             (this.player1.y >= this.smallBuilding1_y + 207 && this.player1.y <= this.smallBuilding1_y + 370) || (this.player1.y >= this.smallBuilding1_y + 400 && this.player1.y <= this.smallBuilding1_y + 557) ||
@@ -427,7 +430,7 @@ class Play extends Phaser.Scene {
 
         // up is wall (this.bigBuilding1_x, this.bigBuilding1_y) : [x: 2931 to 4886, y:3106]
         // lower x:[2863 to 3675 and 4200 to 4950 ]y : 4709 or 4661
-        else if ((this.player1.x >= this.bigBuilding1_x + 80 && this.player1.x <= this.bigBuilding1_x + 2041 && ((this.player1.y >= this.bigBuilding1_y + 111 && this.player1.y <= this.bigBuilding1_y + 115)) ||
+        else if ((this.player1.x >= this.bigBuilding1_x + 75 && this.player1.x <= this.bigBuilding1_x + 2041 && ((this.player1.y >= this.bigBuilding1_y + 111 && this.player1.y <= this.bigBuilding1_y + 115)) ||
             ((this.player1.x >= this.bigBuilding1_x + 18 && this.player1.x <= this.bigBuilding1_x + 830) && (this.player1.y >= this.bigBuilding1_y + 1664 && this.player1.y <= this.bigBuilding1_y + 1670)) ||
             (this.player1.x >= this.bigBuilding1_x + 1350 && this.player1.x <= this.bigBuilding1_x + 2105 && ((this.player1.y >= this.bigBuilding1_y + 1664 && this.player1.y <= this.bigBuilding1_y + 1670)))
         )) {
@@ -442,6 +445,40 @@ class Play extends Phaser.Scene {
         )) {
             downIsWall = true;
         }
+
+        // * big building2  top left x = 7960 ; y = 2975; // altered from building2
+        else if ((this.player1.x >= this.bigBuilding2_x && this.player1.x <= this.bigBuilding2_x + 10 && ((this.player1.y >= this.bigBuilding2_y && this.player1.y <= this.bigBuilding2_y + 1658)) ||
+            ((this.player1.x >= this.bigBuilding2_x && this.player1.x <= this.bigBuilding2_x + 10) && (this.player1.y >= this.bigBuilding2_y + 107 && this.player1.y <= this.bigBuilding2_y + 1203)) ||
+            (this.player1.x >= this.bigBuilding2_x + 2043 && this.player1.x <= this.bigBuilding2_x + 2053 && ((this.player1.y >= this.bigBuilding2_y + 107 && this.player1.y <= this.bigBuilding2_y + 1208)))
+        ) || (this.player1.x >= this.bigBuilding2_x + 1328 && this.player1.x <= this.bigBuilding2_x + 1428 && (this.player1.y >= this.bigBuilding2_y + 1227 && this.player1.y <= this.bigBuilding2_y + 1640))) {
+            rightIsWall = true;
+        }
+        // left is wall (this.bigBuilding2_x, this.bigBuilding2_y)
+        else if ((this.player1.x >= this.bigBuilding2_x + 75 && this.player1.x <= this.bigBuilding2_x + 90 && ((this.player1.y >= this.bigBuilding2_y + 95 && this.player1.y <= this.bigBuilding2_y + 1193)) ||
+            ((this.player1.x >= this.bigBuilding2_x + 847 && this.player1.x <= this.bigBuilding2_x + 857) && (this.player1.y >= this.bigBuilding2_y + 1201 && this.player1.y <= this.bigBuilding2_y + 1660)) ||
+            (this.player1.x >= this.bigBuilding2_x + 2040 && this.player1.x <= this.bigBuilding2_x + 2045 && ((this.player1.y >= this.bigBuilding2_y + 95 && this.player1.y <= this.bigBuilding2_y + 1220)))
+        ) || (this.player1.x >= this.bigBuilding2_x + 2123 && this.player1.x <= this.bigBuilding2_x + 2127 && (this.player1.y >= this.bigBuilding2_y && this.player1.y <= this.bigBuilding2_y + 1655))) {
+            leftIsWall = true;
+        }
+
+        // up is wall (this.bigBuilding2_x, this.bigBuilding2_y) : [x: 2931 to 4886, y:3106]
+        // lower x:[2863 to 3675 and 4200 to 4950 ]y : 4709 or 4661
+        else if ((this.player1.x >= this.bigBuilding2_x + 80 && this.player1.x <= this.bigBuilding2_x + 2041 && ((this.player1.y >= this.bigBuilding2_y + 111 && this.player1.y <= this.bigBuilding2_y + 115)) ||
+            ((this.player1.x >= this.bigBuilding2_x + 18 && this.player1.x <= this.bigBuilding2_x + 830) && (this.player1.y >= this.bigBuilding2_y + 1664 && this.player1.y <= this.bigBuilding2_y + 1670)) ||
+            (this.player1.x >= this.bigBuilding2_x + 1350 && this.player1.x <= this.bigBuilding2_x + 2105 && ((this.player1.y >= this.bigBuilding2_y + 1664 && this.player1.y <= this.bigBuilding2_y + 1670)))
+        )) {
+            upIsWall = true;
+        }
+
+        // down is wall (this.bigBuilding2_x, this.bigBuilding2_y) : [x: 2866 to 4955, y:2975]
+        // lower x:[x: 2920 to 3670 and 4206 to 4890, y:4193]
+        else if ((this.player1.x >= this.bigBuilding2_x + 15 && this.player1.x <= this.bigBuilding2_x + 2110 && ((this.player1.y >= this.bigBuilding2_y - 18 && this.player1.y <= this.bigBuilding2_y)) ||
+            ((this.player1.x >= this.bigBuilding2_x + 75 && this.player1.x <= this.bigBuilding2_x + 821) && (this.player1.y >= this.bigBuilding2_y + 1192 && this.player1.y <= this.bigBuilding2_y + 1200)) ||
+            (this.player1.x >= this.bigBuilding2_x + 1361 && this.player1.x <= this.bigBuilding2_x + 2050 && ((this.player1.y >= this.bigBuilding2_y + 1192 && this.player1.y <= this.bigBuilding2_y + 1200)))
+        )) {
+            downIsWall = true;
+        }
+
 
         else {
             // Reset all direction booleans
