@@ -25,10 +25,22 @@ You can read more about the background story of SCUM [here](https://scum-game.fa
 ### Patch Notes:
 
 `Patch v0.5 (Final Game):`
-- Coming soon!
+- Hours taken: 
+  - 12 hours or more
+- Features
+  - release version
+  - axe as win game condition 
+  - easter eggs
+  - press p to pause background music
 
 `Patch v0.3 (Final sprint):`
-- Coming soon!
+- Hours taken: 
+  - 10 hours
+- Features implemented:
+  - wall
+  - chests
+  - items
+  
 
 `Patch v0.2 (Sprint 2): May 28, 2021`
 - Hours taken: 
@@ -57,6 +69,10 @@ You can read more about the background story of SCUM [here](https://scum-game.fa
 
 ### Fun Facts:
 - Leland came up with the idea of making a 2D adaption of SCUM after playing SCUM for 30 hours. 
+- You can do beatbox in this game!
+- Whistle and beatbox sounds are made by Leland!
+- Wall collision is hardcoded by Leland.
+- Many fantastic arts in the assets are not actually implemented in the coding aspect:(
   
 ---
 ### Reference:
