@@ -160,6 +160,7 @@ class Play extends Phaser.Scene {
         keyH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
         keyK = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K);
         keyJ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J);
+        keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 
 
 
@@ -300,10 +301,9 @@ class Play extends Phaser.Scene {
         }, null, this);
         */
         // play background music 
-        if (this.bgmPlayed == false) {
+        if (!this.bgmPlayed) {
             if (this.bgmCreated) {
                 this.bgm.resume();
-                return;
             }
             this.bgm = this.sound.add('bgm', {
                 mute: false,
@@ -724,11 +724,20 @@ class Play extends Phaser.Scene {
 
             this.mainmap.tilePositionX -= 0;  // update tile sprite
         }
-        if (gameOver) {
+        if (gameOver || Phaser.Input.Keyboard.JustDown(keyP)) {
+            // press p to toggle on/off bgm
             if (this.bgmCreated) {
-                this.bgm.pause()
-                this.bgmPlayed = false;
+                if (this.bgmPlayed) {
+                    this.bgm.volume = 0;
+                    this.bgmPlayed = false;
+                } else {
+                    this.bgm.volume = 0.3;
+                    this.bgmPlayed = true;
+                }
             }
+
+            console.log("this.bgm.volume:" + this.bgm.volume);
+
         }
         // ** Send events to UI.js
         if (Phaser.Input.Keyboard.JustDown(keyTAB) || Phaser.Input.Keyboard.JustDown(keyI) || Phaser.Input.Keyboard.JustDown(key1)) {

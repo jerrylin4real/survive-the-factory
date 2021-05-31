@@ -123,7 +123,7 @@ class UI extends Phaser.Scene {
 
         // add Tutorial UI Panel
         this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
-        press M or 3 for metabolism UI\nPress Shift to sprint\nPress F to get item\nClick on item to use\nPress DOWN to poo\nPress UP to pee\nPress Q to end game', { font: '36px Pathway Gothic One', fill: 'WHITE' }).setOrigin(0.5);
+        press M or 3 for metabolism UI\nPress P to toggle bgm\nPress Shift to sprint\nPress F to get item\nClick on item to use\nPress DOWN to poo\nPress UP to pee\nPress Q to end game', { font: '36px Pathway Gothic One', fill: 'WHITE' }).setOrigin(0.5);
 
 
         // set the UI elements to be invisible as default
