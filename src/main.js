@@ -19,6 +19,8 @@ let config = {
   scene: [
     Menu,
     Play,
+    Credit,
+    Tutorial,
     UI
   ]
 };
@@ -36,13 +38,16 @@ let borderLimitDown_y = 5085;
 
 let borderLimitUp_x = 9965;
 let borderLimitUp_y = 1378;
+
+let fullpage_x = 590;
+let fullpage_y = 400;
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyShift, keyL,
+let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyShift, keyL, keyC,
   keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, keyT, keyI, key1, key3, key4;
 
 
 /******************************************************
-// Macros, global variables:
+// Macros, Global Variables:
 *******************************************************/
 var initialTime = 0;
 
@@ -56,6 +61,9 @@ var gameOver = false;
 //*** Global Inventory Variables
 var num_peach = 0;
 var num_cherry = 0;
+var num_pitaya = 0 ;
+var num_watermalon = 0;
+var num_canned_beef = 0;
 
 
 //*** Global Player Variables
