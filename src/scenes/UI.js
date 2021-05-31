@@ -10,6 +10,8 @@ class UI extends Phaser.Scene {
         // load image
         this.load.image('mouse', 'assets/sprites/mouse.png'); // for mouse control
 
+        this.load.image('peach', './assets/name-for-json/taozi.png'); // Placeholder file for now; FIXME!!!
+
         // load audio
         //this.load.audio('switchsound', './assets/switchsound.wav');
 
@@ -49,6 +51,8 @@ class UI extends Phaser.Scene {
         //click-able inventory
         this.peachText = this.add.text(borderUISize, borderUISize * 1.5, 'Peach#: ' + num_peach + " F for more", { font: '24px Pathway Gothic One', fill: 'PINK' });
         this.peachText.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
+        this.peach_pic = this.add.sprite(200, 75, 'peach'); // Placeholder file for now; FIXME!!!
+        this.peach_pic.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
 
         //*** add Metabolism UI Panel
         this.metabolismText = this.add.text(10 + borderUISize * 6.2, 10, '(M)etabolism  ', { font: '48px Pathway Gothic One', fill: 'WHITE' });
@@ -76,6 +80,9 @@ class UI extends Phaser.Scene {
 
         // UI prompts
         this.exclamationMarkText = this.add.text(563, 312, '!! Press M for more info', { font: '24px Pathway Gothic One', fill: 'RED' });
+        this.F_Text = this.add.text(399, 314, 'Press F to loot until emtpy', { font: '24px Pathway Gothic One', fill: 'WHITE' });
+
+
         this.MosaicRect = this.add.rectangle(512, 400, 25, 25, "BLACK"); // a 25^2 black square for pee and poo //(511,426) 
 
         // add Tutorial UI Panel
@@ -101,11 +108,13 @@ class UI extends Phaser.Scene {
         this.staminaText_LowerLeft.alpha = 0;
         this.thristText.alpha = 0;
         this.peachText.alpha = 0;
+        this.peach_pic.alpha = 0;
 
         this.stomachText.alpha = 0;
         this.bladderText.alpha = 0;
 
         this.exclamationMarkText.alpha = 0;
+        this.F_Text.alpha = 0;
         this.MosaicRect.alpha = 0;
 
         // define key control
@@ -159,7 +168,7 @@ class UI extends Phaser.Scene {
         this.healthText.setText('HP(lvl.' + health_lvl + '): ' + player_hp);
         this.hungerText.setText('Hunger: ' + player_hunger);
         this.thristText.setText("Thrist: " + player_thrist);
-        this.peachText.setText("Peach#: " + num_peach + " F for more");
+        this.peachText.setText("Peach#: " + num_peach);
 
         //sync always-on display text outside Metabolism or Inventory
 
@@ -214,6 +223,11 @@ class UI extends Phaser.Scene {
         } else {
             this.stomachText.setText("Stomach_Vol: " + player_stomach_volume);
             this.stomachText.setColor("PINK");
+        }
+        if (nearChest){
+            this.F_Text.alpha = 1;
+        } else {
+            this.F_Text.alpha = 0;
         }
 
         if (pee || poo) {
@@ -314,6 +328,8 @@ class UI extends Phaser.Scene {
             } else {
                 this.gameOverText.alpha = 1;
             }
+            this.healthText_LowerLeft.alpha = 0;
+            this.staminaText_LowerLeft.alpha = 0;
         }
         this.timeText.setText('Time Survived: ' + this.formatTime(initialTime));
 
@@ -342,6 +358,7 @@ class UI extends Phaser.Scene {
         this.inventoryText.alpha = 0;
         this.inventoryUIRight.alpha = 0;
         this.peachText.alpha = 0;
+        this.peach_pic.alpha = 0;
 
         openedInventory = false;
     }
@@ -355,7 +372,10 @@ class UI extends Phaser.Scene {
         this.inventoryText.alpha = 1;
         this.inventoryUIRight.alpha = 1;
         this.peachText.alpha = 1;
+        this.peach_pic.alpha = 1;
         this.exclamationMarkText.alpha = 0;
+        this.F_Text.alpha = 0;
+
 
         openedInventory = true;
     }
@@ -395,6 +415,8 @@ class UI extends Phaser.Scene {
         this.stomachText.alpha = 1;
         this.bladderText.alpha = 1;
         this.exclamationMarkText.alpha = 0;
+        this.F_Text.alpha = 0;
+
         openedMetabolism = true;
 
     }

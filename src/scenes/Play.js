@@ -55,10 +55,6 @@ class Play extends Phaser.Scene {
         this.superWeaponRewarded = false;
         this.openedMetabolism = false;
 
-
-        //  Make the world larger than the actual canvas; buggy
-        //this.game.world.setBounds(1400, 1400);
-
         // Add time counters
         this.hasteCounter = 0; // Increase ships' movespeed if >= 30.
         this.superWeaponCount = 0;
@@ -69,32 +65,28 @@ class Play extends Phaser.Scene {
         // place tile sprite
         this.mainmap = this.add.tileSprite(0, 0, 9999, 9999, 'mainmap').setOrigin(0, 0);
 
-        // Azure/0x3e5861 UI background
-        //this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderLimitDown, 0x00BBFF).setOrigin(0, 0);
-
-        // Add river rectange for distance check
-        // new Rectangle                    (scene, x, y [, width] [, height] [, fillColor] [, fillAlpha])
-        //this.riverNS1 = this.add.rectangle(1400, 2000, 200, 2100, sadBLUE);
-        //this.riverEW1 = this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize,).setOrigin(0, 0);
-        // this.add.rectangle(0, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
-        // this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
-
-
-        // add player at world(x, y)
+        // * add player at world(x, y)
         this.init_spawn_x = 7960; //!was 62
         this.init_spawn_y = 2975; //!was 1510
 
         this.player1 = new Player(this, this.init_spawn_x, this.init_spawn_y, 'platformer', 'stand').setScale(1); // scale the size of this.player1
-        // this.player1.body.setSize(20, 55, 0) // usage: setSize(width, height, center)
-
         player1 = this.player1;
+        // this.player1.body.setSize(20, 55, 0) // usage: setSize(width, height, center)
 
         //*** add camera
         // Set the camera bounds
         this.cameras.main.setBounds(0, 0, borderLimitDown_x + borderUISize * 1.9, borderLimitDown_y + borderUISize * 0.9);
         this.cameras.main.setZoom(1);
         //Set the camera to follow this.player1
-        this.cameras.main.startFollow(player1);
+        this.cameras.main.startFollow(this.player1);
+
+        //! * add chests
+        this.chest1 = new Item(this, this.init_spawn_x - 100, this.init_spawn_y + 100, 'platformer', 'baoxiang').setScale(1);
+        this.chest1.name = "chest";
+
+        chestList.push(this.chest1);
+        // console.log("chestList[0] "+ chestList[0].name);
+        //! * add zombies 
 
 
         // follow style switch buttons
@@ -188,7 +180,7 @@ class Play extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('explosion2', { start: 0, end: 12, first: 0 }),
             frameRate: 10
         });
-        
+
         this.anims.create({
             key: 'baoxiang2',
             defaultTextureKey: 'platformer',
@@ -258,7 +250,8 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        // pass playerx and playery to the globle variables
+        // pass player_x and player_y to the globle variables
+        player1 = this.player1; // update global variable
         player1_x = this.player1.x;
         player1_y = this.player1.y;
 
@@ -277,10 +270,19 @@ class Play extends Phaser.Scene {
                 player_thrist -= 20;
                 player_bladder_volume += 20;
             }
-            //! add peach for sprint 2
-            num_peach += 1;
-            // if F a loot
-            // randomly gerenate an item/weapon;      
+            if (nearChest) {
+                let i;
+                for (i = 0; i < chestList.length; i++) {
+                    if (this.checkInteractionInBound(this.player1, chestList[i]) && chestList[i].stock > 0) {
+                        // if chest is close to the player1
+                        chestList[i].stock -= 1;
+                        num_peach += 1;
+                    }
+                }
+                // if F a loot
+                // randomly gerenate an item/weapon; 
+            }
+
         }
 
         // press UP to pee
@@ -582,37 +584,29 @@ class Play extends Phaser.Scene {
                     player_stamina -= 1;
                 }
             }
-            //state machines
-            // metabolism 
-        }
+            // *** while game is not over ***
+            this.player1.update();             // update this.player1
 
-        if (this.hasteCounter > 30 && this.hasted == false) {
-            this.ship01.moveSpeed += 2;
-            this.ship02.moveSpeed += 2;
-            this.ship03.moveSpeed += 2;
-            this.ship04.moveSpeed += 2;
-            this.hasted = true;
-        }
+            // * check chests
+            let i;
+            for (i = 0; i < chestList.length; i++) {
+                if (this.checkInteractionInBound(this.player1, chestList[i]) && chestList[i].stock > 0) {
+                    // if chest is close to the player1
+                    nearChest = true;
+                } else {
+                    nearChest = false;
+                }
+            }
 
-        if (gameOver) {
+
+            this.mainmap.tilePositionX -= 0;  // update tile sprite
+
+        } else if (gameOver) {
             if (this.bgmCreated) {
                 this.bgm.pause()
                 this.bgmPlayed = false;
             }
-            if (restartPlay || Phaser.Input.Keyboard.JustDown(keyR)) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
-                console.log("Restarting game...");
-                this.sound.play('switchsound');
-                this.scene.restart();
-                // clear event flag
-                restartPlay = false;
-            }
         }
-        if (!gameOver) {
-
-            this.player1.update();             // update this.player1
-
-        }
-
         // ** Send events to UI.js
         if (Phaser.Input.Keyboard.JustDown(keyTAB) || Phaser.Input.Keyboard.JustDown(keyI) || Phaser.Input.Keyboard.JustDown(key1)) {
             //  Dispatch openInventory event
@@ -634,10 +628,15 @@ class Play extends Phaser.Scene {
 
         }
 
-        this.mainmap.tilePositionX -= 0;  // update tile sprite
 
-        // if game is not over...
-
+        if (restartPlay) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
+            console.log("Restarting game...");
+            this.sound.play('switchsound');
+            restartPlay = false;
+            gameOver = true;
+            this.scene.restart();
+            // clear event flag
+        }
 
         // new weapon
         if (this.superWeaponCount > 0 && Phaser.Input.Keyboard.JustDown(keyV)) { // if pressed v for superweapon
@@ -655,7 +654,7 @@ class Play extends Phaser.Scene {
         }
 
         // check collisions
-        
+
 
     }
 
@@ -697,10 +696,11 @@ class Play extends Phaser.Scene {
     }
 
     checkInteractionInBound(player, item) { //!fix me 
-        this.interactionRange = 200;
-        this.distance = Phaser.Math.Between(player.x, player.y, item.x, item.y);
+        this.interactionRange = 60;
+        this.distance = Phaser.Math.Distance.BetweenPoints(player, item);
+
         if (this.distance <= this.interactionRange) {
-            console.log("Interaction in range");
+            //console.log("Interaction in range: " + this.distance);
             return true;
         } else {
             return false;

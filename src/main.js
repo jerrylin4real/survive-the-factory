@@ -54,7 +54,9 @@ var at_MENU_Scene = true;
 var gameOver = false;
 
 //*** Global Inventory Variables
-var num_peach = 2;
+var num_peach = 0;
+var num_cherry = 0;
+
 
 //*** Global Player Variables
 var player1;
@@ -97,6 +99,12 @@ var rightIsWall = false;
 var upIsWall = false;
 var downIsWall = false;
 
+var nearChest = false;
+
+//* Global Lists
+var chestList = [];
+var itemList = [];
+var inventoryMap = new Map();
 
 // Define colors 
 var BROWN = 0x664C47;
@@ -114,11 +122,6 @@ var textConfig = {
   },
   fixedWidth: 100
 }
-/*
-var velocityFromRotation = Phaser.Physics.Arcade.ArcadePhysics.prototype.velocityFromRotation;
-var ROTATION_SPEED = 1 * Math.PI; // 0.5 arc per sec, 2 sec per arc
-var ROTATION_SPEED_DEGREES = Phaser.Math.RadToDeg(ROTATION_SPEED);
-var TOLERANCE = 0.02 * ROTATION_SPEED;
-*/
+
 localStorage.setItem("Scum2DTopScore", 0);
 localStorage.setItem("Scum2DBestTimeSurvived", 0);
