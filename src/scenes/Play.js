@@ -198,6 +198,51 @@ class Play extends Phaser.Scene {
             ],
             repeat: -1
         });
+        
+        this.anims.create({
+            key: 'food',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'food' }
+            ],
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'taozi',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'taozi' }
+            ],
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'yingtao',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'yingtao' }
+            ],
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'xigua',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'xigua' }
+            ],
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'huolongguo',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'huolongguo' }
+            ],
+            repeat: -1
+        });
 
 
 
