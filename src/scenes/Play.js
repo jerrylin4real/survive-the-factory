@@ -379,7 +379,7 @@ class Play extends Phaser.Scene {
                 }
             }
 
-            if (this.checkInteractionInBound(this.player1, this.axe)) {
+            if (this.checkInteractionInBound(this.player1, this.axe) && !haveAxe) {
                 this.sound.play('eatsound');
                 this.sound.play('nevergonna');
                 haveAxe = true;

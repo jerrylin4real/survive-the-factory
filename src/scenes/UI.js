@@ -38,7 +38,7 @@ class UI extends Phaser.Scene {
 
 
         // add gameOver UI
-        this.gameOverText = this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER\nPress (R) to Restart or (ESC) to Menu', this.scoreConfig).setOrigin(0.5);
+        this.gameOverText = this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER!\nPress (R) to Restart or (ESC) to Menu', { font: '48px Pathway Gothic One', fill: 'RED' }).setOrigin(0.5);
         this.gameOverText.alpha = 0;
 
         //*** add Inventory UI Panel
