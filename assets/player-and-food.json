@@ -1,0 +1,934 @@
+{
+    "frames": {
+        "glasses-stand": {
+            "frame": {
+                "x": 283,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "glasses-sword": {
+            "frame": {
+                "x": 283,
+                "y": 79,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "glasses-up": {
+            "frame": {
+                "x": 283,
+                "y": 158,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "glasses-up2": {
+            "frame": {
+                "x": 0,
+                "y": 265,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "glasses-updown": {
+            "frame": {
+                "x": 46,
+                "y": 265,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "glasses-updown2": {
+            "frame": {
+                "x": 92,
+                "y": 265,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "gun": {
+            "frame": {
+                "x": 153,
+                "y": 214,
+                "w": 49,
+                "h": 49
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 49,
+                "h": 49
+            },
+            "sourceSize": {
+                "w": 49,
+                "h": 49
+            }
+        },
+        "holdgun": {
+            "frame": {
+                "x": 138,
+                "y": 265,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "holdgun2": {
+            "frame": {
+                "x": 184,
+                "y": 265,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "holdgun3": {
+            "frame": {
+                "x": 230,
+                "y": 265,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "hudong": {
+            "frame": {
+                "x": 276,
+                "y": 265,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "huijian": {
+            "frame": {
+                "x": 0,
+                "y": 153,
+                "w": 55,
+                "h": 60
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 55,
+                "h": 60
+            },
+            "sourceSize": {
+                "w": 55,
+                "h": 60
+            }
+        },
+        "huolongguo": {
+            "frame": {
+                "x": 56,
+                "y": 153,
+                "w": 50,
+                "h": 50
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 50,
+                "h": 50
+            },
+            "sourceSize": {
+                "w": 50,
+                "h": 50
+            }
+        },
+        "jian": {
+            "frame": {
+                "x": 233,
+                "y": 0,
+                "w": 49,
+                "h": 49
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 49,
+                "h": 49
+            },
+            "sourceSize": {
+                "w": 49,
+                "h": 49
+            }
+        },
+        "knife": {
+            "frame": {
+                "x": 233,
+                "y": 50,
+                "w": 49,
+                "h": 49
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 49,
+                "h": 49
+            },
+            "sourceSize": {
+                "w": 49,
+                "h": 49
+            }
+        },
+        "leftright": {
+            "frame": {
+                "x": 329,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "leftright2": {
+            "frame": {
+                "x": 329,
+                "y": 79,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "robot": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 179,
+                "h": 152
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 179,
+                "h": 152
+            },
+            "sourceSize": {
+                "w": 179,
+                "h": 152
+            }
+        },
+        "smallknife": {
+            "frame": {
+                "x": 107,
+                "y": 153,
+                "w": 50,
+                "h": 50
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 50,
+                "h": 50
+            },
+            "sourceSize": {
+                "w": 50,
+                "h": 50
+            }
+        },
+        "stand": {
+            "frame": {
+                "x": 329,
+                "y": 158,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "sword": {
+            "frame": {
+                "x": 329,
+                "y": 237,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "taozi": {
+            "frame": {
+                "x": 180,
+                "y": 160,
+                "w": 50,
+                "h": 50
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 50,
+                "h": 50
+            },
+            "sourceSize": {
+                "w": 50,
+                "h": 50
+            }
+        },
+        "updown": {
+            "frame": {
+                "x": 375,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "updown2": {
+            "frame": {
+                "x": 375,
+                "y": 79,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "wearglasses": {
+            "frame": {
+                "x": 375,
+                "y": 158,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "xigua": {
+            "frame": {
+                "x": 0,
+                "y": 214,
+                "w": 50,
+                "h": 50
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 50,
+                "h": 50
+            },
+            "sourceSize": {
+                "w": 50,
+                "h": 50
+            }
+        },
+        "yingtao": {
+            "frame": {
+                "x": 51,
+                "y": 214,
+                "w": 50,
+                "h": 50
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 50,
+                "h": 50
+            },
+            "sourceSize": {
+                "w": 50,
+                "h": 50
+            }
+        },
+        "zombie1": {
+            "frame": {
+                "x": 375,
+                "y": 237,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "zombie2": {
+            "frame": {
+                "x": 0,
+                "y": 344,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "zombie3": {
+            "frame": {
+                "x": 46,
+                "y": 344,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "zombie4": {
+            "frame": {
+                "x": 92,
+                "y": 344,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "zombie5": {
+            "frame": {
+                "x": 138,
+                "y": 344,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "zombie6": {
+            "frame": {
+                "x": 184,
+                "y": 344,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "zombie7": {
+            "frame": {
+                "x": 230,
+                "y": 344,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "zombie8": {
+            "frame": {
+                "x": 276,
+                "y": 344,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "zombie9": {
+            "frame": {
+                "x": 322,
+                "y": 344,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "baoxiang": {
+            "frame": {
+                "x": 233,
+                "y": 150,
+                "w": 48,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 48,
+                "h": 64
+            },
+            "sourceSize": {
+                "w": 48,
+                "h": 64
+            }
+        },
+        "baoxiang2": {
+            "frame": {
+                "x": 180,
+                "y": 92,
+                "w": 50,
+                "h": 67
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 50,
+                "h": 67
+            },
+            "sourceSize": {
+                "w": 50,
+                "h": 67
+            }
+        },
+        "bingxiang": {
+            "frame": {
+                "x": 180,
+                "y": 0,
+                "w": 52,
+                "h": 91
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 52,
+                "h": 91
+            },
+            "sourceSize": {
+                "w": 52,
+                "h": 91
+            }
+        },
+        "food": {
+            "frame": {
+                "x": 102,
+                "y": 214,
+                "w": 50,
+                "h": 50
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 50,
+                "h": 50
+            },
+            "sourceSize": {
+                "w": 50,
+                "h": 50
+            }
+        },
+        "futou": {
+            "frame": {
+                "x": 233,
+                "y": 100,
+                "w": 49,
+                "h": 49
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 49,
+                "h": 49
+            },
+            "sourceSize": {
+                "w": 49,
+                "h": 49
+            }
+        },
+        "glasses-holdgun": {
+            "frame": {
+                "x": 368,
+                "y": 344,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "glasses-holdgun2": {
+            "frame": {
+                "x": 421,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "glasses-holdgun3": {
+            "frame": {
+                "x": 421,
+                "y": 79,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "glasses-leftright": {
+            "frame": {
+                "x": 421,
+                "y": 158,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        },
+        "glasses-leftright2": {
+            "frame": {
+                "x": 421,
+                "y": 237,
+                "w": 45,
+                "h": 78
+            },
+            "rotated": false,
+            "trimmed": false,
+            "spriteSourceSize": {
+                "x": 0,
+                "y": 0,
+                "w": 45,
+                "h": 78
+            },
+            "sourceSize": {
+                "w": 45,
+                "h": 78
+            }
+        }
+    },
+    "meta": {
+        "app": "https://www.leshylabs.com/apps/sstool/",
+        "version": "Leshy SpriteSheet Tool v0.8.4",
+        "image": "player-and-food.png",
+        "size": {
+            "w": 466,
+            "h": 422
+        },
+        "scale": 1
+    }
+}
