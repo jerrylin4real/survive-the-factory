@@ -24,8 +24,8 @@ class UI extends Phaser.Scene {
 
         // Add time counters
         initialTime = 0;
-        this.timeText = this.add.text(game.config.width / 1.3, borderUISize - borderPadding, 'Time Survived: ' + this.formatTime(initialTime), { font: '24px Arial', fill: 'WHITE' });
-        this.bestTimeSurvived = this.add.text(game.config.width / 1.7, borderUISize - borderPadding, 'Best Time: ' + this.formatTime(localStorage.getItem("Scum2DBestTimeSurvived")), { font: '24px Arial', fill: 'WHITE' });
+        this.timeText = this.add.text(game.config.width / 1.3, borderUISize - borderPadding, 'Time Survived: ' + this.formatTime(initialTime), { font: '24px Pathway Gothic One', fill: 'WHITE' });
+        this.bestTimeSurvived = this.add.text(game.config.width / 1.7, borderUISize - borderPadding, 'Best Time: ' + this.formatTime(localStorage.getItem("Scum2DBestTimeSurvived")), { font: '24px Pathway Gothic One', fill: 'WHITE' });
 
         // For each 1000 ms or 1 second, call onTimedEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onTimeEvent, callbackScope: this, loop: true });
@@ -36,7 +36,7 @@ class UI extends Phaser.Scene {
         this.gameOverText.alpha = 0;
 
         //*** add Inventory UI Panel
-        this.inventoryText = this.add.text(10, 10, '(I)nventory  ', { font: '48px Arial', fill: 'WHITE' });
+        this.inventoryText = this.add.text(10, 10, '(I)nventory  ', { font: '48px Pathway Gothic One', fill: 'WHITE' });
 
         // @ param          (scene(neglected),    x, y,                          ,width,        
         this.inventoryUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 11,
@@ -47,11 +47,11 @@ class UI extends Phaser.Scene {
             game.config.height * 2, BROWN).setOrigin(0, 0);
 
         //click-able inventory
-        this.peachText = this.add.text(borderUISize, borderUISize * 1.5, 'Peach#: ' + num_peach + " F for more", { font: '24px Arial', fill: 'PINK' });
+        this.peachText = this.add.text(borderUISize, borderUISize * 1.5, 'Peach#: ' + num_peach + " F for more", { font: '24px Pathway Gothic One', fill: 'PINK' });
         this.peachText.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
 
         //*** add Metabolism UI Panel
-        this.metabolismText = this.add.text(10 + borderUISize * 6.2, 10, '(M)etabolism  ', { font: '48px Arial', fill: 'WHITE' });
+        this.metabolismText = this.add.text(10 + borderUISize * 6.2, 10, '(M)etabolism  ', { font: '48px Pathway Gothic One', fill: 'WHITE' });
         this.metabolismUILeft = this.add.rectangle(0, borderUISize + borderPadding, game.config.width / 2 - borderPadding * 11,
             //                          height, fillColor)
             game.config.height - borderPadding, sadBLUE).setOrigin(0, 0);
@@ -61,26 +61,26 @@ class UI extends Phaser.Scene {
 
         //Player Stat UI Panel
         // @ param                                   , borderUISize * y // change y to list-show stat
-        this.healthText = this.add.text(borderUISize, borderUISize * 1.5, 'HP(lvl.' + health_lvl + '): ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
-        this.healthText_LowerLeft = this.add.text(borderUISize, borderUISize * 16, 'HP(lvl.' + health_lvl + '): ' + player_hp, { font: '24px Arial', fill: 'WHITE' });
-        this.staminaText = this.add.text(borderUISize, borderUISize * 2.5, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
+        this.healthText = this.add.text(borderUISize, borderUISize * 1.5, 'HP(lvl.' + health_lvl + '): ' + player_hp, { font: '24px Pathway Gothic One', fill: 'WHITE' });
+        this.healthText_LowerLeft = this.add.text(borderUISize, borderUISize * 16, 'HP(lvl.' + health_lvl + '): ' + player_hp, { font: '24px Pathway Gothic One', fill: 'WHITE' });
+        this.staminaText = this.add.text(borderUISize, borderUISize * 2.5, 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Pathway Gothic One', fill: 'WHITE' });
         this.staminaText_LowerLeft = this.add.text(borderUISize, borderUISize * 17
-            , 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Arial', fill: 'WHITE' });
-        this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: normal', { font: '24px Arial', fill: 'GREEN' });
+            , 'Stamina(lvl.' + stamina_lvl + '): ' + player_stamina, { font: '24px Pathway Gothic One', fill: 'WHITE' });
+        this.exhaustedText = this.add.text(borderUISize, borderUISize * 3.5, 'Status: normal', { font: '24px Pathway Gothic One', fill: 'GREEN' });
 
-        this.hungerText = this.add.text(borderUISize, borderUISize * 4.5, 'Hunger: ' + player_hunger, { font: '24px Arial', fill: 'ORANGE' });
-        this.stomachText = this.add.text(borderUISize, borderUISize * 5.5, 'Stomach_Vol: ' + player_stomach_volume, { font: '24px Arial', fill: 'PINK' });
+        this.hungerText = this.add.text(borderUISize, borderUISize * 4.5, 'Hunger: ' + player_hunger, { font: '24px Pathway Gothic One', fill: 'ORANGE' });
+        this.stomachText = this.add.text(borderUISize, borderUISize * 5.5, 'Stomach_Vol: ' + player_stomach_volume, { font: '24px Pathway Gothic One', fill: 'PINK' });
 
-        this.thristText = this.add.text(borderUISize, borderUISize * 6.5, 'Thrist: ' + player_thrist, { font: '24px Arial', fill: 'WHITE' });
-        this.bladderText = this.add.text(borderUISize, borderUISize * 7.5, 'Bladder_Vol: ' + player_bladder_volume, { font: '24px Arial', fill: 'PINK' });
+        this.thristText = this.add.text(borderUISize, borderUISize * 6.5, 'Thrist: ' + player_thrist, { font: '24px Pathway Gothic One', fill: 'WHITE' });
+        this.bladderText = this.add.text(borderUISize, borderUISize * 7.5, 'Bladder_Vol: ' + player_bladder_volume, { font: '24px Pathway Gothic One', fill: 'PINK' });
 
         // UI prompts
-        this.exclamationMarkText = this.add.text(563, 312, '!! Press M for more info', { font: '24px Arial', fill: 'RED' });
-        this.MosaicRect = this.add.rectangle(511, 426, 30, 30, "BLACK"); // a 30^2 black square for pee and poo //(511,426) 
+        this.exclamationMarkText = this.add.text(563, 312, '!! Press M for more info', { font: '24px Pathway Gothic One', fill: 'RED' });
+        this.MosaicRect = this.add.rectangle(512, 400, 25, 25, "BLACK"); // a 25^2 black square for pee and poo //(511,426) 
 
         // add Tutorial UI Panel
         this.tutorialText = this.add.text(game.config.width / 2, game.config.height / 2, 'Use WSAD to move and mouse to interact\nPress TAB or 1 for inventory\nPress T for Tutorial \
-        press M or 3 for metabolism UI\nPress Shift to sprint\nPress F to get item\nClick on item to use\nPress DOWN to poo\nPress UP to pee\nPress Q to end game', { font: '36px Arial', fill: 'WHITE' }).setOrigin(0.5);
+        press M or 3 for metabolism UI\nPress Shift to sprint\nPress F to get item\nClick on item to use\nPress DOWN to poo\nPress UP to pee\nPress Q to end game', { font: '36px Pathway Gothic One', fill: 'WHITE' }).setOrigin(0.5);
 
 
         // set the UI to be invisible as default

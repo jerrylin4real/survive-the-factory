@@ -23,11 +23,7 @@ class Play extends Phaser.Scene {
         console.log("preload");
 
         // load images/tile sprites
-        this.load.image('rocket2', './assets/rocket2.png');
-        this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('mainmap', './assets/map/SCUM-MAP.png'); // Not showing the full img? Default: mainmap.png 
-        this.load.image('smallfreighterspr', './assets/smallfreighterspr.png');
-        this.load.image('speedship', './assets/speedship.png');
         this.load.image('player', './assets/Runner-obstacle.png'); // Placeholder file for now; FIXME!!!
 
 
@@ -107,13 +103,6 @@ class Play extends Phaser.Scene {
         btn2 = game.add.button(6, 200, 'button', topdownFollow, this, 2, 2, 2);
         btn3 = game.add.button(6, 280, 'button', topdownTightFollow, this, 3, 3, 3);
         */
-        // add Spaceships (x3)
-
-        this.ship01 = new Spaceship(this, game.config.width + borderLimitUp_y, borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20, 2).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderLimitUp_y + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
-        this.ship04 = new Spaceship(this, game.config.width, borderLimitDown + 45, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
-        this.ship04.moveSpeed = 10;
 
         // define key control
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -224,20 +213,10 @@ class Play extends Phaser.Scene {
         this.p1Score = 0;
         // display text
 
-        // display Left and middle UI
-        //this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 5, 'Score:', textConfig);
-        //this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding + 5, this.p1Score, textConfig);
-
-        // this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
-        // this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
-        //     localStorage.getItem("RocketPatrolTopScore"), textConfig);
-
         let redConfig = {
             color: 'red', // color hex code: black
             fixedWidth: 150
         }
-        // this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: WSAD', redConfig);
-        // this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
         // clear GAME OVER flag
 
@@ -342,6 +321,7 @@ class Play extends Phaser.Scene {
         }
         //* ___________________________________________________________________________________________________________________
         //! wall detection; hard coded; if made as a seperate function it would probably not work 
+        //! DO NOT edit this section unless you understand it!
         //* small building1 (Left-to-right order) Top Left coordinate (x,y) =  (100, 1579)
         this.smallBuilding1_x = 100;
         this.smallBuilding1_y = 1580;
@@ -367,7 +347,7 @@ class Play extends Phaser.Scene {
 
         } else if ((this.player1.x >= this.smallBuilding1_x + 559 && this.player1.x <= this.smallBuilding1_x + 569) && ((this.player1.y >= this.smallBuilding1_y && this.player1.y <= this.smallBuilding1_y + 107) ||
             (this.player1.y >= this.smallBuilding1_y + 656 && this.player1.y <= this.smallBuilding1_y + 806)) || ((this.player1.x >= this.smallBuilding1_x + 214 && this.player1.x <= this.smallBuilding1_x + 224) &&
-                (((this.player1.y >= this.smallBuilding1_y + 435 && this.player1.y <= this.smallBuilding1_y + 563)) || (this.player1.y >= this.smallBuilding1_y + 215 && this.player1.y <= this.smallBuilding1_y + 370)))) {
+                (((this.player1.y >= this.smallBuilding1_y + 435 && this.player1.y <= this.smallBuilding1_y + 563)) || (this.player1.y >= this.smallBuilding1_y + 215 && this.player1.y <= this.smallBuilding1_y + 375)))) {
             leftIsWall = true;
         }
 
@@ -400,7 +380,7 @@ class Play extends Phaser.Scene {
 
         } else if ((this.player1.x >= this.smallBuilding2_x + 559 && this.player1.x <= this.smallBuilding2_x + 569) && ((this.player1.y >= this.smallBuilding2_y && this.player1.y <= this.smallBuilding2_y + 107) ||
             (this.player1.y >= this.smallBuilding2_y + 656 && this.player1.y <= this.smallBuilding2_y + 806)) || ((this.player1.x >= this.smallBuilding2_x + 214 && this.player1.x <= this.smallBuilding2_x + 224) &&
-                (((this.player1.y >= this.smallBuilding2_y + 435 && this.player1.y <= this.smallBuilding2_y + 563)) || (this.player1.y >= this.smallBuilding2_y + 215 && this.player1.y <= this.smallBuilding2_y + 370)))) {
+                (((this.player1.y >= this.smallBuilding2_y + 435 && this.player1.y <= this.smallBuilding2_y + 563)) || (this.player1.y >= this.smallBuilding2_y + 215 && this.player1.y <= this.smallBuilding2_y + 375)))) {
             leftIsWall = true;
         }
 
@@ -449,7 +429,7 @@ class Play extends Phaser.Scene {
         // up is wall (this.bigBuilding1_x, this.bigBuilding1_y) : [x: 2931 to 4886, y:3106]
         // lower x:[2863 to 3675 and 4200 to 4950 ]y : 4709 or 4661
         else if ((this.player1.x >= this.bigBuilding1_x + 75 && this.player1.x <= this.bigBuilding1_x + 2041 && ((this.player1.y >= this.bigBuilding1_y + 111 && this.player1.y <= this.bigBuilding1_y + 115)) ||
-            ((this.player1.x >= this.bigBuilding1_x + 18 && this.player1.x <= this.bigBuilding1_x + 830) && (this.player1.y >= this.bigBuilding1_y + 1664 && this.player1.y <= this.bigBuilding1_y + 1670)) ||
+            ((this.player1.x >= this.bigBuilding1_x + 15 && this.player1.x <= this.bigBuilding1_x + 830) && (this.player1.y >= this.bigBuilding1_y + 1664 && this.player1.y <= this.bigBuilding1_y + 1670)) ||
             (this.player1.x >= this.bigBuilding1_x + 1350 && this.player1.x <= this.bigBuilding1_x + 2105 && ((this.player1.y >= this.bigBuilding1_y + 1664 && this.player1.y <= this.bigBuilding1_y + 1670)))
         )) {
             upIsWall = true;
@@ -482,7 +462,7 @@ class Play extends Phaser.Scene {
         // up is wall (this.bigBuilding2_x, this.bigBuilding2_y) : [x: 2931 to 4886, y:3106]
         // lower x:[2863 to 3675 and 4200 to 4950 ]y : 4709 or 4661
         else if ((this.player1.x >= this.bigBuilding2_x + 80 && this.player1.x <= this.bigBuilding2_x + 2041 && ((this.player1.y >= this.bigBuilding2_y + 111 && this.player1.y <= this.bigBuilding2_y + 115)) ||
-            ((this.player1.x >= this.bigBuilding2_x + 18 && this.player1.x <= this.bigBuilding2_x + 830) && (this.player1.y >= this.bigBuilding2_y + 1664 && this.player1.y <= this.bigBuilding2_y + 1670)) ||
+            ((this.player1.x >= this.bigBuilding2_x + 15 && this.player1.x <= this.bigBuilding2_x + 830) && (this.player1.y >= this.bigBuilding2_y + 1664 && this.player1.y <= this.bigBuilding2_y + 1670)) ||
             (this.player1.x >= this.bigBuilding2_x + 1350 && this.player1.x <= this.bigBuilding2_x + 2105 && ((this.player1.y >= this.bigBuilding2_y + 1664 && this.player1.y <= this.bigBuilding2_y + 1670)))
         )) {
             upIsWall = true;
@@ -505,7 +485,7 @@ class Play extends Phaser.Scene {
             leftIsWall = false;
             rightIsWall = false;
         }
-        //* -----------------------------------------------------------------------------------------------------------------
+        //* end of hardcoded section-----------------------------------------------------------------------------------------------------------------
 
         //* Player stat detection
         if (player_exhausted) {
@@ -630,13 +610,7 @@ class Play extends Phaser.Scene {
         if (!gameOver) {
 
             this.player1.update();             // update this.player1
-            this.ship01.update();               // update spaceship (x4)
-            this.ship02.update();
-            this.ship03.update();
-            this.ship04.update();
 
-            // Debugging Only
-            // console.log('gametime: ' + this.game.getTimer());
         }
 
         // ** Send events to UI.js
@@ -681,23 +655,7 @@ class Play extends Phaser.Scene {
         }
 
         // check collisions
-        if (this.checkCollision(this.player1, this.ship04)) {
-            //this.player1.reset();
-            this.shipExplode(this.ship04);
-        }
-
-        if (this.checkCollision(this.player1, this.ship03)) {
-            //this.player1.reset();
-            this.shipExplode(this.ship03);
-        }
-        if (this.checkCollision(this.player1, this.ship02)) {
-            //this.player1.reset();
-            this.shipExplode(this.ship02);
-        }
-        if (this.checkCollision(this.player1, this.ship01)) {
-            //this.player1.reset();
-            this.shipExplode(this.ship01);
-        }
+        
 
     }
 
@@ -762,23 +720,6 @@ class Play extends Phaser.Scene {
             boom.destroy();                       // remove explosion sprite
         });
 
-        // score add and repaint
-        // this.p1Score += ship.points;
-        // if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
-        //     localStorage.setItem("RocketPatrolTopScore", this.p1Score);
-        //     this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
-        // }
-        // this.scoreLeft.text = this.p1Score;
-
-        // let soundFXLib = [
-        //     'sfx_explosion_spell',
-        //     'sfx_explosion_sea-mine',
-        //     'sfx_explosion_shot-light',
-        //     'sfx_explosion_crash'
-        // ];
-        // let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
-        // this.explosionFX = this.sound.add(soundFXLib[random4SoundFX], { volume: 0.1 });
-        // this.explosionFX.play();
     }
 
     shipExplode2(ship) {
@@ -792,14 +733,6 @@ class Play extends Phaser.Scene {
             ship.alpha = 1;                       // make ship visible again
             boom2.destroy();                       // remove explosion sprite
         });
-
-        // score add and repaint
-        // this.p1Score += ship.points;
-        // if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
-        //     localStorage.setItem("RocketPatrolTopScore", this.p1Score);
-        //     this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
-        // }
-        // this.scoreLeft.text = this.p1Score;
 
         let soundFXLib = [
             'sfx_explosion_spell',

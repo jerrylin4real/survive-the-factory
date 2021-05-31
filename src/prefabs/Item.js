@@ -6,7 +6,7 @@ class Item extends Phaser.GameObjects.Sprite {
         scene.add.existing(this);   // add to existing, displayList, updateList
         //! Translate variable to main.js as var(s), like what Leland did with player_exhausted 
         this.number = 1; // number/packs of food
-        this.hunger_restore_value;
+        this.hunger_restore_value = 0;
         this.durability = 100;
         this.name = "peach";
 
@@ -47,7 +47,6 @@ class Item extends Phaser.GameObjects.Sprite {
             // near river
             // if it is with in distance
                 // this.nearRiver = true;
-
         }
 
     }
