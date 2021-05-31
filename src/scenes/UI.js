@@ -53,6 +53,10 @@ class UI extends Phaser.Scene {
         this.peachText.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
         this.peach_pic = this.add.sprite(200, 75, 'peach'); // Placeholder file for now; FIXME!!!
         this.peach_pic.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
+        
+        // * initialize items in inventory
+        num_peach = 0;
+        num_cherry = 0;
 
         //*** add Metabolism UI Panel
         this.metabolismText = this.add.text(10 + borderUISize * 6.2, 10, '(M)etabolism  ', { font: '48px Pathway Gothic One', fill: 'WHITE' });
@@ -285,6 +289,14 @@ class UI extends Phaser.Scene {
                 restoredhealth += (health_lvl + 1); //aka restoredhp
                 // clear flag
                 healthregenCounted = true;
+            }
+
+            //* chest refresh
+            if ((initialTime % 300) == 0){ // for every 5 minutes
+                let i;
+                for(i = 0; i < chestList.length; i++){
+                    chestList[i].stock = Math.floor(Math.random() * 4);// chest will have 0 - 3 item(s) to loot
+                }
             }
         }
     }

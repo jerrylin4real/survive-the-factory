@@ -257,6 +257,7 @@ class Play extends Phaser.Scene {
 
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
             gameOver = true;
+
         }
         if (Phaser.Input.Keyboard.JustDown(keyESC)) {
             gameOver = true;
@@ -600,8 +601,8 @@ class Play extends Phaser.Scene {
 
 
             this.mainmap.tilePositionX -= 0;  // update tile sprite
-
-        } else if (gameOver) {
+        } 
+        if (gameOver){
             if (this.bgmCreated) {
                 this.bgm.pause()
                 this.bgmPlayed = false;
@@ -632,6 +633,10 @@ class Play extends Phaser.Scene {
         if (restartPlay) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
             console.log("Restarting game...");
             this.sound.play('switchsound');
+            if (this.bgmCreated) {
+                this.bgm.pause()
+                this.bgmPlayed = false;
+            }
             restartPlay = false;
             gameOver = true;
             this.scene.restart();
