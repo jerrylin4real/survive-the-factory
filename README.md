@@ -10,7 +10,7 @@ Spring 2021
 You can read more about the background story of SCUM [here](https://scum-game.fandom.com/wiki/Scum).
 
 ### Links:
-- [Public GitHub repository](https://github.com/jerrylin4real/survive-a-factory)
+- [Public GitHub repository](https://github.com/jerrylin4real/survive-the-factory)
 
 - [GitHub page/Playable link](https://jerrylin4real.github.io/survive-the-factory/)
 
