@@ -322,47 +322,95 @@ class Play extends Phaser.Scene {
         } else {
             nearRiver = false;
         }
+        //* ___________________________________________________________________________________________________________________
+        //! wall detection; hard coded; if made as a seperate function it would probably not work 
+        //* small building1 (Left-to-right order) Top Left coordinate (x,y) =  (100, 1579)
+        this.smallBuilding1_x = 100;
+        this.smallBuilding1_y = 1580;
 
-        //! wall detection; abadoned - too hard to hard code
-        // building1 (Left-to-right order)
-        if (this.player1.x >= 100 && this.player1.x <= 110 && ((this.player1.y >= 1582 && this.player1.y <= 1687) ||
-            (this.player1.y >= 1807 && this.player1.y <= 1951) || (this.player1.y >= 1990 && this.player1.y <= 2137) ||
-            (this.player1.y >= 2236 && this.player1.y <= 2386))) {
+
+        // * small building2 (Left-to-right order) Top Left (x,y)
+        this.smallBuilding2_x = 5224;
+        this.smallBuilding2_y = 1585;
+
+        // * big building1 (Left-to-right order) Top Left (x, y)
+        this.bigBuilding1_x = 2846;
+        this.bigBuilding1_y = 2997;
+
+        if (this.player1.x >= this.smallBuilding1_x && this.player1.x <= this.smallBuilding1_x + 10 && ((this.player1.y >= this.smallBuilding1_y && this.player1.y <= this.smallBuilding1_y + 107) ||
+            (this.player1.y >= this.smallBuilding1_y + 207 && this.player1.y <= this.smallBuilding1_y + 370) || (this.player1.y >= this.smallBuilding1_y + 400 && this.player1.y <= this.smallBuilding1_y + 557) ||
+            (this.player1.y >= this.smallBuilding1_y + 656 && this.player1.y <= this.smallBuilding1_y + 806))) {
             rightIsWall = true;
 
 
-        } else if ((this.player1.x >= 659 && this.player1.x <= 669) && ((this.player1.y >= 1582 && this.player1.y <= 1687) ||
-            (this.player1.y >= 2236 && this.player1.y <= 2386)) || ((this.player1.x >= 314 && this.player1.x <= 324) &&
-                (((this.player1.y >= 2015 && this.player1.y <= 2143)) || (this.player1.y >= 1795 && this.player1.y <= 1950)))) {
+        } else if ((this.player1.x >= this.smallBuilding1_x + 559 && this.player1.x <= this.smallBuilding1_x + 569) && ((this.player1.y >= this.smallBuilding1_y && this.player1.y <= this.smallBuilding1_y + 107) ||
+            (this.player1.y >= this.smallBuilding1_y + 656 && this.player1.y <= this.smallBuilding1_y + 806)) || ((this.player1.x >= this.smallBuilding1_x + 214 && this.player1.x <= this.smallBuilding1_x + 224) &&
+                (((this.player1.y >= this.smallBuilding1_y + 435 && this.player1.y <= this.smallBuilding1_y + 563)) || (this.player1.y >= this.smallBuilding1_y + 215 && this.player1.y <= this.smallBuilding1_y + 370)))) {
             leftIsWall = true;
         }
 
-        else if ((this.player1.x >= 100 && this.player1.x <= 669) && (
-            (this.player1.y >= 2387 && this.player1.y <= 2397) || (this.player1.y >= 1676 && this.player1.y <= 1686))) {
+        else if ((this.player1.x >= this.smallBuilding1_x && this.player1.x <= this.smallBuilding1_x + 559) && (
+            (this.player1.y >= this.smallBuilding1_y + 807 && this.player1.y <= this.smallBuilding1_y + 817) || (this.player1.y >= this.smallBuilding1_y + 96 && this.player1.y <= this.smallBuilding1_y + 106))) {
             upIsWall = true;
         }
 
-        else if ((this.player1.x >= 146 && this.player1.x <= 330) && (
-            (this.player1.y >= 2115 && this.player1.y <= 2125) || (this.player1.y >= 1579 && this.player1.y <= 1589) || 
-            (this.player1.y >= 1919 && this.player1.y <= 1929))) {
+        else if ((this.player1.x >= this.smallBuilding1_x + 46 && this.player1.x <= +230) && (
+            (this.player1.y >= this.smallBuilding1_y + 535 && this.player1.y <= this.smallBuilding1_y + 645) || (this.player1.y >= this.smallBuilding1_y && this.player1.y <= this.smallBuilding1_y + 10) ||
+            (this.player1.y >= this.smallBuilding1_y + 339 && this.player1.y <= this.smallBuilding1_y + 349))) {
             upIsWall = true;
         }
-        else if ((this.player1.x >= 95 && this.player1.x <= 668) && ((this.player1.y >= 1579 && this.player1.y <= 1589)||
-        (this.player1.y >= 2232 && this.player1.y <= 2332))){
+        else if ((this.player1.x >= this.smallBuilding1_x && this.player1.x <= this.smallBuilding1_x + 568) && ((this.player1.y >= this.smallBuilding1_y && this.player1.y <= this.smallBuilding1_y + 10) ||
+            (this.player1.y >= this.smallBuilding1_y + 652 && this.player1.y <= this.smallBuilding1_y + 752))) {
             downIsWall = true;
         }
 
-        else if ((this.player1.x >= 156 && this.player1.x <= 326) && ((this.player1.y >= 1803 && this.player1.y <= 1813)||
-        (this.player1.y >= 1988 && this.player1.y <= 1998))){
+        else if ((this.player1.x >= this.smallBuilding1_x + 56 && this.player1.x <= this.smallBuilding1_x + 226) && ((this.player1.y >= this.smallBuilding1_y + 223 && this.player1.y <= this.smallBuilding1_y + 233) ||
+            (this.player1.y >= this.smallBuilding1_y + 400 && this.player1.y <= this.smallBuilding1_y + 410))) {
             downIsWall = true;
         }
 
+        // * small building2    
+        else if (this.player1.x >= this.smallBuilding2_x && this.player1.x <= this.smallBuilding2_x + 10 && ((this.player1.y >= this.smallBuilding2_y && this.player1.y <= this.smallBuilding2_y + 107) ||
+            (this.player1.y >= this.smallBuilding2_y + 207 && this.player1.y <= this.smallBuilding2_y + 370) || (this.player1.y >= this.smallBuilding2_y + 400 && this.player1.y <= this.smallBuilding2_y + 557) ||
+            (this.player1.y >= this.smallBuilding2_y + 656 && this.player1.y <= this.smallBuilding2_y + 806))) {
+            rightIsWall = true;
+
+
+        } else if ((this.player1.x >= this.smallBuilding2_x + 559 && this.player1.x <= this.smallBuilding2_x + 569) && ((this.player1.y >= this.smallBuilding2_y && this.player1.y <= this.smallBuilding2_y + 107) ||
+            (this.player1.y >= this.smallBuilding2_y + 656 && this.player1.y <= this.smallBuilding2_y + 806)) || ((this.player1.x >= this.smallBuilding2_x + 214 && this.player1.x <= this.smallBuilding2_x + 224) &&
+                (((this.player1.y >= this.smallBuilding2_y + 435 && this.player1.y <= this.smallBuilding2_y + 563)) || (this.player1.y >= this.smallBuilding2_y + 215 && this.player1.y <= this.smallBuilding2_y + 370)))) {
+            leftIsWall = true;
+        }
+
+        else if ((this.player1.x >= this.smallBuilding2_x && this.player1.x <= this.smallBuilding2_x + 559) && (
+            (this.player1.y >= this.smallBuilding2_y + 807 && this.player1.y <= this.smallBuilding2_y + 817) || (this.player1.y >= this.smallBuilding2_y + 96 && this.player1.y <= this.smallBuilding2_y + 106))) {
+            upIsWall = true;
+        }
+
+        else if ((this.player1.x >= this.smallBuilding2_x + 46 && this.player1.x <= +230) && (
+            (this.player1.y >= this.smallBuilding2_y + 535 && this.player1.y <= this.smallBuilding2_y + 645) || (this.player1.y >= this.smallBuilding2_y && this.player1.y <= this.smallBuilding2_y + 10) ||
+            (this.player1.y >= this.smallBuilding2_y + 339 && this.player1.y <= this.smallBuilding2_y + 349))) {
+            upIsWall = true;
+        }
+        else if ((this.player1.x >= this.smallBuilding2_x && this.player1.x <= this.smallBuilding2_x + 568) && ((this.player1.y >= this.smallBuilding2_y && this.player1.y <= this.smallBuilding2_y + 10) ||
+            (this.player1.y >= this.smallBuilding2_y + 652 && this.player1.y <= this.smallBuilding2_y + 752))) {
+            downIsWall = true;
+        }
+
+        else if ((this.player1.x >= this.smallBuilding2_x + 56 && this.player1.x <= this.smallBuilding2_x + 226) && ((this.player1.y >= this.smallBuilding2_y + 223 && this.player1.y <= this.smallBuilding2_y + 233) ||
+            (this.player1.y >= this.smallBuilding2_y + 400 && this.player1.y <= this.smallBuilding2_y + 410))) {
+            downIsWall = true;
+        }
+
+        // default conditions
         else {
+            // Reset all direction booleans
             upIsWall = false;
             downIsWall = false;
             leftIsWall = false;
             rightIsWall = false;
         }
+        //* -----------------------------------------------------------------------------------------------------------------
 
         //* Player stat detection
         if (player_exhausted) {
@@ -661,44 +709,6 @@ class Play extends Phaser.Scene {
         this.explosionFX = this.sound.add(soundFXLib[random4SoundFX], { volume: 0.1 });
         this.explosionFX.play();
         // add time bonus
-    }
-
-    setMap(scene, mapName) {
-        currentMap = mapName;
-        // currentMap = "dungeonMap";
-        map = scene.make.tilemap({ key: currentMap });
-        const tileset = map.addTilesetImage("room-tileset", "tiles");
-
-        const belowLayer = map.createStaticLayer("Below Player", tileset, 0, 0);
-        worldLayer = map.createStaticLayer("World", tileset, 0, 0);
-        const aboveLayer = map.createStaticLayer("Above Player", tileset, 0, 0);
-
-        worldLayer.setCollisionByProperty({ collides: true });
-        aboveLayer.setDepth(10);
-        spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
-
-        const enterArea = map.findObject("Objects", obj => obj.name === "Enter Area");
-        enterRec = new Phaser.GameObjects.Rectangle(scene, enterArea.x, enterArea.y, enterArea.width, enterArea.height);
-
-        // Create a sprite with physics enabled via the physics system. The image used for the sprite has
-        // a bit of whitespace, so I'm using setSize & setOffset to control the size of the player's body.
-        // if(player)
-        if (player == undefined) {
-            player = scene.physics.add
-                .sprite(spawnPoint.x, spawnPoint.y, "atlas", "misa-front")
-                .setSize(30, 40)
-                .setOffset(0, 24).setDepth(5);
-        } else {
-            scene.physics.world.removeCollider(colPW);
-            player.x = spawnPoint.x;
-            player.y = spawnPoint.y;
-        }
-
-        colPW = scene.physics.add.collider(player, worldLayer);
-
-        camera = scene.cameras.main;
-        camera.startFollow(player);
-        camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     }
 }
 
