@@ -26,15 +26,11 @@ class Play extends Phaser.Scene {
         this.load.image('mainmap', './assets/map/SCUM-MAP.png'); // Not showing the full img? Default: mainmap.png 
         this.load.image('player', './assets/Runner-obstacle.png'); // Placeholder file for now; FIXME!!!
 
-
-        // load spritesheet
-        // this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
-        // this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12 });
-
-
         // load audio
         this.load.audio('bgm', './assets/sound/scumbgm.mp3');
         this.load.audio('switchsound', './assets/sound/Select.wav');
+        this.load.audio('nevergonna', './assets/sound/whistle_never_gonna_give_u_up.mp3');
+
 
         // load atlas animation
         this.load.path = './assets/';
@@ -341,7 +337,7 @@ class Play extends Phaser.Scene {
 
         // Interact button F
         if (Phaser.Input.Keyboard.JustDown(keyF)) {
-            if (nearRiver && !this.openedMetabolism && !openedInventory) {
+            if (nearRiver && !openedMetabolism && !openedInventory) {
                 // drink water!
                 this.sound.play('eatsound');
                 player_thrist -= 20;
@@ -379,6 +375,7 @@ class Play extends Phaser.Scene {
 
             if (this.checkInteractionInBound(this.player1, this.axe)) {
                 this.sound.play('eatsound');
+                this.sound.play('nevergonna');
                 haveAxe = true;
             }
 

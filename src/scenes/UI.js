@@ -94,8 +94,8 @@ class UI extends Phaser.Scene {
         this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 9, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, sadBLUE).setOrigin(0, 0);
 
-        this.tips_Metabolism_Right = this.add.text(10 + borderUISize * 18, borderUISize * 1.5, 'Tips:\n\nPress T for in-game tutorial\n\nPress F to loot\n\nEat/drink to survive!',
-            { font: '24px Pathway Gothic One', fill: 'WHITE' });
+        this.tips_Metabolism_Right = this.add.text(10 + borderUISize * 18, borderUISize * 1.5, 'Tips:\n\nPress T for in-game tutorial\n\nPress F to loot\n\nEat/drink to survive! \
+        \n\nyou can survive(win game)\nif you picked up the axe!',{ font: '24px Pathway Gothic One', fill: 'WHITE' });
 
         //Player Stat UI Panel
         // @ param                                   , borderUISize * y // change y to list-show stat
