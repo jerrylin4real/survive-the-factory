@@ -431,7 +431,7 @@ class Play extends Phaser.Scene {
 
         // up is wall (this.bigBuilding1_x, this.bigBuilding1_y) : [x: 2931 to 4886, y:3106]
         // lower x:[2863 to 3675 and 4200 to 4950 ]y : 4709 or 4661
-        else if ((this.player1.x >= this.bigBuilding1_x + 75 && this.player1.x <= this.bigBuilding1_x + 2041 && ((this.player1.y >= this.bigBuilding1_y + 111 && this.player1.y <= this.bigBuilding1_y + 115)) ||
+        else if ((this.player1.x >= this.bigBuilding1_x + 70 && this.player1.x <= this.bigBuilding1_x + 2041 && ((this.player1.y >= this.bigBuilding1_y + 111 && this.player1.y <= this.bigBuilding1_y + 115)) ||
             ((this.player1.x >= this.bigBuilding1_x + 15 && this.player1.x <= this.bigBuilding1_x + 830) && (this.player1.y >= this.bigBuilding1_y + 1664 && this.player1.y <= this.bigBuilding1_y + 1670)) ||
             (this.player1.x >= this.bigBuilding1_x + 1350 && this.player1.x <= this.bigBuilding1_x + 2105 && ((this.player1.y >= this.bigBuilding1_y + 1664 && this.player1.y <= this.bigBuilding1_y + 1670)))
         )) {
@@ -455,7 +455,7 @@ class Play extends Phaser.Scene {
             rightIsWall = true;
         }
         // left is wall (this.bigBuilding2_x, this.bigBuilding2_y)
-        else if ((this.player1.x >= this.bigBuilding2_x + 75 && this.player1.x <= this.bigBuilding2_x + 90 && ((this.player1.y >= this.bigBuilding2_y + 95 && this.player1.y <= this.bigBuilding2_y + 1193)) ||
+        else if ((this.player1.x >= this.bigBuilding2_x + 70 && this.player1.x <= this.bigBuilding2_x + 90 && ((this.player1.y >= this.bigBuilding2_y + 95 && this.player1.y <= this.bigBuilding2_y + 1193)) ||
             ((this.player1.x >= this.bigBuilding2_x + 847 && this.player1.x <= this.bigBuilding2_x + 857) && (this.player1.y >= this.bigBuilding2_y + 1201 && this.player1.y <= this.bigBuilding2_y + 1660)) ||
             (this.player1.x >= this.bigBuilding2_x + 2040 && this.player1.x <= this.bigBuilding2_x + 2045 && ((this.player1.y >= this.bigBuilding2_y + 95 && this.player1.y <= this.bigBuilding2_y + 1220)))
         ) || (this.player1.x >= this.bigBuilding2_x + 2123 && this.player1.x <= this.bigBuilding2_x + 2127 && (this.player1.y >= this.bigBuilding2_y && this.player1.y <= this.bigBuilding2_y + 1655))) {
