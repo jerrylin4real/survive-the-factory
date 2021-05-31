@@ -9,8 +9,6 @@ class Menu extends Phaser.Scene {
 
     // load img
     this.load.image('MENU_img', './assets/page_imgs/menu.png');
-    //!this.load.image('Tutorial_img', './assets/page_imgs/xxx');
-
   }
 
   create() {
@@ -18,9 +16,9 @@ class Menu extends Phaser.Scene {
     gameOver = true;
 
     // show menu img
-    this.menu_img = this.add.image(575, 400, 'MENU_img');
+    this.menu_img = this.add.image(fullpage_x, fullpage_y, 'MENU_img');
 
-    // menu text configuration //! replaced by  menu_img 
+    // menu text configuration //! legacy code are commented out and replaced by menu_img 
     // let menuConfig = {
     //   fontFamily: 'Courier',
     //   fontSize: '28px',
@@ -55,28 +53,21 @@ class Menu extends Phaser.Scene {
 
   update() {
     if (Phaser.Input.Keyboard.JustDown(keyP)) {
-      // Expert mode
-      game.settings = {
-        spaceshipSpeed: 4,
-        gameTimer: 0
-      }
       at_MENU_Scene = true;
       this.sound.play('switchsound');
       this.scene.start("playScene");
     }
 
     if (Phaser.Input.Keyboard.JustDown(keyC)) {
-      // // Quick Test mode
-      // game.settings = { // a list of settings
-      //   spaceshipSpeed: 5,
-      //   gameTimer: 0
-      // }
-      // this.sound.play('sfx_select');
-      // this.scene.start("playScene");
+      console.log("Loaded Credit Scene");
+      this.sound.play('switchsound');
+      this.scene.start("creditScene");
     }
 
     if (Phaser.Input.Keyboard.JustDown(keyT)) {
-
+      console.log("Loaded Tutorial Scene");
+      this.sound.play('switchsound');
+      this.scene.start("tutorialScene");
 
     }
   }

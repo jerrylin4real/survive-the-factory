@@ -6,7 +6,7 @@ class Credit extends Phaser.Scene {
   preload() {
 
     // load image
-    this.load.image('creditPage', './assets/Credit.png');
+    this.load.image('creditPage', './assets/page_imgs/credit.png');
 
     // load audio
     this.load.audio('switchsound', './assets/switchsound.wav');
@@ -15,14 +15,15 @@ class Credit extends Phaser.Scene {
 
   create() {
     // Define keys 
+    keyC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
     keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
-    this.add.image(410, 310, 'creditPage');
+    this.add.image(fullpage_x, fullpage_y, 'creditPage');
 
   }
 
   update() {
 
-    if (Phaser.Input.Keyboard.JustDown(keyM)) {
+    if (Phaser.Input.Keyboard.JustDown(keyM) || Phaser.Input.Keyboard.JustDown(keyC)) {
       console.log("Loaded Menu Scene");
       this.sound.play('switchsound');
       this.scene.start("menuScene");
