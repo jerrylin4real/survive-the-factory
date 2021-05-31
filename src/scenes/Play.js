@@ -24,12 +24,14 @@ class Play extends Phaser.Scene {
 
         // load images/tile sprites
         this.load.image('mainmap', './assets/map/SCUM-MAP.png'); // Not showing the full img? Default: mainmap.png 
-        this.load.image('player', './assets/Runner-obstacle.png'); // Placeholder file for now; FIXME!!!
-
         // load audio
         this.load.audio('bgm', './assets/sound/scumbgm.mp3');
         this.load.audio('switchsound', './assets/sound/Select.wav');
         this.load.audio('nevergonna', './assets/sound/whistle_never_gonna_give_u_up.mp3');
+        this.load.audio('hihat', './assets/sound/hihat.wav');
+        this.load.audio('bass', './assets/sound/bass.wav');
+        this.load.audio('snare', './assets/sound/snare.wav');
+
 
 
         // load atlas animation
@@ -154,6 +156,10 @@ class Play extends Phaser.Scene {
         key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
         key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
         key4 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.FOUR);
+
+        keyH = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
+        keyK = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K);
+        keyJ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J);
 
 
 
@@ -386,6 +392,19 @@ class Play extends Phaser.Scene {
             this.axe.x = player1_x - 25;
             this.axe.y = player1_y + 12;
         }
+
+        if (Phaser.Input.Keyboard.JustDown(keyH)) {
+            this.sound.play('hihat');
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(keyJ)) {
+            this.sound.play('bass');
+        }
+
+        if (Phaser.Input.Keyboard.JustDown(keyK)) {
+            this.sound.play('snare');
+        }
+
 
         // press UP to pee
         if (Phaser.Input.Keyboard.JustDown(keyUP)) {

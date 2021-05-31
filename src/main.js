@@ -43,7 +43,8 @@ let fullpage_x = 590;
 let fullpage_y = 400;
 // reserve keyboard variables
 let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyShift, keyL, keyC,
-  keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, keyT, keyI, key1, key3, key4;
+  keyA, keyD, keyQ, keyP, keyM, keyV, keyESC, keyTAB, keyT, keyI, key1, key3, key4,
+  keyH, keyJ, keyK;
 
 
 /******************************************************
@@ -61,7 +62,7 @@ var gameOver = false;
 //*** Global Inventory Variables
 var num_peach = 0;
 var num_cherry = 0;
-var num_pitaya = 0 ;
+var num_pitaya = 0;
 var num_watermalon = 0;
 var num_canned_beef = 0;
 
