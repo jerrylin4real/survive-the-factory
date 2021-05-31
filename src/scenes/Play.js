@@ -23,23 +23,20 @@ class Play extends Phaser.Scene {
         console.log("preload");
 
         // load images/tile sprites
-        //this.load.image('rocket', './assets/rocket.png');
-        this.load.image('rocket2', './assets/rocket2.png');
-        this.load.image('spaceship', './assets/spaceship.png');
-        this.load.image('starfield', './assets/nebulaRed.png'); // Not showing the full img? Default: starfield.png 
-        this.load.image('smallfreighterspr', './assets/smallfreighterspr.png');
-        this.load.image('speedship', './assets/speedship.png');
+        this.load.image('mainmap', './assets/map/SCUM-MAP.png'); // Not showing the full img? Default: mainmap.png 
         this.load.image('player', './assets/Runner-obstacle.png'); // Placeholder file for now; FIXME!!!
 
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
         this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12 });
-        this.load.audio('bgm', './assets/mixkit-space-game-668.wav');
+
 
         // load audio
-        this.load.audio('switchsound', './assets/Select.wav');
+        this.load.audio('bgm', './assets/sound/scumbgm.mp3');
+        this.load.audio('switchsound', './assets/sound/Select.wav');
 
+        // load atlas animation
         this.load.path = './assets/';
         this.load.atlas('platformer', 'player-and-food.png', 'player-and-food.json');
 
@@ -52,49 +49,44 @@ class Play extends Phaser.Scene {
         // Scene-level variables
         gameOver = false;
         at_MENU_Scene = false;
-
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
         this.superWeaponRewarded = false;
         this.openedMetabolism = false;
 
-
-        //  Make the world larger than the actual canvas; buggy
-        //this.game.world.setBounds(1400, 1400);
-
         // Add time counters
         this.hasteCounter = 0; // Increase ships' movespeed if >= 30.
         this.superWeaponCount = 0;
-
-        init_exhausted_countdown = 600; // 6 seconds cd for exhausted status penalty 
+        init_countdown = 600;
+        init_exhausted_countdown = init_countdown; // 6 seconds cd for exhausted status penalty 
         exhausted_countdown = init_exhausted_countdown;
 
         // place tile sprite
-        this.starfield = this.add.tileSprite(0, 0, 9999, 9999, 'starfield').setOrigin(0, 0);
+        this.mainmap = this.add.tileSprite(0, 0, 9999, 9999, 'mainmap').setOrigin(0, 0);
 
-        // Azure/0x3e5861 UI background
-        //this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderLimitDown, 0x00BBFF).setOrigin(0, 0);
+        // * add player at world(x, y)
+        this.init_spawn_x = 7960; //!was 62
+        this.init_spawn_y = 2975; //!was 1510
 
-        // Grey/0x00BBFF borders 
-        /* Borders might be Unnecessary in SCUM-2D
-        this.add.rectangle(0, 0, game.config.width, borderUISize, 0x3e5861).setOrigin(0, 0);
-        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x3e5861).setOrigin(0, 0);
-        this.add.rectangle(0, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
-        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
-        */
-
-        // add player 
-        //this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-        this.player1 = new Player(this, borderLimitDown + borderUISize, game.config.height - borderLimitDown, 'platformer', 'stand').setScale(1); // scale the size of this.player1
+        this.player1 = new Player(this, this.init_spawn_x, this.init_spawn_y, 'platformer', 'stand').setScale(1); // scale the size of this.player1
         player1 = this.player1;
+        // this.player1.body.setSize(20, 55, 0) // usage: setSize(width, height, center)
 
         //*** add camera
         // Set the camera bounds
-        this.cameras.main.setBounds(0, 0, game.config.width * 10, game.config.height * 10);
+        this.cameras.main.setBounds(0, 0, borderLimitDown_x + borderUISize * 1.9, borderLimitDown_y + borderUISize * 0.9);
         this.cameras.main.setZoom(1);
         //Set the camera to follow this.player1
-        this.cameras.main.startFollow(player1);
+        this.cameras.main.startFollow(this.player1);
+
+        //! * add chests
+        this.chest1 = new Item(this, this.init_spawn_x - 100, this.init_spawn_y + 100, 'platformer', 'baoxiang').setScale(1);
+        this.chest1.name = "chest";
+
+        chestList.push(this.chest1);
+        // console.log("chestList[0] "+ chestList[0].name);
+        //! * add zombies 
 
 
         // follow style switch buttons
@@ -103,26 +95,20 @@ class Play extends Phaser.Scene {
         btn2 = game.add.button(6, 200, 'button', topdownFollow, this, 2, 2, 2);
         btn3 = game.add.button(6, 280, 'button', topdownTightFollow, this, 3, 3, 3);
         */
-        // add Spaceships (x3)
-
-        this.ship01 = new Spaceship(this, game.config.width + borderLimitUp, borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20, 2).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderLimitUp + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
-        this.ship04 = new Spaceship(this, game.config.width, borderLimitDown + 45, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
-        this.ship04.moveSpeed = 10;
 
         // define key control
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+        keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyShift = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
-        keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         keyV = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
         keyESC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
@@ -195,26 +181,34 @@ class Play extends Phaser.Scene {
             frameRate: 10
         });
 
+        this.anims.create({
+            key: 'baoxiang2',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'baoxiang2' }
+            ],
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'bingxiang',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'bingxiang' }
+            ],
+            repeat: -1
+        });
+
 
 
         // initialize score
         this.p1Score = 0;
         // display text
 
-        // display Left and middle UI
-        //this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 5, 'Score:', textConfig);
-        //this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding + 5, this.p1Score, textConfig);
-
-        // this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
-        // this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
-        //     localStorage.getItem("RocketPatrolTopScore"), textConfig);
-
         let redConfig = {
             color: 'red', // color hex code: black
             fixedWidth: 150
         }
-        // this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: WSAD', redConfig);
-        // this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
         // clear GAME OVER flag
 
@@ -256,37 +250,247 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        //console.log("update()");
-        // let paused = false;
-        // check key input for restart / menu
+        // pass player_x and player_y to the globle variables
+        player1 = this.player1; // update global variable
+        player1_x = this.player1.x;
+        player1_y = this.player1.y;
+
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
             gameOver = true;
         }
         if (Phaser.Input.Keyboard.JustDown(keyESC)) {
             gameOver = true;
-            at_MENU_Scene = true;
             this.scene.start("menuScene");
         }
 
-        // Interact button
+        // Interact button F
         if (Phaser.Input.Keyboard.JustDown(keyF)) {
-            //!implement interaction
-            //! add peach for sprint 2
-            num_peach += 1;
-            // if F a loot
-            // randomly gerenate an item/weapon;      
+            if (nearRiver) {
+                // drink water!
+                player_thrist -= 20;
+                player_bladder_volume += 20;
+            }
+            if (nearChest) {
+                let i;
+                for (i = 0; i < chestList.length; i++) {
+                    if (this.checkInteractionInBound(this.player1, chestList[i]) && chestList[i].stock > 0) {
+                        // if chest is close to the player1
+                        chestList[i].stock -= 1;
+                        num_peach += 1;
+                    }
+                }
+                // if F a loot
+                // randomly gerenate an item/weapon; 
+            }
+
         }
 
+        // press UP to pee
+        if (Phaser.Input.Keyboard.JustDown(keyUP)) {
+            pee = true;
+        }
+        // preess DOWN to poo
+        if (Phaser.Input.Keyboard.JustDown(keyDOWN)) {
+            poo = true;
+        }
         // Press L to show player location
         if (Phaser.Input.Keyboard.JustDown(keyL)) {
             // console.log("x:" + this.player1.x + " y:" + this.player1.y);
             console.log("x:" + player1_x + " y:" + player1_y);
+        }
 
+        // water area detection
+        // river1
+        if (this.player1.x >= 1300 && this.player1.x <= 1600 && this.player1.y >= 1345 && this.player1.y <= 3745) {
+            console.log("near river!");
+            nearRiver = true;
+        } else if (this.player1.x >= 32 && this.player1.x <= 1412 && this.player1.y >= 3355 && this.player1.y <= 3745) {
+            console.log("near river!");
+            nearRiver = true;
+        }
+
+        // river2
+        else if (this.player1.x >= 6437 && this.player1.x <= 6700 && this.player1.y >= 1345 && this.player1.y <= 3745) {
+            console.log("near river!");
+            nearRiver = true;
+        }
+
+        else if (this.player1.x >= 5072 && this.player1.x <= 6482 && this.player1.y >= 3415 && this.player1.y <= 3760) {
+            console.log("near river!");
+            nearRiver = true;
+        } else {
+            nearRiver = false;
+        }
+        //* ___________________________________________________________________________________________________________________
+        //! wall detection; hard coded; if made as a seperate function it would probably not work 
+        //! DO NOT edit this section unless you understand it!
+        //* small building1 (Left-to-right order) Top Left coordinate (x,y) =  (100, 1579)
+        this.smallBuilding1_x = 100;
+        this.smallBuilding1_y = 1580;
+
+
+        // * small building2 (Left-to-right order) Top Left (x,y)
+        this.smallBuilding2_x = 5224;
+        this.smallBuilding2_y = 1585;
+
+        // * big building1 (Left-to-right order) Top Left (x, y)
+        this.bigBuilding1_x = 2845;
+        this.bigBuilding1_y = 2997;
+
+        // * big building2  top left x = 7960 ; y = 2975
+        this.bigBuilding2_x = 7960;
+        this.bigBuilding2_y = 2997;
+
+        if (this.player1.x >= this.smallBuilding1_x && this.player1.x <= this.smallBuilding1_x + 10 && ((this.player1.y >= this.smallBuilding1_y && this.player1.y <= this.smallBuilding1_y + 107) ||
+            (this.player1.y >= this.smallBuilding1_y + 207 && this.player1.y <= this.smallBuilding1_y + 370) || (this.player1.y >= this.smallBuilding1_y + 400 && this.player1.y <= this.smallBuilding1_y + 557) ||
+            (this.player1.y >= this.smallBuilding1_y + 656 && this.player1.y <= this.smallBuilding1_y + 806))) {
+            rightIsWall = true;
+
+
+        } else if ((this.player1.x >= this.smallBuilding1_x + 559 && this.player1.x <= this.smallBuilding1_x + 569) && ((this.player1.y >= this.smallBuilding1_y && this.player1.y <= this.smallBuilding1_y + 107) ||
+            (this.player1.y >= this.smallBuilding1_y + 656 && this.player1.y <= this.smallBuilding1_y + 806)) || ((this.player1.x >= this.smallBuilding1_x + 214 && this.player1.x <= this.smallBuilding1_x + 224) &&
+                (((this.player1.y >= this.smallBuilding1_y + 435 && this.player1.y <= this.smallBuilding1_y + 563)) || (this.player1.y >= this.smallBuilding1_y + 215 && this.player1.y <= this.smallBuilding1_y + 375)))) {
+            leftIsWall = true;
+        }
+
+        else if ((this.player1.x >= this.smallBuilding1_x && this.player1.x <= this.smallBuilding1_x + 559) && (
+            (this.player1.y >= this.smallBuilding1_y + 807 && this.player1.y <= this.smallBuilding1_y + 817) || (this.player1.y >= this.smallBuilding1_y + 96 && this.player1.y <= this.smallBuilding1_y + 106))) {
+            upIsWall = true;
+        }
+
+        else if ((this.player1.x >= this.smallBuilding1_x + 46 && this.player1.x <= +230) && (
+            (this.player1.y >= this.smallBuilding1_y + 535 && this.player1.y <= this.smallBuilding1_y + 645) || (this.player1.y >= this.smallBuilding1_y && this.player1.y <= this.smallBuilding1_y + 10) ||
+            (this.player1.y >= this.smallBuilding1_y + 339 && this.player1.y <= this.smallBuilding1_y + 349))) {
+            upIsWall = true;
+        }
+        else if ((this.player1.x >= this.smallBuilding1_x && this.player1.x <= this.smallBuilding1_x + 568) && ((this.player1.y >= this.smallBuilding1_y && this.player1.y <= this.smallBuilding1_y + 10) ||
+            (this.player1.y >= this.smallBuilding1_y + 652 && this.player1.y <= this.smallBuilding1_y + 752))) {
+            downIsWall = true;
+        }
+
+        else if ((this.player1.x >= this.smallBuilding1_x + 56 && this.player1.x <= this.smallBuilding1_x + 226) && ((this.player1.y >= this.smallBuilding1_y + 223 && this.player1.y <= this.smallBuilding1_y + 233) ||
+            (this.player1.y >= this.smallBuilding1_y + 400 && this.player1.y <= this.smallBuilding1_y + 410))) {
+            downIsWall = true;
+        }
+
+        // * small building2    
+        else if (this.player1.x >= this.smallBuilding2_x && this.player1.x <= this.smallBuilding2_x + 10 && ((this.player1.y >= this.smallBuilding2_y && this.player1.y <= this.smallBuilding2_y + 107) ||
+            (this.player1.y >= this.smallBuilding2_y + 207 && this.player1.y <= this.smallBuilding2_y + 370) || (this.player1.y >= this.smallBuilding2_y + 400 && this.player1.y <= this.smallBuilding2_y + 557) ||
+            (this.player1.y >= this.smallBuilding2_y + 656 && this.player1.y <= this.smallBuilding2_y + 806))) {
+            rightIsWall = true;
+
+
+        } else if ((this.player1.x >= this.smallBuilding2_x + 559 && this.player1.x <= this.smallBuilding2_x + 569) && ((this.player1.y >= this.smallBuilding2_y && this.player1.y <= this.smallBuilding2_y + 107) ||
+            (this.player1.y >= this.smallBuilding2_y + 656 && this.player1.y <= this.smallBuilding2_y + 806)) || ((this.player1.x >= this.smallBuilding2_x + 214 && this.player1.x <= this.smallBuilding2_x + 224) &&
+                (((this.player1.y >= this.smallBuilding2_y + 435 && this.player1.y <= this.smallBuilding2_y + 563)) || (this.player1.y >= this.smallBuilding2_y + 215 && this.player1.y <= this.smallBuilding2_y + 375)))) {
+            leftIsWall = true;
+        }
+
+        else if ((this.player1.x >= this.smallBuilding2_x && this.player1.x <= this.smallBuilding2_x + 559) && (
+            (this.player1.y >= this.smallBuilding2_y + 807 && this.player1.y <= this.smallBuilding2_y + 817) || (this.player1.y >= this.smallBuilding2_y + 96 && this.player1.y <= this.smallBuilding2_y + 106))) {
+            upIsWall = true;
+        }
+
+        else if ((this.player1.x >= this.smallBuilding2_x + 46 && this.player1.x <= +230) && (
+            (this.player1.y >= this.smallBuilding2_y + 535 && this.player1.y <= this.smallBuilding2_y + 645) || (this.player1.y >= this.smallBuilding2_y && this.player1.y <= this.smallBuilding2_y + 10) ||
+            (this.player1.y >= this.smallBuilding2_y + 339 && this.player1.y <= this.smallBuilding2_y + 349))) {
+            upIsWall = true;
+        }
+        else if ((this.player1.x >= this.smallBuilding2_x && this.player1.x <= this.smallBuilding2_x + 568) && ((this.player1.y >= this.smallBuilding2_y && this.player1.y <= this.smallBuilding2_y + 10) ||
+            (this.player1.y >= this.smallBuilding2_y + 652 && this.player1.y <= this.smallBuilding2_y + 752))) {
+            downIsWall = true;
+        }
+
+        else if ((this.player1.x >= this.smallBuilding2_x + 56 && this.player1.x <= this.smallBuilding2_x + 226) && ((this.player1.y >= this.smallBuilding2_y + 223 && this.player1.y <= this.smallBuilding2_y + 233) ||
+            (this.player1.y >= this.smallBuilding2_y + 400 && this.player1.y <= this.smallBuilding2_y + 410))) {
+            downIsWall = true;
+        }
+        // * big building1  top left x = 2845; y = 2997;
+        // right is wall (this.bigBuilding1_x, this.bigBuilding1_y)  top left x = 2845; y = 2997;
+        // lowerleft 2845, 4655 
+
+        // top right 4888, 3104; lower right 4888, 4205 
+        // mid right 4173,4224; mid left 4180 4637
+        // default conditions
+        else if ((this.player1.x >= this.bigBuilding1_x && this.player1.x <= this.bigBuilding1_x + 10 && ((this.player1.y >= this.bigBuilding1_y && this.player1.y <= this.bigBuilding1_y + 1658)) ||
+            ((this.player1.x >= this.bigBuilding1_x && this.player1.x <= this.bigBuilding1_x + 10) && (this.player1.y >= this.bigBuilding1_y + 107 && this.player1.y <= this.bigBuilding1_y + 1203)) ||
+            (this.player1.x >= this.bigBuilding1_x + 2043 && this.player1.x <= this.bigBuilding1_x + 2053 && ((this.player1.y >= this.bigBuilding1_y + 107 && this.player1.y <= this.bigBuilding1_y + 1208)))
+        ) || (this.player1.x >= this.bigBuilding1_x + 1328 && this.player1.x <= this.bigBuilding1_x + 1428 && (this.player1.y >= this.bigBuilding1_y + 1227 && this.player1.y <= this.bigBuilding1_y + 1640))) {
+            rightIsWall = true;
+        }
+        // left is wall (this.bigBuilding1_x, this.bigBuilding1_y) top left x = 2925; y: from 3100 to 4195;
+        // mid left x:3692 [y:4198, 4652]
+        // top right x:3693 [y:2968 to 4652]
+        else if ((this.player1.x >= this.bigBuilding1_x + 80 && this.player1.x <= this.bigBuilding1_x + 90 && ((this.player1.y >= this.bigBuilding1_y + 95 && this.player1.y <= this.bigBuilding1_y + 1193)) ||
+            ((this.player1.x >= this.bigBuilding1_x + 847 && this.player1.x <= this.bigBuilding1_x + 857) && (this.player1.y >= this.bigBuilding1_y + 1201 && this.player1.y <= this.bigBuilding1_y + 1660)) ||
+            (this.player1.x >= this.bigBuilding1_x + 2040 && this.player1.x <= this.bigBuilding1_x + 2045 && ((this.player1.y >= this.bigBuilding1_y + 95 && this.player1.y <= this.bigBuilding1_y + 1220)))
+        ) || (this.player1.x >= this.bigBuilding1_x + 2123 && this.player1.x <= this.bigBuilding1_x + 2127 && (this.player1.y >= this.bigBuilding1_y && this.player1.y <= this.bigBuilding1_y + 1655))) {
+            leftIsWall = true;
+        }
+
+        // up is wall (this.bigBuilding1_x, this.bigBuilding1_y) : [x: 2931 to 4886, y:3106]
+        // lower x:[2863 to 3675 and 4200 to 4950 ]y : 4709 or 4661
+        else if ((this.player1.x >= this.bigBuilding1_x + 75 && this.player1.x <= this.bigBuilding1_x + 2041 && ((this.player1.y >= this.bigBuilding1_y + 111 && this.player1.y <= this.bigBuilding1_y + 115)) ||
+            ((this.player1.x >= this.bigBuilding1_x + 15 && this.player1.x <= this.bigBuilding1_x + 830) && (this.player1.y >= this.bigBuilding1_y + 1664 && this.player1.y <= this.bigBuilding1_y + 1670)) ||
+            (this.player1.x >= this.bigBuilding1_x + 1350 && this.player1.x <= this.bigBuilding1_x + 2105 && ((this.player1.y >= this.bigBuilding1_y + 1664 && this.player1.y <= this.bigBuilding1_y + 1670)))
+        )) {
+            upIsWall = true;
+        }
+
+        // down is wall (this.bigBuilding1_x, this.bigBuilding1_y) : [x: 2866 to 4955, y:2975]
+        // lower x:[x: 2920 to 3670 and 4206 to 4890, y:4193]
+        else if ((this.player1.x >= this.bigBuilding1_x + 15 && this.player1.x <= this.bigBuilding1_x + 2110 && ((this.player1.y >= this.bigBuilding1_y - 18 && this.player1.y <= this.bigBuilding1_y)) ||
+            ((this.player1.x >= this.bigBuilding1_x + 75 && this.player1.x <= this.bigBuilding1_x + 821) && (this.player1.y >= this.bigBuilding1_y + 1192 && this.player1.y <= this.bigBuilding1_y + 1200)) ||
+            (this.player1.x >= this.bigBuilding1_x + 1361 && this.player1.x <= this.bigBuilding1_x + 2050 && ((this.player1.y >= this.bigBuilding1_y + 1192 && this.player1.y <= this.bigBuilding1_y + 1200)))
+        )) {
+            downIsWall = true;
+        }
+
+        // * big building2  top left x = 7960 ; y = 2975; // altered from building2
+        else if ((this.player1.x >= this.bigBuilding2_x && this.player1.x <= this.bigBuilding2_x + 10 && ((this.player1.y >= this.bigBuilding2_y && this.player1.y <= this.bigBuilding2_y + 1658)) ||
+            ((this.player1.x >= this.bigBuilding2_x && this.player1.x <= this.bigBuilding2_x + 10) && (this.player1.y >= this.bigBuilding2_y + 107 && this.player1.y <= this.bigBuilding2_y + 1203)) ||
+            (this.player1.x >= this.bigBuilding2_x + 2043 && this.player1.x <= this.bigBuilding2_x + 2053 && ((this.player1.y >= this.bigBuilding2_y + 107 && this.player1.y <= this.bigBuilding2_y + 1208)))
+        ) || (this.player1.x >= this.bigBuilding2_x + 1328 && this.player1.x <= this.bigBuilding2_x + 1428 && (this.player1.y >= this.bigBuilding2_y + 1227 && this.player1.y <= this.bigBuilding2_y + 1640))) {
+            rightIsWall = true;
+        }
+        // left is wall (this.bigBuilding2_x, this.bigBuilding2_y)
+        else if ((this.player1.x >= this.bigBuilding2_x + 75 && this.player1.x <= this.bigBuilding2_x + 90 && ((this.player1.y >= this.bigBuilding2_y + 95 && this.player1.y <= this.bigBuilding2_y + 1193)) ||
+            ((this.player1.x >= this.bigBuilding2_x + 847 && this.player1.x <= this.bigBuilding2_x + 857) && (this.player1.y >= this.bigBuilding2_y + 1201 && this.player1.y <= this.bigBuilding2_y + 1660)) ||
+            (this.player1.x >= this.bigBuilding2_x + 2040 && this.player1.x <= this.bigBuilding2_x + 2045 && ((this.player1.y >= this.bigBuilding2_y + 95 && this.player1.y <= this.bigBuilding2_y + 1220)))
+        ) || (this.player1.x >= this.bigBuilding2_x + 2123 && this.player1.x <= this.bigBuilding2_x + 2127 && (this.player1.y >= this.bigBuilding2_y && this.player1.y <= this.bigBuilding2_y + 1655))) {
+            leftIsWall = true;
+        }
+
+        // up is wall (this.bigBuilding2_x, this.bigBuilding2_y) : [x: 2931 to 4886, y:3106]
+        // lower x:[2863 to 3675 and 4200 to 4950 ]y : 4709 or 4661
+        else if ((this.player1.x >= this.bigBuilding2_x + 80 && this.player1.x <= this.bigBuilding2_x + 2041 && ((this.player1.y >= this.bigBuilding2_y + 111 && this.player1.y <= this.bigBuilding2_y + 115)) ||
+            ((this.player1.x >= this.bigBuilding2_x + 15 && this.player1.x <= this.bigBuilding2_x + 830) && (this.player1.y >= this.bigBuilding2_y + 1664 && this.player1.y <= this.bigBuilding2_y + 1670)) ||
+            (this.player1.x >= this.bigBuilding2_x + 1350 && this.player1.x <= this.bigBuilding2_x + 2105 && ((this.player1.y >= this.bigBuilding2_y + 1664 && this.player1.y <= this.bigBuilding2_y + 1670)))
+        )) {
+            upIsWall = true;
+        }
+
+        // down is wall (this.bigBuilding2_x, this.bigBuilding2_y) : [x: 2866 to 4955, y:2975]
+        // lower x:[x: 2920 to 3670 and 4206 to 4890, y:4193]
+        else if ((this.player1.x >= this.bigBuilding2_x + 15 && this.player1.x <= this.bigBuilding2_x + 2110 && ((this.player1.y >= this.bigBuilding2_y - 18 && this.player1.y <= this.bigBuilding2_y)) ||
+            ((this.player1.x >= this.bigBuilding2_x + 75 && this.player1.x <= this.bigBuilding2_x + 821) && (this.player1.y >= this.bigBuilding2_y + 1192 && this.player1.y <= this.bigBuilding2_y + 1200)) ||
+            (this.player1.x >= this.bigBuilding2_x + 1361 && this.player1.x <= this.bigBuilding2_x + 2050 && ((this.player1.y >= this.bigBuilding2_y + 1192 && this.player1.y <= this.bigBuilding2_y + 1200)))
+        )) {
+            downIsWall = true;
         }
 
 
-        if (player_exhausted) {
+        else {
+            // Reset all direction booleans
+            upIsWall = false;
+            downIsWall = false;
+            leftIsWall = false;
+            rightIsWall = false;
+        }
+        //* end of hardcoded section-----------------------------------------------------------------------------------------------------------------
 
+        //* Player stat detection
+        if (player_exhausted) {
             if (exhausted_countdown > 0) {
                 exhausted_countdown -= 1;
                 player_exhausted = true;
@@ -296,11 +500,40 @@ class Play extends Phaser.Scene {
                 player_stamina = 1; // to get out of infinate loop
                 player_exhausted = false;
             }
-        } else {
+        } else if (pee) {
+            if (pee_countdown > 0) {
+                pee_countdown -= 1;
+                pee = true;
+
+            } else {
+                pee_countdown = init_countdown;
+                if (player_bladder_volume >= 100) { // full bladder penalty
+                    player_hp -= 10;
+                }
+                player_bladder_volume = 0; // empty bladder
+                pee = false;
+            }
+
+        } else if (poo) {
+            if (poo_countdown > 0) {
+                poo_countdown -= 1;
+                poo = true;
+
+            } else {
+                poo_countdown = init_countdown;
+                if (player_stomach_volume >= 100) { // full stomach penalty
+                    player_hp -= 10;
+                }
+                player_stomach_volume = 0; // empty stomach; well it is a compomise
+
+                poo = false;
+            }
+        }
+        else if (!gameOver) {
             // not exhausted 
             //***  player movement control:W S A D
             // is Down = keep pressed down
-            if (keyA.isDown && this.player1.x >= borderUISize) {
+            if (keyA.isDown && this.player1.x >= borderUISize && !leftIsWall) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.x -= this.player1.runspeed;
@@ -313,7 +546,7 @@ class Play extends Phaser.Scene {
                     player_stamina -= 1;
                 }
 
-            } else if (keyD.isDown && this.player1.x < game.config.width * 10 - borderUISize) {
+            } else if (keyD.isDown && this.player1.x < borderLimitUp_x && !rightIsWall) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.x += this.player1.runspeed;
@@ -326,7 +559,7 @@ class Play extends Phaser.Scene {
                     player_stamina -= 1;
                 }
             }
-            if (keyW.isDown && this.player1.y >= borderLimitUp - borderUISize) {
+            if (keyW.isDown && this.player1.y >= borderLimitUp_y && !upIsWall) {
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.y -= this.player1.runspeed;
@@ -338,7 +571,7 @@ class Play extends Phaser.Scene {
                     //this.player1.anims.play('go-up');
                     player_stamina -= 1;
                 }
-            } else if (keyS.isDown && this.player1.y <= game.config.height * 10 - borderLimitDown) {
+            } else if (keyS.isDown && this.player1.y <= borderLimitDown_y - 2 && !downIsWall) { // 2 is the offset
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.y += this.player1.runspeed;
@@ -351,43 +584,29 @@ class Play extends Phaser.Scene {
                     player_stamina -= 1;
                 }
             }
-            //state machines
-            // metabolism 
-        }
+            // *** while game is not over ***
+            this.player1.update();             // update this.player1
 
-        if (this.hasteCounter > 30 && this.hasted == false) {
-            this.ship01.moveSpeed += 2;
-            this.ship02.moveSpeed += 2;
-            this.ship03.moveSpeed += 2;
-            this.ship04.moveSpeed += 2;
-            this.hasted = true;
-        }
+            // * check chests
+            let i;
+            for (i = 0; i < chestList.length; i++) {
+                if (this.checkInteractionInBound(this.player1, chestList[i]) && chestList[i].stock > 0) {
+                    // if chest is close to the player1
+                    nearChest = true;
+                } else {
+                    nearChest = false;
+                }
+            }
 
-        if (gameOver) {
+
+            this.mainmap.tilePositionX -= 0;  // update tile sprite
+
+        } else if (gameOver) {
             if (this.bgmCreated) {
                 this.bgm.pause()
                 this.bgmPlayed = false;
             }
-            if (restartPlay || Phaser.Input.Keyboard.JustDown(keyR)) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
-                console.log("Restarting game...");
-                this.sound.play('switchsound');
-                this.scene.restart();
-                // clear event flag
-                restartPlay = false;
-            }
         }
-        if (!gameOver) {
-
-            this.player1.update();             // update this.player1
-            this.ship01.update();               // update spaceship (x4)
-            this.ship02.update();
-            this.ship03.update();
-            this.ship04.update();
-
-            // Debugging Only
-            // console.log('gametime: ' + this.game.getTimer());
-        }
-
         // ** Send events to UI.js
         if (Phaser.Input.Keyboard.JustDown(keyTAB) || Phaser.Input.Keyboard.JustDown(keyI) || Phaser.Input.Keyboard.JustDown(key1)) {
             //  Dispatch openInventory event
@@ -409,10 +628,15 @@ class Play extends Phaser.Scene {
 
         }
 
-        this.starfield.tilePositionX -= 0;  // update tile sprite
 
-        // if game is not over...
-
+        if (restartPlay) { //!condition Phaser.Input.Keyboard.JustDown(keyR) may be redundant
+            console.log("Restarting game...");
+            this.sound.play('switchsound');
+            restartPlay = false;
+            gameOver = true;
+            this.scene.restart();
+            // clear event flag
+        }
 
         // new weapon
         if (this.superWeaponCount > 0 && Phaser.Input.Keyboard.JustDown(keyV)) { // if pressed v for superweapon
@@ -430,23 +654,7 @@ class Play extends Phaser.Scene {
         }
 
         // check collisions
-        if (this.checkCollision(this.player1, this.ship04)) {
-            //this.player1.reset();
-            this.shipExplode(this.ship04);
-        }
 
-        if (this.checkCollision(this.player1, this.ship03)) {
-            //this.player1.reset();
-            this.shipExplode(this.ship03);
-        }
-        if (this.checkCollision(this.player1, this.ship02)) {
-            //this.player1.reset();
-            this.shipExplode(this.ship02);
-        }
-        if (this.checkCollision(this.player1, this.ship01)) {
-            //this.player1.reset();
-            this.shipExplode(this.ship01);
-        }
 
     }
 
@@ -487,6 +695,19 @@ class Play extends Phaser.Scene {
         }
     }
 
+    checkInteractionInBound(player, item) { //!fix me 
+        this.interactionRange = 60;
+        this.distance = Phaser.Math.Distance.BetweenPoints(player, item);
+
+        if (this.distance <= this.interactionRange) {
+            //console.log("Interaction in range: " + this.distance);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
     shipExplode(ship) {
         // temporarily hide ship
         ship.alpha = 0;
@@ -499,23 +720,6 @@ class Play extends Phaser.Scene {
             boom.destroy();                       // remove explosion sprite
         });
 
-        // score add and repaint
-        // this.p1Score += ship.points;
-        // if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
-        //     localStorage.setItem("RocketPatrolTopScore", this.p1Score);
-        //     this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
-        // }
-        // this.scoreLeft.text = this.p1Score;
-
-        let soundFXLib = [
-            'sfx_explosion_spell',
-            'sfx_explosion_sea-mine',
-            'sfx_explosion_shot-light',
-            'sfx_explosion_crash'
-        ];
-        let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
-        this.explosionFX = this.sound.add(soundFXLib[random4SoundFX], { volume: 0.1 });
-        this.explosionFX.play();
     }
 
     shipExplode2(ship) {
@@ -530,14 +734,6 @@ class Play extends Phaser.Scene {
             boom2.destroy();                       // remove explosion sprite
         });
 
-        // score add and repaint
-        // this.p1Score += ship.points;
-        // if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
-        //     localStorage.setItem("RocketPatrolTopScore", this.p1Score);
-        //     this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
-        // }
-        // this.scoreLeft.text = this.p1Score;
-
         let soundFXLib = [
             'sfx_explosion_spell',
             'sfx_explosion_sea-mine',
@@ -548,44 +744,6 @@ class Play extends Phaser.Scene {
         this.explosionFX = this.sound.add(soundFXLib[random4SoundFX], { volume: 0.1 });
         this.explosionFX.play();
         // add time bonus
-    }
-
-    setMap(scene, mapName) {
-        currentMap = mapName;
-        // currentMap = "dungeonMap";
-        map = scene.make.tilemap({ key: currentMap });
-        const tileset = map.addTilesetImage("room-tileset", "tiles");
-
-        const belowLayer = map.createStaticLayer("Below Player", tileset, 0, 0);
-        worldLayer = map.createStaticLayer("World", tileset, 0, 0);
-        const aboveLayer = map.createStaticLayer("Above Player", tileset, 0, 0);
-
-        worldLayer.setCollisionByProperty({ collides: true });
-        aboveLayer.setDepth(10);
-        spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
-
-        const enterArea = map.findObject("Objects", obj => obj.name === "Enter Area");
-        enterRec = new Phaser.GameObjects.Rectangle(scene, enterArea.x, enterArea.y, enterArea.width, enterArea.height);
-
-        // Create a sprite with physics enabled via the physics system. The image used for the sprite has
-        // a bit of whitespace, so I'm using setSize & setOffset to control the size of the player's body.
-        // if(player)
-        if (player == undefined) {
-            player = scene.physics.add
-                .sprite(spawnPoint.x, spawnPoint.y, "atlas", "misa-front")
-                .setSize(30, 40)
-                .setOffset(0, 24).setDepth(5);
-        } else {
-            scene.physics.world.removeCollider(colPW);
-            player.x = spawnPoint.x;
-            player.y = spawnPoint.y;
-        }
-
-        colPW = scene.physics.add.collider(player, worldLayer);
-
-        camera = scene.cameras.main;
-        camera.startFollow(player);
-        camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
     }
 }
 

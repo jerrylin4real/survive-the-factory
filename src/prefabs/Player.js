@@ -3,11 +3,12 @@ class Player extends Phaser.GameObjects.Sprite {
         super(scene, x, y, texture, frame);
         scene.add.existing(this);   // add to existing, displayList, updateList
         //! Translate variable to main.js as var(s), like what Leland did with player_exhausted 
-        this.famePoint = 0;
         this.hunger = 0; // character dies after their hunger reaches 100 for 7 days or 7 minutes
         this.thrist = 0; // character dies after their thrist reaches 100 for 3 days or 3 minutes
 
         // Unavailiable for sprint 2
+        //this.famePoint = 0;
+
         // this.kcal_intake = 2500;
         // this.kcal_usage = 2500;
         // this.target_percentage = this.kcal_intake * 100 / this.kcal_usage;
@@ -16,10 +17,12 @@ class Player extends Phaser.GameObjects.Sprite {
         // Unavailiable for sprint 2
 
         // volumes below are in percentage
-        // this.stomach_volume = 0;
+        player_stomach_volume = 0;
+        player_bladder_volume = 0;
+
         // this.intestine_volume = 0;
         // this.colon_volume = 0;
-        // this.bladder_volume = 0;
+
 
 
         // Level UP milestones:  [lvl0, lvl1, lvl2, ...]
@@ -34,7 +37,9 @@ class Player extends Phaser.GameObjects.Sprite {
         this.max_stamina = this.stamina_milestone[stamina_lvl];
         player_stamina = this.max_stamina;
         this.restoredstamina = 0;
-        this.walkspeed = 3 + stamina_lvl; // pixels per frame, will move faster for higher stamina lvl
+
+        this.riverSpeedDebuff = 0;
+        this.walkspeed = 20 + stamina_lvl + this.riverSpeedDebuff; // pixels per frame, will move faster for higher stamina lvl //!speed was 3
         this.runspeed = this.walkspeed * 2;
 
 
@@ -62,10 +67,6 @@ class Player extends Phaser.GameObjects.Sprite {
 
 
     update() {
-        // pass playerx and playery to the globle variables
-        player1_x = this.x;
-        player1_y = this.y;
-
 
         // upload player stat to global variable
         if (player_hp <= 0 || player_hunger >= 100 || player_thrist >= 100) { //!use simple hunger condition for now
@@ -74,7 +75,7 @@ class Player extends Phaser.GameObjects.Sprite {
             gameOver = true;
         }
 
-        // make sure player stat is within range
+        //* make sure player stat is within range
         if (player_hp > this.max_health) {
             player_hp = this.max_health;
         }
@@ -91,8 +92,26 @@ class Player extends Phaser.GameObjects.Sprite {
             player_hunger = 0;
         }
 
+        if (player_bladder_volume < 0) {
+            player_bladder_volume = 0;
+        }
+
+        if (player_bladder_volume >= 100) {
+            player_bladder_volume = 100;
+            pee = true;
+        }
+
+        
+        if (player_stomach_volume >= 100) {
+            player_stomach_volume = 100;
+            poo = true;
+        }
+
         this.max_stamina = this.stamina_milestone[stamina_lvl];
 
+        //update speed
+        this.walkspeed = 3 + stamina_lvl + this.riverSpeedDebuff; // pixels per frame, will move faster for higher stamina lvl //!speed was 3
+        this.runspeed = this.walkspeed * 2;
 
         if (player_stamina <= 0 && !player_exhausted) {
             player_stamina = 0; // avoid negative stamina# to be bug-free
@@ -132,15 +151,13 @@ class Player extends Phaser.GameObjects.Sprite {
             }
         }
 
-        //! reset on miss; might not be necessary
-        if (this.y <= borderUISize * 3 + borderPadding) {
-            // this.reset();
-        }
-    }
+        if (nearRiver) {
+            this.riverSpeedDebuff = -2;
+        } else {
+            this.riverSpeedDebuff = 0;
 
-    //! reset player to "ground"; might not be necessary
-    reset() {
-        this.y = game.config.height - borderUISize - borderPadding;
+        }
+
     }
 }
 
