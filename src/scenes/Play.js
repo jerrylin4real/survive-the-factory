@@ -28,8 +28,8 @@ class Play extends Phaser.Scene {
 
 
         // load spritesheet
-        this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
-        this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12 });
+        // this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
+        // this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12 });
 
 
         // load audio
@@ -49,6 +49,8 @@ class Play extends Phaser.Scene {
         // Scene-level variables
         gameOver = false;
         at_MENU_Scene = false;
+        nearChest = false;
+        player_exhausted = false;
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
@@ -65,9 +67,12 @@ class Play extends Phaser.Scene {
         // place tile sprite
         this.mainmap = this.add.tileSprite(0, 0, 9999, 9999, 'mainmap').setOrigin(0, 0);
 
-        // * add player at world(x, y)
-        this.init_spawn_x = 7960; //!was 62
-        this.init_spawn_y = 2975; //!was 1510
+        // * Spawn player randomly in the world(x, y)
+        this.init_spawn_x = Phaser.Math.Between(borderLimitUp_x, borderLimitDown_x);; //!was 62
+        this.init_spawn_y = Phaser.Math.Between(borderLimitUp_y, borderLimitDown_y);; //!was 1510
+
+        // this.init_spawn_x = 8657; //!was 62
+        // this.init_spawn_y = 3134; //!was 1510
 
         this.player1 = new Player(this, this.init_spawn_x, this.init_spawn_y, 'platformer', 'stand').setScale(1); // scale the size of this.player1
         player1 = this.player1;
@@ -81,11 +86,35 @@ class Play extends Phaser.Scene {
         this.cameras.main.startFollow(this.player1);
 
         //! * add chests
-        this.chest1 = new Item(this, this.init_spawn_x - 100, this.init_spawn_y + 100, 'platformer', 'baoxiang').setScale(1);
+        //chest1 location(8657,3134)
+        this.chest1 = new Item(this, 8657, 3134, 'platformer', 'baoxiang').setScale(1);
         this.chest1.name = "chest";
 
-        chestList.push(this.chest1);
-        // console.log("chestList[0] "+ chestList[0].name);
+        //chest2 location(9945,5061)
+        this.chest2 = new Item(this, 9945, 5061, 'platformer', 'baoxiang').setScale(1);
+        this.chest2.name = "chest";
+
+        //chest3 location(3831,3766)
+        this.chest3 = new Item(this, 3831, 3766, 'platformer', 'bingxiang').setScale(1); // fridge
+        this.chest3.name = "chest";
+
+        //chest4 location(431,2193)
+        this.chest4 = new Item(this, 431, 2193, 'platformer', 'bingxiang').setScale(1);
+        this.chest4.name = "chest";
+
+        //chest5 location(4003,1463)
+        this.chest5 = new Item(this, 4003, 1463, 'platformer', 'baoxiang').setScale(1);
+        this.chest5.name = "chest";
+
+        // push chests to chestList
+        chestList = [this.chest1, this.chest2, this.chest3, this.chest4, this.chest5];
+
+        console.log("chestList[0].stock:" + chestList[0].stock + " @(" + chestList[0].x + ", " + chestList[0].y);
+        console.log("chestList[1].stock:" + chestList[1].stock + " @(" + chestList[1].x + ", " + chestList[1].y);
+        console.log("chestList[2].stock:" + chestList[2].stock + " @(" + chestList[2].x + ", " + chestList[2].y);
+        console.log("chestList[3].stock:" + chestList[3].stock + " @(" + chestList[3].x + ", " + chestList[3].y);
+        console.log("chestList[4].stock:" + chestList[4].stock + " @(" + chestList[4].x + ", " + chestList[4].y);
+
         //! * add zombies 
 
 
@@ -171,17 +200,6 @@ class Play extends Phaser.Scene {
         });
 
         this.anims.create({
-            key: 'explode',
-            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0 }),
-            frameRate: 30
-        });
-        this.anims.create({
-            key: 'explode2',
-            frames: this.anims.generateFrameNumbers('explosion2', { start: 0, end: 12, first: 0 }),
-            frameRate: 10
-        });
-
-        this.anims.create({
             key: 'baoxiang2',
             defaultTextureKey: 'platformer',
             frames: [
@@ -198,7 +216,7 @@ class Play extends Phaser.Scene {
             ],
             repeat: -1
         });
-        
+
         this.anims.create({
             key: 'food',
             defaultTextureKey: 'platformer',
@@ -311,7 +329,7 @@ class Play extends Phaser.Scene {
 
         // Interact button F
         if (Phaser.Input.Keyboard.JustDown(keyF)) {
-            if (nearRiver) {
+            if (nearRiver && !this.openedMetabolism && !openedInventory) {
                 // drink water!
                 player_thrist -= 20;
                 player_bladder_volume += 20;
@@ -319,10 +337,27 @@ class Play extends Phaser.Scene {
             if (nearChest) {
                 let i;
                 for (i = 0; i < chestList.length; i++) {
-                    if (this.checkInteractionInBound(this.player1, chestList[i]) && chestList[i].stock > 0) {
+                    this.close_enough = this.checkInteractionInBound(this.player1, chestList[i])
+                    if (this.close_enough && chestList[i].stock > 0) {
                         // if chest is close to the player1
+                        let randomIndex = Math.floor(Math.random() * itemList.length);
+                        if (itemList[randomIndex] == "peach") {
+                            num_peach += 1;
+                        }
+                        if (itemList[randomIndex] == "cherry") {
+                            num_cherry += 1;
+                        }
+                        if (itemList[randomIndex] == "pitaya") {
+                            num_pitaya += 1;
+                        }
+                        if (itemList[randomIndex] == "watermalon") {
+                            num_watermalon += 1;
+                        }
+                        if (itemList[randomIndex] == "canned_beef") {
+                            num_canned_beef += 1;
+                        }
                         chestList[i].stock -= 1;
-                        num_peach += 1;
+
                     }
                 }
                 // if F a loot
@@ -348,21 +383,21 @@ class Play extends Phaser.Scene {
         // water area detection
         // river1
         if (this.player1.x >= 1300 && this.player1.x <= 1600 && this.player1.y >= 1345 && this.player1.y <= 3745) {
-            console.log("near river!");
+            // console.log("near river!");
             nearRiver = true;
         } else if (this.player1.x >= 32 && this.player1.x <= 1412 && this.player1.y >= 3355 && this.player1.y <= 3745) {
-            console.log("near river!");
+            // console.log("near river!");
             nearRiver = true;
         }
 
         // river2
         else if (this.player1.x >= 6437 && this.player1.x <= 6700 && this.player1.y >= 1345 && this.player1.y <= 3745) {
-            console.log("near river!");
+            // console.log("near river!");
             nearRiver = true;
         }
 
         else if (this.player1.x >= 5072 && this.player1.x <= 6482 && this.player1.y >= 3415 && this.player1.y <= 3760) {
-            console.log("near river!");
+            // console.log("near river!");
             nearRiver = true;
         } else {
             nearRiver = false;
@@ -467,10 +502,10 @@ class Play extends Phaser.Scene {
         // left is wall (this.bigBuilding1_x, this.bigBuilding1_y) top left x = 2925; y: from 3100 to 4195;
         // mid left x:3692 [y:4198, 4652]
         // top right x:3693 [y:2968 to 4652]
-        else if ((this.player1.x >= this.bigBuilding1_x + 80 && this.player1.x <= this.bigBuilding1_x + 90 && ((this.player1.y >= this.bigBuilding1_y + 95 && this.player1.y <= this.bigBuilding1_y + 1193)) ||
-            ((this.player1.x >= this.bigBuilding1_x + 847 && this.player1.x <= this.bigBuilding1_x + 857) && (this.player1.y >= this.bigBuilding1_y + 1201 && this.player1.y <= this.bigBuilding1_y + 1660)) ||
-            (this.player1.x >= this.bigBuilding1_x + 2040 && this.player1.x <= this.bigBuilding1_x + 2045 && ((this.player1.y >= this.bigBuilding1_y + 95 && this.player1.y <= this.bigBuilding1_y + 1220)))
-        ) || (this.player1.x >= this.bigBuilding1_x + 2123 && this.player1.x <= this.bigBuilding1_x + 2127 && (this.player1.y >= this.bigBuilding1_y && this.player1.y <= this.bigBuilding1_y + 1655))) {
+        else if ((this.player1.x >= this.bigBuilding1_x + 70 && this.player1.x <= this.bigBuilding1_x + 90 && ((this.player1.y >= this.bigBuilding2_y + 95 && this.player1.y <= this.bigBuilding2_y + 1193)) ||
+            ((this.player1.x >= this.bigBuilding1_x + 847 && this.player1.x <= this.bigBuilding1_x + 857) && (this.player1.y >= this.bigBuilding2_y + 1201 && this.player1.y <= this.bigBuilding2_y + 1660)) ||
+            (this.player1.x >= this.bigBuilding1_x + 2040 && this.player1.x <= this.bigBuilding1_x + 2045 && ((this.player1.y >= this.bigBuilding2_y + 95 && this.player1.y <= this.bigBuilding2_y + 1220)))
+        ) || (this.player1.x >= this.bigBuilding1_x + 2123 && this.player1.x <= this.bigBuilding1_x + 2127 && (this.player1.y >= this.bigBuilding2_y && this.player1.y <= this.bigBuilding2_y + 1655))) {
             leftIsWall = true;
         }
 
@@ -634,20 +669,22 @@ class Play extends Phaser.Scene {
             this.player1.update();             // update this.player1
 
             // * check chests
-            let i;
-            for (i = 0; i < chestList.length; i++) {
-                if (this.checkInteractionInBound(this.player1, chestList[i]) && chestList[i].stock > 0) {
+            let j;
+            for (j = 0; j < chestList.length; j++) {
+                if (this.checkInteractionInBound(this.player1, chestList[j]) && chestList[j].stock > 0) {
                     // if chest is close to the player1
                     nearChest = true;
+                    break; // exit for loop
                 } else {
                     nearChest = false;
                 }
+                // console.log("nearChest: " + nearChest);
             }
 
 
             this.mainmap.tilePositionX -= 0;  // update tile sprite
-        } 
-        if (gameOver){
+        }
+        if (gameOver) {
             if (this.bgmCreated) {
                 this.bgm.pause()
                 this.bgmPlayed = false;

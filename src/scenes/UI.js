@@ -7,10 +7,14 @@ class UI extends Phaser.Scene {
     }
     preload() {
 
-        // load image
-        this.load.image('mouse', 'assets/sprites/mouse.png'); // for mouse control
+        // load image (Some filenames are in Chinese Pinyin)
+        this.load.image('mouse', 'assets/sprites/mouse.png'); // for crossair in mouse control
 
-        this.load.image('peach', './assets/name-for-json/taozi.png'); // Placeholder file for now; FIXME!!!
+        this.load.image('peach', './assets/name-for-json/taozi.png');
+        this.load.image('cherry', './assets/name-for-json/yingtao.png');
+        this.load.image('pitaya', './assets/name-for-json/huolongguo.png');
+        this.load.image('watermalon', './assets/name-for-json/xigua.png');
+        this.load.image('canned_beef', './assets/name-for-json/food.png');
 
         // load audio
         //this.load.audio('switchsound', './assets/switchsound.wav');
@@ -48,15 +52,38 @@ class UI extends Phaser.Scene {
         this.inventoryUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 9, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, BROWN).setOrigin(0, 0);
 
-        //click-able inventory
-        this.peachText = this.add.text(borderUISize, borderUISize * 1.5, 'Peach#: ' + num_peach + " F for more", { font: '24px Pathway Gothic One', fill: 'PINK' });
+        //*add click-able inventory items
+        this.peachText = this.add.text(borderUISize, borderUISize * 1.5, 'Peach#: ' + num_peach, { font: '24px Pathway Gothic One', fill: 'PINK' });
         this.peachText.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
-        this.peach_pic = this.add.sprite(200, 75, 'peach'); // Placeholder file for now; FIXME!!!
-        this.peach_pic.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
-        
-        // * initialize items in inventory
+        this.peachPic = this.add.sprite(borderUISize * 6, borderUISize * 2, 'peach');
+        this.peachPic.setInteractive().on('pointerdown', () => this.consumeItem("peach"));
+
+        this.cherryText = this.add.text(borderUISize, borderUISize * 2.5, 'Cherry#: ' + num_cherry, { font: '24px Pathway Gothic One', fill: 'RED' });
+        this.cherryText.setInteractive().on('pointerdown', () => this.consumeItem("cherry"));
+        this.cherryPic = this.add.sprite(borderUISize * 8, borderUISize * 3, 'cherry');
+        this.cherryPic.setInteractive().on('pointerdown', () => this.consumeItem("cherry"));
+
+        this.pitayaText = this.add.text(borderUISize, borderUISize * 3.5, 'Pitaya#: ' + num_pitaya, { font: '24px Pathway Gothic One', fill: 'RED' });
+        this.pitayaText.setInteractive().on('pointerdown', () => this.consumeItem("pitaya"));
+        this.pitayaPic = this.add.sprite(borderUISize * 6, borderUISize * 4, 'pitaya');
+        this.pitayaPic.setInteractive().on('pointerdown', () => this.consumeItem("pitaya"));
+
+        this.watermalonText = this.add.text(borderUISize, borderUISize * 4.5, 'watermalon#: ' + num_watermalon, { font: '24px Pathway Gothic One', fill: 'GREEN' });
+        this.watermalonText.setInteractive().on('pointerdown', () => this.consumeItem("watermalon"));
+        this.watermalonPic = this.add.sprite(borderUISize * 8, borderUISize * 5, 'watermalon');
+        this.watermalonPic.setInteractive().on('pointerdown', () => this.consumeItem("watermalon"));
+
+        this.cannedBeefText = this.add.text(borderUISize, borderUISize * 5.5, 'canned_beef#: ' + num_canned_beef, { font: '24px Pathway Gothic One', fill: 'WHITE' });
+        this.cannedBeefText.setInteractive().on('pointerdown', () => this.consumeItem("canned_beef"));
+        this.cannedBeefPic = this.add.sprite(borderUISize * 6, borderUISize * 6, 'canned_beef');
+        this.cannedBeefPic.setInteractive().on('pointerdown', () => this.consumeItem("canned_beef"));
+
+        // initialize items' counts in inventory
         num_peach = 0;
         num_cherry = 0;
+        num_pitaya = 0;
+        num_watermalon = 0;
+        num_canned_beef = 0;
 
         //*** add Metabolism UI Panel
         this.metabolismText = this.add.text(10 + borderUISize * 6.2, 10, '(M)etabolism  ', { font: '48px Pathway Gothic One', fill: 'WHITE' });
@@ -67,7 +94,8 @@ class UI extends Phaser.Scene {
         this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 9, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, sadBLUE).setOrigin(0, 0);
 
-        this.tips_Metabolism_Right = this.add.text(10 + borderUISize * 18,  borderUISize * 1.5, 'Tips:\n\nPress T for in-game tutorial\nLoot box to survive!', { font: '24px Pathway Gothic One', fill: 'WHITE' });
+        this.tips_Metabolism_Right = this.add.text(10 + borderUISize * 18, borderUISize * 1.5, 'Tips:\n\nPress T for in-game tutorial\n\nPress F to loot\n\nEat/drink to survive!',
+            { font: '24px Pathway Gothic One', fill: 'WHITE' });
 
         //Player Stat UI Panel
         // @ param                                   , borderUISize * y // change y to list-show stat
@@ -85,6 +113,8 @@ class UI extends Phaser.Scene {
         this.bladderText = this.add.text(borderUISize, borderUISize * 7.5, 'Bladder_Vol: ' + player_bladder_volume, { font: '24px Pathway Gothic One', fill: 'PINK' });
 
         // UI prompts
+        this.drinkPromptText = this.add.text(555, 426, 'Press F for to drink water', { font: '24px Pathway Gothic One', fill: "BLACK" });
+
         this.exclamationMarkText = this.add.text(563, 312, '!! Press M for more info', { font: '24px Pathway Gothic One', fill: 'RED' });
         this.loot_Text = this.add.text(399, 314, 'Press F to loot until emtpy', { font: '24px Pathway Gothic One', fill: 'WHITE' });
 
@@ -96,7 +126,7 @@ class UI extends Phaser.Scene {
         press M or 3 for metabolism UI\nPress Shift to sprint\nPress F to get item\nClick on item to use\nPress DOWN to poo\nPress UP to pee\nPress Q to end game', { font: '36px Pathway Gothic One', fill: 'WHITE' }).setOrigin(0.5);
 
 
-        // set the UI to be invisible as default
+        // set the UI elements to be invisible as default
         this.inventoryUILeft.alpha = 0;
         this.inventoryUIRight.alpha = 0;
         this.inventoryText.alpha = 0;
@@ -114,13 +144,23 @@ class UI extends Phaser.Scene {
         this.healthText_LowerLeft.alpha = 0;
         this.staminaText_LowerLeft.alpha = 0;
         this.thristText.alpha = 0;
+
         this.peachText.alpha = 0;
-        this.peach_pic.alpha = 0;
+        this.peachPic.alpha = 0;
+        this.cherryText.alpha = 0;
+        this.cherryPic.alpha = 0;
+        this.pitayaText.alpha = 0;
+        this.pitayaPic.alpha = 0;
+        this.watermalonText.alpha = 0;
+        this.watermalonPic.alpha = 0;
+        this.cannedBeefText.alpha = 0;
+        this.cannedBeefPic.alpha = 0;
 
         this.stomachText.alpha = 0;
         this.bladderText.alpha = 0;
 
         this.exclamationMarkText.alpha = 0;
+        this.drinkPromptText.alpha = 0;
         this.loot_Text.alpha = 0;
         this.MosaicRect.alpha = 0;
 
@@ -176,6 +216,10 @@ class UI extends Phaser.Scene {
         this.hungerText.setText('Hunger: ' + player_hunger);
         this.thristText.setText("Thrist: " + player_thrist);
         this.peachText.setText("Peach#: " + num_peach);
+        this.cherryText.setText("Cherry#: " + num_cherry);
+        this.pitayaText.setText("Pitaya#: " + num_pitaya);
+        this.watermalonText.setText("watermalon#: " + num_watermalon);
+        this.cannedBeefText.setText("canned_beef#: " + num_canned_beef);
 
         //sync always-on display text outside Metabolism or Inventory
 
@@ -231,10 +275,17 @@ class UI extends Phaser.Scene {
             this.stomachText.setText("Stomach_Vol: " + player_stomach_volume);
             this.stomachText.setColor("PINK");
         }
-        if (nearChest){
+
+        if (nearChest) {
             this.loot_Text.alpha = 1;
         } else {
             this.loot_Text.alpha = 0;
+        }
+
+        if (nearRiver && !openedInventory && !openedMetabolism) {
+            this.drinkPromptText.alpha = 1;
+        } else {
+            this.drinkPromptText.alpha = 0;
         }
 
         if (pee || poo) {
@@ -295,10 +346,10 @@ class UI extends Phaser.Scene {
             }
 
             //* chest refresh
-            if ((initialTime % 300) == 0){ // for every 5 minutes
+            if ((initialTime % 300) == 0) { // for every 5 minutes
                 let i;
-                for(i = 0; i < chestList.length; i++){
-                    chestList[i].stock = Math.floor(Math.random() * 4);// chest will have 0 - 3 item(s) to loot
+                for (i = 0; i < chestList.length; i++) {
+                    chestList[i].stock = Math.floor(Math.random() * 5);// chest will have 0 - 4 item(s) to loot
                 }
             }
         }
@@ -373,7 +424,15 @@ class UI extends Phaser.Scene {
         this.inventoryText.alpha = 0;
         this.inventoryUIRight.alpha = 0;
         this.peachText.alpha = 0;
-        this.peach_pic.alpha = 0;
+        this.peachPic.alpha = 0;
+        this.cherryText.alpha = 0;
+        this.cherryPic.alpha = 0;
+        this.pitayaText.alpha = 0;
+        this.pitayaPic.alpha = 0;
+        this.watermalonText.alpha = 0;
+        this.watermalonPic.alpha = 0;
+        this.cannedBeefText.alpha = 0;
+        this.cannedBeefPic.alpha = 0;
 
         openedInventory = false;
     }
@@ -387,8 +446,19 @@ class UI extends Phaser.Scene {
         this.inventoryText.alpha = 1;
         this.inventoryUIRight.alpha = 1;
         this.peachText.alpha = 1;
-        this.peach_pic.alpha = 1;
+        this.peachPic.alpha = 1;
+        this.cherryText.alpha = 1;
+        this.cherryPic.alpha = 1;
+        this.pitayaText.alpha = 1;
+        this.pitayaPic.alpha = 1;
+        this.watermalonText.alpha = 1;
+        this.watermalonPic.alpha = 1;
+        this.cannedBeefText.alpha = 1;
+        this.cannedBeefPic.alpha = 1;
+
         this.exclamationMarkText.alpha = 0;
+        this.drinkPromptText.alpha = 0;
+
         this.loot_Text.alpha = 0;
 
 
@@ -432,7 +502,9 @@ class UI extends Phaser.Scene {
         this.thristText.alpha = 1;
         this.stomachText.alpha = 1;
         this.bladderText.alpha = 1;
+
         this.exclamationMarkText.alpha = 0;
+        this.drinkPromptText.alpha = 0;
         this.loot_Text.alpha = 0;
 
         openedMetabolism = true;
@@ -463,10 +535,54 @@ class UI extends Phaser.Scene {
                     num_peach -= 1;
                     player_hunger -= 10;
                     player_stomach_volume += 10;
-                    player_thrist -= 5;
+                    player_thrist -= 4;
                 } else {
                     //! print "no more peach"
                     console.log("No more peach!");
+                }
+            }
+            if (item_name == "cherry") {
+                if (num_cherry > 0) {
+                    num_cherry -= 1;
+                    player_hunger -= 5;
+                    player_stomach_volume += 6;
+                    player_thrist -= 1;
+                } else {
+                    //! print "no more peach"
+                    console.log("No more cherry!");
+                }
+            }
+            if (item_name == "pitaya") {
+                if (num_pitaya > 0) {
+                    num_pitaya -= 1;
+                    player_hunger -= 20;
+                    player_stomach_volume += 30;
+                    player_thrist -= 5;
+                } else {
+                    //! print "no more peach"
+                    console.log("No more pitaya!");
+                }
+            }
+            if (item_name == "watermalon") {
+                if (num_watermalon > 0) {
+                    num_watermalon -= 1;
+                    player_hunger -= 30;
+                    player_stomach_volume += 30;
+                    player_thrist -= 8;
+                } else {
+                    //! print "no more peach"
+                    console.log("No more watermalon!");
+                }
+            }
+            if (item_name == "canned_beef") {
+                if (num_canned_beef > 0) {
+                    num_canned_beef -= 1;
+                    player_hunger -= 50;
+                    player_stomach_volume += 40;
+                    player_thrist += 5; // canned_beef makes u thirsty
+                } else {
+                    //! print "no more peach"
+                    console.log("No more canned_beef!");
                 }
             }
         }

@@ -61,6 +61,9 @@ var gameOver = false;
 //*** Global Inventory Variables
 var num_peach = 0;
 var num_cherry = 0;
+var num_pitaya = 0 ;
+var num_watermalon = 0;
+var num_canned_beef = 0;
 
 
 //*** Global Player Variables
