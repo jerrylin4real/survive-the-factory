@@ -119,7 +119,7 @@ class Player extends Phaser.GameObjects.Sprite {
             console.log("player exhausted");
 
             // apply penalties
-            player_hp -= 10;
+            player_hp -= 30; //!was 10
             player_thrist += 10;
             player_hunger += 6;
             player_exhausted = true;

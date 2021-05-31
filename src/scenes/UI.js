@@ -118,7 +118,7 @@ class UI extends Phaser.Scene {
         this.exclamationMarkText = this.add.text(563, 312, '!! Press M for more info', { font: '24px Pathway Gothic One', fill: 'RED' });
         this.loot_Text = this.add.text(399, 314, 'Press F to loot until emtpy', { font: '24px Pathway Gothic One', fill: 'WHITE' });
 
-
+        //!fixme does not follow the player
         this.MosaicRect = this.add.rectangle(512, 400, 25, 25, "BLACK"); // a 25^2 black square for pee and poo //(511,426) 
 
         // add Tutorial UI Panel
@@ -222,7 +222,6 @@ class UI extends Phaser.Scene {
         this.cannedBeefText.setText("canned_beef#: " + num_canned_beef);
 
         //sync always-on display text outside Metabolism or Inventory
-
         if (initialTime > 0) {
             if (openedMetabolism || openedInventory) {
                 this.staminaText_LowerLeft.alpha = 0;

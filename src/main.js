@@ -109,6 +109,8 @@ var downIsWall = false;
 
 var nearChest = false;
 
+//*** Global weapon Variables
+var haveAxe = false;
 //* Global Lists
 var chestList = [];
 var itemList = [];

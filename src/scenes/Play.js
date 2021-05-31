@@ -46,11 +46,16 @@ class Play extends Phaser.Scene {
 
     create() {
         console.log("create");
-        // Scene-level variables
+
+        // initialize global variables
         gameOver = false;
         at_MENU_Scene = false;
         nearChest = false;
         player_exhausted = false;
+        haveAxe = false;
+
+        // Scene-level variables
+
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
@@ -85,7 +90,7 @@ class Play extends Phaser.Scene {
         //Set the camera to follow this.player1
         this.cameras.main.startFollow(this.player1);
 
-        //! * add chests
+        // * add chests
         //chest1 location(8657,3134)
         this.chest1 = new Item(this, 8657, 3134, 'platformer', 'baoxiang').setScale(1);
         this.chest1.name = "chest";
@@ -114,6 +119,11 @@ class Play extends Phaser.Scene {
         console.log("chestList[2].stock:" + chestList[2].stock + " @(" + chestList[2].x + ", " + chestList[2].y);
         console.log("chestList[3].stock:" + chestList[3].stock + " @(" + chestList[3].x + ", " + chestList[3].y);
         console.log("chestList[4].stock:" + chestList[4].stock + " @(" + chestList[4].x + ", " + chestList[4].y);
+
+        //!add easter eggs
+        //axe location: x:9711 y:3486
+        this.axe = new Item(this, 9711, 3486, 'platformer', 'futou').setScale(1);
+        this.axe.name = "axe";
 
         //! * add zombies 
 
@@ -318,6 +328,8 @@ class Play extends Phaser.Scene {
         player1_x = this.player1.x;
         player1_y = this.player1.y;
 
+
+
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
             gameOver = true;
 
@@ -331,6 +343,7 @@ class Play extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyF)) {
             if (nearRiver && !this.openedMetabolism && !openedInventory) {
                 // drink water!
+                this.sound.play('eatsound');
                 player_thrist -= 20;
                 player_bladder_volume += 20;
             }
@@ -340,6 +353,8 @@ class Play extends Phaser.Scene {
                     this.close_enough = this.checkInteractionInBound(this.player1, chestList[i])
                     if (this.close_enough && chestList[i].stock > 0) {
                         // if chest is close to the player1
+                        this.sound.play('eatsound');
+
                         let randomIndex = Math.floor(Math.random() * itemList.length);
                         if (itemList[randomIndex] == "peach") {
                             num_peach += 1;
@@ -357,13 +372,22 @@ class Play extends Phaser.Scene {
                             num_canned_beef += 1;
                         }
                         chestList[i].stock -= 1;
-
+                        break;
                     }
                 }
-                // if F a loot
-                // randomly gerenate an item/weapon; 
             }
 
+            if (this.checkInteractionInBound(this.player1, this.axe)) {
+                this.sound.play('eatsound');
+                haveAxe = true;
+            }
+
+        }
+
+        if (haveAxe) {
+            // axe follows player if close enough
+            this.axe.x = player1_x - 25;
+            this.axe.y = player1_y + 12;
         }
 
         // press UP to pee
@@ -589,7 +613,7 @@ class Play extends Phaser.Scene {
             } else {
                 pee_countdown = init_countdown;
                 if (player_bladder_volume >= 100) { // full bladder penalty
-                    player_hp -= 10;
+                    player_hp -= 30; //!was 10
                 }
                 player_bladder_volume = 0; // empty bladder
                 pee = false;
@@ -603,7 +627,7 @@ class Play extends Phaser.Scene {
             } else {
                 poo_countdown = init_countdown;
                 if (player_stomach_volume >= 100) { // full stomach penalty
-                    player_hp -= 10;
+                    player_hp -= 30;
                 }
                 player_stomach_volume = 0; // empty stomach; well it is a compomise
 

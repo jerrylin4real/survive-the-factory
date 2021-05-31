@@ -47,7 +47,12 @@ class Item extends Phaser.GameObjects.Sprite {
 
         // * chests, 4 types of chest     
 
+        //!for future updates
         if (this.name == "chest") {
+        }
+
+        if (this.name == "axe") {
+
         }
 
 
