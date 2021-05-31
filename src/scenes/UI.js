@@ -17,7 +17,7 @@ class UI extends Phaser.Scene {
         this.load.image('canned_beef', './assets/name-for-json/food.png');
 
         // load audio
-        //this.load.audio('switchsound', './assets/switchsound.wav');
+        this.load.audio('eatsound', './assets/sound/eatsound.wav');
 
     }
     create() {
@@ -585,6 +585,7 @@ class UI extends Phaser.Scene {
                     console.log("No more canned_beef!");
                 }
             }
+            this.sound.play('eatsound');
         }
     }
 
