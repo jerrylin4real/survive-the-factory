@@ -199,6 +199,24 @@ class Play extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('explosion2', { start: 0, end: 12, first: 0 }),
             frameRate: 10
         });
+        
+        this.anims.create({
+            key: 'baoxiang2',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'baoxiang2' }
+            ],
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'baoxiang2',
+            defaultTextureKey: 'platformer',
+            frames: [
+                { frame: 'baoxiang2' }
+            ],
+            repeat: -1
+        });
 
 
 
