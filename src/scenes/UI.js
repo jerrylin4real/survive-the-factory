@@ -67,6 +67,8 @@ class UI extends Phaser.Scene {
         this.metabolismUIRight = this.add.rectangle(game.config.width / 3 + borderUISize * 9, borderUISize + borderPadding, game.config.width / 2 - borderPadding,
             game.config.height * 2, sadBLUE).setOrigin(0, 0);
 
+        this.tips_Metabolism_Right = this.add.text(10 + borderUISize * 18,  borderUISize * 1.5, 'Tips:\n\nPress T for in-game tutorial\nLoot box to survive!', { font: '24px Pathway Gothic One', fill: 'WHITE' });
+
         //Player Stat UI Panel
         // @ param                                   , borderUISize * y // change y to list-show stat
         this.healthText = this.add.text(borderUISize, borderUISize * 1.5, 'HP(lvl.' + health_lvl + '): ' + player_hp, { font: '24px Pathway Gothic One', fill: 'WHITE' });
@@ -84,7 +86,7 @@ class UI extends Phaser.Scene {
 
         // UI prompts
         this.exclamationMarkText = this.add.text(563, 312, '!! Press M for more info', { font: '24px Pathway Gothic One', fill: 'RED' });
-        this.F_Text = this.add.text(399, 314, 'Press F to loot until emtpy', { font: '24px Pathway Gothic One', fill: 'WHITE' });
+        this.loot_Text = this.add.text(399, 314, 'Press F to loot until emtpy', { font: '24px Pathway Gothic One', fill: 'WHITE' });
 
 
         this.MosaicRect = this.add.rectangle(512, 400, 25, 25, "BLACK"); // a 25^2 black square for pee and poo //(511,426) 
@@ -102,6 +104,7 @@ class UI extends Phaser.Scene {
         this.metabolismText.alpha = 0;
         this.metabolismUILeft.alpha = 0;
         this.metabolismUIRight.alpha = 0;
+        this.tips_Metabolism_Right.alpha = 0;
 
         this.tutorialText.alpha = 0;
         this.exhaustedText.alpha = 0;
@@ -118,7 +121,7 @@ class UI extends Phaser.Scene {
         this.bladderText.alpha = 0;
 
         this.exclamationMarkText.alpha = 0;
-        this.F_Text.alpha = 0;
+        this.loot_Text.alpha = 0;
         this.MosaicRect.alpha = 0;
 
         // define key control
@@ -229,9 +232,9 @@ class UI extends Phaser.Scene {
             this.stomachText.setColor("PINK");
         }
         if (nearChest){
-            this.F_Text.alpha = 1;
+            this.loot_Text.alpha = 1;
         } else {
-            this.F_Text.alpha = 0;
+            this.loot_Text.alpha = 0;
         }
 
         if (pee || poo) {
@@ -386,7 +389,7 @@ class UI extends Phaser.Scene {
         this.peachText.alpha = 1;
         this.peach_pic.alpha = 1;
         this.exclamationMarkText.alpha = 0;
-        this.F_Text.alpha = 0;
+        this.loot_Text.alpha = 0;
 
 
         openedInventory = true;
@@ -399,6 +402,7 @@ class UI extends Phaser.Scene {
         this.metabolismUILeft.alpha = 0;
         this.metabolismText.alpha = 0;
         this.metabolismUIRight.alpha = 0;
+        this.tips_Metabolism_Right.alpha = 0;
         this.exhaustedText.alpha = 0;
         this.staminaText.alpha = 0;
         this.healthText.alpha = 0;
@@ -419,6 +423,8 @@ class UI extends Phaser.Scene {
         this.metabolismUILeft.alpha = 1;
         this.metabolismText.alpha = 1;
         this.metabolismUIRight.alpha = 1;
+        this.tips_Metabolism_Right.alpha = 1;
+
         this.exhaustedText.alpha = 1;
         this.staminaText.alpha = 1;
         this.healthText.alpha = 1;
@@ -427,7 +433,7 @@ class UI extends Phaser.Scene {
         this.stomachText.alpha = 1;
         this.bladderText.alpha = 1;
         this.exclamationMarkText.alpha = 0;
-        this.F_Text.alpha = 0;
+        this.loot_Text.alpha = 0;
 
         openedMetabolism = true;
 

@@ -614,19 +614,19 @@ class Play extends Phaser.Scene {
                     player_stamina -= 2;
                 } else {
                     this.player1.y -= this.player1.walkspeed;
-                    //this.player1.anims.play('go-up');
+                    // this.player1.anims.play('go-up');
                     player_stamina -= 1;
                 }
             } else if (keyS.isDown && this.player1.y <= borderLimitDown_y - 2 && !downIsWall) { // 2 is the offset
                 if (keyShift.isDown) {
                     // speed up if boost
                     this.player1.y += this.player1.runspeed;
-                    //this.player1.anims.play('go-down');
+                    // this.player1.anims.play('go-down');
                     // running loses more stamina
                     player_stamina -= 2;
                 } else {
                     this.player1.y += this.player1.walkspeed;
-                    //.player1.anims.play('go-down');
+                    // player1.anims.play('go-down');
                     player_stamina -= 1;
                 }
             }
