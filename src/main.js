@@ -1,9 +1,8 @@
 /******************************************************
-* SCUM-2D Developers:
+* Survive The Factory Developers:
 * Leland Jin 
 * Jerry Lin
 * Lakery Cao
-//!make sure it is in the canvaus comment as well.
 *******************************************************/
 
 let config = {
