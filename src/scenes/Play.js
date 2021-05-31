@@ -723,20 +723,21 @@ class Play extends Phaser.Scene {
 
 
             this.mainmap.tilePositionX -= 0;  // update tile sprite
+        } else if(gameOver){
+            // this.bgmPlayed = false;
         }
         if (gameOver || Phaser.Input.Keyboard.JustDown(keyP)) {
             // press p to toggle on/off bgm
             if (this.bgmCreated) {
-                if (this.bgmPlayed) {
+                if (this.bgmPlayed || gameOver) {
                     this.bgm.volume = 0;
                     this.bgmPlayed = false;
-                } else {
+                } else if (!this.bgmPlayed){
                     this.bgm.volume = 0.3;
                     this.bgmPlayed = true;
                 }
             }
-
-            console.log("this.bgm.volume:" + this.bgm.volume);
+            //console.log("this.bgm.volume:" + this.bgm.volume);
 
         }
         // ** Send events to UI.js
